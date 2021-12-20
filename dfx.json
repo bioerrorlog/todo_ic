@@ -1,7 +1,7 @@
 {
   "canisters": {
     "todo_ic": {
-      "main": "src/todo_ic/main.mo",
+      "main": "src/todo_ic/src/Main.mo",
       "type": "motoko"
     },
     "todo_ic_assets": {
