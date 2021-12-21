@@ -16,4 +16,9 @@ actor {
         tasks := Utils.add(tasks, task, nextId);
         nextId += 1;
     };
+
+    public query func getTasks() : async [Task] {
+        return tasks;
+    };
+
 };

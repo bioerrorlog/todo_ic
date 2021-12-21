@@ -1,3 +1,10 @@
+type Task = 
+ record {
+   completed: bool;
+   description: text;
+   id: nat;
+ };
 service : {
   addTask: (text) -> ();
+  getTasks: () -> (vec Task) query;
 }
