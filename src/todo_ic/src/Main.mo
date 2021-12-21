@@ -18,7 +18,6 @@ actor {
     };
 
     public query func getTasks() : async [Task] {
-        return tasks;
+        tasks;
     };
-
 };

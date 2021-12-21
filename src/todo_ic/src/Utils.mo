@@ -12,6 +12,6 @@ module Utils {
             completed = false;
             description = task.description  // TODO: concat fullTask and task
         };
-        Array.append<Task>([fullTask], tasks)
+        Array.append<Task>([fullTask], tasks);
     };
 };

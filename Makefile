@@ -18,8 +18,13 @@ upgrade: build
 reinstall: build
 	dfx canister install todo_ic --mode reinstall
 
-.PHONY: test
-test:
+.PHONY: module_test
+module_test:
+	$(shell vessel bin)/moc $(shell vessel sources) -wasi-system-api -o Test.wasm src/todo_ic/tests/Test.mo && wasmtime Test.wasm
+	rm -f Test.wasm
+
+.PHONY: canister_test
+canister_test:
 	# Add Task
 	dfx canister call todo_ic addTask "Task 001: Write test code"
 	dfx canister call todo_ic addTask "Task 002: Run test"
@@ -31,6 +36,7 @@ test:
 		| grep 'description = "Task 002: Run test";' && echo 'PASS'
 	dfx canister call todo_ic getTasks \
 		| grep 'description = "Task 003: Taste the red bar";' && echo 'PASS'
+
 .PHONY: clean
 clean:
 	rm -fr .dfx
