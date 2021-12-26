@@ -13,12 +13,13 @@ do {
     description = "This is description";
   };
 
-  let tasksExpected = [
+  let tasksExpected : [Types.Task] = [
     {
       id = nextId;
       completed = false;
-      description = task.description
+      taskText = task;
     },
   ];
   assert(Utils.add(tasks, task, nextId) == tasksExpected);
+  Debug.print("  -> PASS");
 };

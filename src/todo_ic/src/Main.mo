@@ -9,9 +9,9 @@ actor {
   var tasks : [Task] = [];
   var nextId : Nat = 1;
 
-  public func addTask(description : Text) : async () {
+  public func addTask(description_ : Text) : async () {
     let taskText : TaskText = {
-      description = description;
+      description = description_;
     };
     tasks := Utils.add(tasks, taskText, nextId);
     nextId += 1;

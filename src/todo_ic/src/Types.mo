@@ -5,7 +5,7 @@ module Types {
   public type Task = {
     id: Nat;
     completed: Bool;
-    description: Text;  // TODO: extend TaskText
+    taskText: TaskText;
   };
 
   public type TaskText = {

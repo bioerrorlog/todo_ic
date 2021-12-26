@@ -6,12 +6,12 @@ module Utils {
   type Task = Types.Task;
   type TaskText = Types.TaskText;
 
-  public func add(tasks : [Task], task : TaskText, nextId : Nat) : [Task] {
-    let fullTask : Task = {
+  public func add(tasks : [Task], taskText_ : TaskText, nextId : Nat) : [Task] {
+    let task : Task = {
       id = nextId;
       completed = false;
-      description = task.description;  // TODO: concat fullTask and task
+      taskText = taskText_;
     };
-    Array.append<Task>([fullTask], tasks);
+    Array.append<Task>([task], tasks);
   };
 };
