@@ -21,5 +21,5 @@ do {
     },
   ];
   assert(Utils.add(tasks, task, nextId) == tasksExpected);
-  Debug.print("  -> PASS");
+  Debug.print("PASS");
 };
