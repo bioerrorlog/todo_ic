@@ -16,7 +16,7 @@ do {
   let tasksExpected : [Types.Task] = [
     {
       id = nextId;
-      completed = false;
+      status = #todo;
       taskText = task;
     },
   ];

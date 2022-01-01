@@ -3,6 +3,7 @@ import Utils "Utils";
 
 actor {
 
+  type TaskId = Types.TaskId;
   type Task = Types.Task;
   type TaskText = Types.TaskText;
 

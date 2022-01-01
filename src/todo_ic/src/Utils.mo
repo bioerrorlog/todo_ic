@@ -9,7 +9,7 @@ module Utils {
   public func add(tasks : [Task], taskText_ : TaskText, nextId : Nat) : [Task] {
     let task : Task = {
       id = nextId;
-      completed = false;
+      status = #todo;
       taskText = taskText_;
     };
     Array.append<Task>([task], tasks);

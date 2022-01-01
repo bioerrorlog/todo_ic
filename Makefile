@@ -34,7 +34,7 @@ canister_test: reinstall
 	dfx canister call todo_ic addTask "Task 001: Write test code"
 	dfx canister call todo_ic addTask "Task 002: Run test"
 	dfx canister call todo_ic addTask "Task 003: Taste the red bar"
-	# Get tasks
+	# Test description
 	dfx canister call todo_ic getTasks \
 		| grep "Task 001: Write test code" && echo 'PASS'
 	dfx canister call todo_ic getTasks \
