@@ -1,0 +1,36 @@
+# Run backend test.
+
+name: backend-test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    env:
+      DFX_VERSION: 0.8.4
+    steps:
+    - uses: actions/checkout@v2
+    - name: install
+      run: |
+        echo y | DFX_VERSION=$DFX_VERSION bash -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
+        echo "/home/runner/bin" >> $GITHUB_PATH
+        ./scripts/vessel-install.sh
+        ./scripts/repl-install.sh
+    - name: module test
+      run: |
+        make module_test
+    - name: deploy canister
+      run: |
+        dfx cache install
+        dfx start --background
+        make install
+    - name: canister test
+      run: |
+        make canister_test
+    - name: stop dfx
+      run: |
+        dfx stop

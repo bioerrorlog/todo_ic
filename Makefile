@@ -27,7 +27,7 @@ module_test:
 	rm -f Test.wasm
 
 .PHONY: canister_test
-canister_test: reinstall
+canister_test:
 	# TODO: use ic-repl
 
 	# Add Task
