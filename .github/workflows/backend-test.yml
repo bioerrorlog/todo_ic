@@ -22,7 +22,9 @@ jobs:
         ./scripts/ic-repl-install.sh 
     - name: module test
       run: |
-        make module_test
+        # TODO: extend "src/todo_ic/tests/Test.mo" to "src/todo_ic/tests/*.mo"
+        $(vessel bin)/moc $(vessel sources) -wasi-system-api -o Test.wasm src/todo_ic/tests/Test.mo && wasmtime Test.wasm
+        rm -f Test.wasm
     - name: deploy canister
       run: |
         dfx start --background
