@@ -19,7 +19,7 @@ jobs:
         echo y | DFX_VERSION=$DFX_VERSION bash -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
         echo "/home/runner/bin" >> $GITHUB_PATH
         ./scripts/vessel-install.sh
-        ./scripts/repl-install.sh
+        ./scripts/ic-repl-install.sh 
     - name: module test
       run: |
         make module_test
