@@ -18,7 +18,6 @@ jobs:
       run: |
         echo y | DFX_VERSION=$DFX_VERSION bash -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
         echo "/home/runner/bin" >> $GITHUB_PATH
-        dfx cache install
         ./scripts/vessel-install.sh
         ./scripts/ic-repl-install.sh 
     - name: module test
