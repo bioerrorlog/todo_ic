@@ -15,34 +15,18 @@ jobs:
       VESSEL_VERSION: v0.6.2
       DFX_VERSION: 0.8.4
     steps:
-    - uses: actions/checkout@v2
-    - name: make bin dir
-      run: |
-        mkdir -p /home/runner/bin
-        echo "/home/runner/bin" >> $GITHUB_PATH
-    # TODO: Motoko module test
-    # - name: install moc
-    #   run: |
-    #     # not necessary?
-    #     wget https://github.com/dfinity/motoko/releases/download/$MOC_VERSION/motoko-linux64-$MOC_VERSION.tar.gz
-    #     tar -xzf motoko-linux64-$MOC_VERSION.tar.gz -C /home/runner/bin
-    #     moc --help
-    # - name: install vessel
-    #   run: |
-    #     wget --output-document /home/runner/bin/vessel https://github.com/dfinity/vessel/releases/download/$VESSEL_VERSION/vessel-linux64
-    #     chmod +x /home/runner/bin/vessel
-    #     vessel --help
-    # - name: module test
-    #   run: |
-    #     # TODO: extend "src/todo_ic/tests/Test.mo" to "src/todo_ic/tests/*.mo"
-    #     $(vessel bin)moc $(vessel sources) -wasi-system-api -o Test.wasm src/todo_ic/tests/Test.mo && wasmtime Test.wasm
-    #     rm -f Test.wasm
-    - name: install dfx
-      run: |
-        echo y | DFX_VERSION=$DFX_VERSION bash -ci "$(curl -fsSL https://sdk.dfinity.org/install.sh)"
-    - name: canister test
-      run: |
-        dfx start --background
-        dfx deploy --no-wallet todo_ic
-        make canister_test
-        dfx stop
+      - uses: actions/checkout@v2
+      - uses:  aviate-labs/setup-dfx@v0.2.3
+        with:
+          dfx-version: 0.8.4
+          install-moc: true
+          vessel-version: 0.6.2
+      - name: module test
+        run: |
+          make module_test
+      - name: canister test
+        run: |
+          dfx start --background
+          dfx deploy --no-wallet todo_ic
+          make canister_test
+          dfx stop
