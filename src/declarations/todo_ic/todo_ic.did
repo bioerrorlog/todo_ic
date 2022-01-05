@@ -14,6 +14,7 @@ type TaskStatus =
    done;
    todo;
  };
+type TaskId__1 = nat;
 type TaskId = nat;
 type Task = 
  record {
@@ -22,6 +23,6 @@ type Task =
    taskText: TaskText;
  };
 service : {
-  addTask: (TaskText__1) -> ();
+  addTask: (TaskText__1) -> (TaskId__1);
   getTasks: () -> (vec Task) query;
 }

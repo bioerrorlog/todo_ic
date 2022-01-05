@@ -3,6 +3,7 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
+  const TaskId__1 = IDL.Nat;
   const TaskId = IDL.Nat;
   const TaskStatus = IDL.Variant({
     'done' : IDL.Null,
@@ -16,7 +17,7 @@ export const idlFactory = ({ IDL }) => {
     'taskText' : TaskText,
   });
   return IDL.Service({
-    'addTask' : IDL.Func([TaskText__1], [], []),
+    'addTask' : IDL.Func([TaskText__1], [TaskId__1], []),
     'getTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),
   });
 };
