@@ -3,17 +3,14 @@ import Utils "Utils";
 
 actor {
 
-  type TaskId = Types.TaskId;
   type Task = Types.Task;
+  type TaskId = Types.TaskId;
   type TaskText = Types.TaskText;
 
   var tasks : [Task] = [];
   var nextId : Nat = 1;
 
-  public func addTask(description_ : Text) : async () {
-    let taskText : TaskText = {
-      description = description_;
-    };
+  public func addTask(taskText : TaskText) : async () {
     tasks := Utils.add(tasks, taskText, nextId);
     nextId += 1;
   };

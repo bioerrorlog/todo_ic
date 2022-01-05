@@ -1,18 +1,27 @@
-type TaskText = record {description: text;};
+type TaskText__1 = 
+ record {
+   description: text;
+   title: text;
+ };
+type TaskText = 
+ record {
+   description: text;
+   title: text;
+ };
 type TaskStatus = 
  variant {
    doing;
    done;
    todo;
  };
+type TaskId = nat;
 type Task = 
  record {
-   id: nat;
+   id: TaskId;
    status: TaskStatus;
    taskText: TaskText;
  };
 service : {
-  addTask: (text) -> ();
-  doneTask: () -> (vec Task) query;
+  addTask: (TaskText__1) -> ();
   getTasks: () -> (vec Task) query;
 }

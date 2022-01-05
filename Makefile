@@ -30,17 +30,11 @@ module_test:
 canister_test:
 	# TODO: use ic-repl
 
-	# Add Task
-	dfx canister call todo_ic addTask "Task 001: Write test code"
-	dfx canister call todo_ic addTask "Task 002: Run test"
-	dfx canister call todo_ic addTask "Task 003: Taste the red bar"
-	# Test description
+	# addTask
+	dfx canister call todo_ic addTask '(record { title="Task 001"; description="Write test code"; })'
+	# getTasks
 	dfx canister call todo_ic getTasks \
-		| grep "Task 001: Write test code" && echo 'PASS'
-	dfx canister call todo_ic getTasks \
-		| grep "Task 002: Run test" && echo 'PASS'
-	dfx canister call todo_ic getTasks \
-		| grep "Task 003: Taste the red bar" && echo 'PASS'
+		| grep 'taskText = record { title = "Task 001"; description = "Write test code" };' && echo 'PASS'
 
 .PHONY: all_test
 all_test: module_test canister_test

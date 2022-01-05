@@ -10,6 +10,7 @@ do {
   var tasks : [Types.Task] = [];
   var nextId : Nat = 100;
   let task : Types.TaskText = {
+    title = "Title 001";
     description = "This is description";
   };
 

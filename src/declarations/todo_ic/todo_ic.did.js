@@ -1,18 +1,22 @@
 export const idlFactory = ({ IDL }) => {
+  const TaskText__1 = IDL.Record({
+    'title' : IDL.Text,
+    'description' : IDL.Text,
+  });
+  const TaskId = IDL.Nat;
   const TaskStatus = IDL.Variant({
     'done' : IDL.Null,
     'todo' : IDL.Null,
     'doing' : IDL.Null,
   });
-  const TaskText = IDL.Record({ 'description' : IDL.Text });
+  const TaskText = IDL.Record({ 'title' : IDL.Text, 'description' : IDL.Text });
   const Task = IDL.Record({
-    'id' : IDL.Nat,
+    'id' : TaskId,
     'status' : TaskStatus,
     'taskText' : TaskText,
   });
   return IDL.Service({
-    'addTask' : IDL.Func([IDL.Text], [], []),
-    'doneTask' : IDL.Func([], [IDL.Vec(Task)], ['query']),
+    'addTask' : IDL.Func([TaskText__1], [], []),
     'getTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),
   });
 };
