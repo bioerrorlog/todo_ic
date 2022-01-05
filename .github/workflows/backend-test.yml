@@ -25,6 +25,8 @@ jobs:
           dfx --version
           moc --version
           vessel --version
+          vessel bin
+          vessel soruces
       - name: module test
         run: |
           make module_test
