@@ -22,25 +22,19 @@ jobs:
           dfx-version: 0.8.4
           install-moc: true
           vessel-version: 0.6.2
+      - name: install wasmtime
+        uses: mwilliamson/setup-wasmtime-action@v1
+        with:
+          wasmtime-version: "0.33.0"
       - name: show versions
         run: |
           dfx --version
           moc --version
           vessel --version
+          wasmtime -V
       - name: motoko type checking
         run: |
           for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
-      - name: install wasmtime
-        uses: mwilliamson/setup-wasmtime-action@v1
-        with:
-          wasmtime-version: "0.33.0"
-      # - name: install wasmtime
-      #   run: |
-      #     curl https://wasmtime.dev/install.sh -sSf | bash
-      #     echo "$HOME/.wasmtime" >> $GITHUB_PATH
-      #     wasmtime -V
-      - name: show wasmtime version
-        run: wasmtime -V
       - name: module test
         run: |
           make module_test
