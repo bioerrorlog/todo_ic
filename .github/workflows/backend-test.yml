@@ -32,7 +32,7 @@ jobs:
       - name: install wasmtime
         run: |
           curl https://wasmtime.dev/install.sh -sSf | bash
-          /home/runner/.bashrc
+          sudo /home/runner/.bashrc
           wasmtime -V
       - name: module test
         run: |
