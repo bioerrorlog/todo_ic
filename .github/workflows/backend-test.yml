@@ -21,14 +21,18 @@ jobs:
           dfx-version: 0.8.4
           install-moc: true
           vessel-version: 0.6.2
-      - name: show version
+      - name: show versions
         run: |
           dfx --version
           moc --version
           vessel --version
+      - name: motoko type checking
+        run: |
+          for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
       - name: install wasmtime
         run: |
           curl https://wasmtime.dev/install.sh -sSf | bash
+          /home/runner/.bashrc
           wasmtime -V
       - name: module test
         run: |
