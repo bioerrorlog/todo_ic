@@ -20,13 +20,7 @@ jobs:
         with:
           dfx-version: 0.8.4
           install-moc: true
-          vessel-version: 0.6.0
-      - run: |
-          dfx --version
-          moc --version
-          vessel --version
-          vessel bin
-          vessel soruces
+          vessel-version: 0.6.2
       - name: module test
         run: |
           make module_test
