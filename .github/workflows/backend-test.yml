@@ -16,7 +16,8 @@ jobs:
       DFX_VERSION: 0.8.4
     steps:
       - uses: actions/checkout@v2
-      - uses:  aviate-labs/setup-dfx@v0.2.3
+      - name: install dfx/moc/vessel
+        uses:  aviate-labs/setup-dfx@v0.2.3
         with:
           dfx-version: 0.8.4
           install-moc: true
@@ -30,10 +31,16 @@ jobs:
         run: |
           for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
       - name: install wasmtime
-        run: |
-          curl https://wasmtime.dev/install.sh -sSf | bash
-          echo "$HOME/.wasmtime" >> $GITHUB_PATH
-          wasmtime -V
+        uses: mwilliamson/setup-wasmtime-action@v1
+        with:
+          wasmtime-version: "0.33.0"
+      # - name: install wasmtime
+      #   run: |
+      #     curl https://wasmtime.dev/install.sh -sSf | bash
+      #     echo "$HOME/.wasmtime" >> $GITHUB_PATH
+      #     wasmtime -V
+      - name: show wasmtime version
+        run: wasmtime -V
       - name: module test
         run: |
           make module_test
