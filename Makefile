@@ -1,3 +1,9 @@
+WASM_OUTDIR=_wasm_out
+
+BACKEND_DIR=src/todo_ic
+
+BACKEND_TEST_DIR=$(BACKEND_DIR)/tests
+
 .PHONY: all
 all: build
 
@@ -22,9 +28,13 @@ reinstall: build
 
 .PHONY: module_test
 module_test:
-	# TODO: extend "src/todo_ic/tests/Test.mo" to "src/todo_ic/tests/*.mo"
-	$(shell vessel bin)/moc $(shell vessel sources) -wasi-system-api -o Test.wasm src/todo_ic/tests/Test.mo && wasmtime Test.wasm
-	rm -f Test.wasm
+	rm -rf $(WASM_OUTDIR)
+	mkdir $(WASM_OUTDIR)
+	for i in $(BACKEND_TEST_DIR)/*mo; do \
+		$(shell vessel bin)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i; \
+		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm; \
+	done
+	rm -rf $(WASM_OUTDIR)
 
 .PHONY: canister_test
 canister_test:
