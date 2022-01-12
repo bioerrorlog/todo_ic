@@ -8,17 +8,21 @@ import Utils "Utils";
 
 actor {
 
-  type State = Types.State;
+  // type State = Types.State;
+  type TaskStates = Types.TaskStates;
+  type Profiles = Types.Profiles;
   type Profile = Types.Profile;
   type ProfileUpdate = Types.ProfileUpdate;
   type Error = Types.Error;
   // type UserId = Types.UserId;
   // type PrincipalUser = Types.PrincipalUser;
 
-  stable var state : State = {
-    taskState = Trie.empty();
-    profiles = Trie.empty();
-  };
+  // stable var state : State = {
+  //   taskState = Trie.empty();
+  //   profiles = Trie.empty();
+  // };
+  stable var taskStates: TaskStates = Trie.empty();
+  stable var profiles : Profiles = Trie.empty();
   // stable var principalUser : PrincipalUser = Trie.empty();
 
   public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
@@ -35,7 +39,7 @@ actor {
     };
   
     let (newProfiles, existing) = Trie.put(
-      state.profiles,
+      profiles,
       keyPrincipal(msg.caller),
       Principal.equal,
       userProfile,
@@ -44,7 +48,7 @@ actor {
     // If there is an original value, do not update
     switch(existing) {
       case null {
-        state.profiles := newProfiles;
+        profiles := newProfiles;
         return #ok(());
       };
       // Matches pattern of type - opt Profile

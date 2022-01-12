@@ -1,3 +1,20 @@
+type Result = 
+ variant {
+   err: Error;
+   ok;
+ };
+type ProfileUpdate = 
+ record {
+   about: text;
+   name: text;
+ };
+type Error = 
+ variant {
+   AlreadyExists;
+   NotAuthorized;
+   NotFound;
+ };
 service : {
+  createUser: (ProfileUpdate) -> (Result);
   showCaller: () -> (principal);
 }

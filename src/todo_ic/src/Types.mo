@@ -11,10 +11,13 @@ module {
   // public type PrincipalUser = Trie.Trie<Principal, UserId>;
 
   // stable State - contains no Principal
-  public type State = {
-    taskState: Trie.Trie2D<Principal, TaskId, TaskState>;
-    profiles: Trie.Trie<Principal, Profile>;
-  };
+  // public type State = {
+  //   taskState: Trie.Trie2D<Principal, TaskId, TaskState>;
+  //   profiles: Trie.Trie<Principal, Profile>;
+  // };
+  public type TaskStates = Trie.Trie2D<Principal, TaskId, TaskState>;
+
+  public type Profiles = Trie.Trie<Principal, Profile>;
 
   public type TaskState = {
     id: TaskId;
