@@ -1,13 +1,36 @@
-import * as React from "react";
+import React, { useState, useEffect } from 'react';
+import { Connect } from './components';
 import { todo_ic } from "../../declarations/todo_ic";
 
 const App = () => {
   const [name, setName] = React.useState('');
   const [message, setMessage] = React.useState('');
 
-  async function doGreet() {
+  const [connected, setConnected] = useState(false);
+  const [principalId, setPrincipalId] = useState('');
+  const [actor, setActor] = useState(false);
+
+  const doGreet = async () => {
     const greeting = await todo_ic.greet(name);
     setMessage(greeting);
+  }
+
+  const handleConnect = async () => {
+    setConnected(true);
+
+    if (!window.ic.plug.agent) {
+      const whitelist = [process.env.PLUG_COIN_FLIP_CANISTER_ID];
+      await window.ic?.plug?.createAgent(whitelist);
+    }
+
+    // Create an actor to interact with the NNS Canister
+    // we pass the NNS Canister id and the interface factory
+    const NNSUiActor = await window.ic.plug.createActor({
+      canisterId: process.env.PLUG_COIN_FLIP_CANISTER_ID,
+      interfaceFactory: idlFactory,
+    });
+
+    setActor(NNSUiActor);
   }
 
   return (
@@ -20,6 +43,7 @@ const App = () => {
           <b> Get Greeting</b> to display the result.
         </p>
       </div>
+      <Connect handleConnect={handleConnect} />
       <div style={{ margin: "30px" }}>
         <input
           id="name"
