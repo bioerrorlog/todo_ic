@@ -1,23 +1,38 @@
-import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
+import Text "mo:base/Text";
+import Trie "mo:base/Trie";
 
-module Types {
+module {
 
-  public type Task = {
-    id: TaskId;
-    status: TaskStatus;
-    taskText: TaskText;
+  public type UserId = Text;  // Decided by users
+  public type TaskId = Text;  // uuid
+
+  // Store Principal-userId relations
+  public type PrincipalUser = Trie.Trie<Principal, UserId>;
+
+  // stable State - contains no Principal
+  public type State = {
+    taskState: Trie2D<UserId, TaskId, TaskState>;
+    profiles: Trie.Trie<UserId, Profiles>;
   };
 
-  public type TaskId = Nat;
+  public type TaskState = {
+    id: TaskId;
+    title: Text;
+    description: Text;
+    status: TaskStatus;
+  };
 
   public type TaskStatus = {
     #todo;
     #doing;
     #done;
+    #deleted;
   };
 
-  public type TaskText = {
-    title: Text;
-    description: Text;
+  type Profile = {
+    userId: UserId;
+    name: Text;
+    about: Text;
   };
 };
