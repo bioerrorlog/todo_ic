@@ -7,5 +7,6 @@ export type Result = { 'ok' : null } |
   { 'err' : Error };
 export interface _SERVICE {
   'createUser' : (arg_0: ProfileUpdate) => Promise<Result>,
+  'greet' : (arg_0: string) => Promise<string>,
   'showCaller' : () => Promise<Principal>,
 }

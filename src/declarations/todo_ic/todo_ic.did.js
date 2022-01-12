@@ -8,6 +8,7 @@ export const idlFactory = ({ IDL }) => {
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   return IDL.Service({
     'createUser' : IDL.Func([ProfileUpdate], [Result], []),
+    'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'showCaller' : IDL.Func([], [IDL.Principal], []),
   });
 };

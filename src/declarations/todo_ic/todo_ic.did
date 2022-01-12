@@ -16,5 +16,6 @@ type Error =
  };
 service : {
   createUser: (ProfileUpdate) -> (Result);
+  greet: (text) -> (text);
   showCaller: () -> (principal);
 }

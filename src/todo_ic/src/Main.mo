@@ -53,6 +53,10 @@ actor {
     msg.caller
   };
 
+  public func greet(name : Text) : async Text {
+    return "Hello, " # name # "!";
+  };
+
   private func keyText(x : Text) : Trie.Key<Text> {
     { key = x; hash = Text.hash(x) }
   };
