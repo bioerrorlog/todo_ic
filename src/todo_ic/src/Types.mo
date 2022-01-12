@@ -4,17 +4,8 @@ import Trie "mo:base/Trie";
 
 module {
 
-  // public type UserId = Text;  // Decided by users
-  public type TaskId = Text;  // uuid
+  public type TaskId = Text;
 
-  // Store Principal-userId relations
-  // public type PrincipalUser = Trie.Trie<Principal, UserId>;
-
-  // stable State - contains no Principal
-  // public type State = {
-  //   taskState: Trie.Trie2D<Principal, TaskId, TaskState>;
-  //   profiles: Trie.Trie<Principal, Profile>;
-  // };
   public type TaskStates = Trie.Trie2D<Principal, TaskId, TaskState>;
 
   public type Profiles = Trie.Trie<Principal, Profile>;
@@ -34,7 +25,6 @@ module {
   };
 
   public type Profile = {
-    // userId: UserId;
     principal: Principal;
     name: Text;
     about: Text;

@@ -8,22 +8,14 @@ import Utils "Utils";
 
 actor {
 
-  // type State = Types.State;
   type TaskStates = Types.TaskStates;
   type Profiles = Types.Profiles;
   type Profile = Types.Profile;
   type ProfileUpdate = Types.ProfileUpdate;
   type Error = Types.Error;
-  // type UserId = Types.UserId;
-  // type PrincipalUser = Types.PrincipalUser;
 
-  // stable var state : State = {
-  //   taskState = Trie.empty();
-  //   profiles = Trie.empty();
-  // };
   stable var taskStates: TaskStates = Trie.empty();
   stable var profiles : Profiles = Trie.empty();
-  // stable var principalUser : PrincipalUser = Trie.empty();
 
   public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
   
@@ -51,24 +43,11 @@ actor {
         profiles := newProfiles;
         return #ok(());
       };
-      // Matches pattern of type - opt Profile
       case (? v) {
         return #err(#AlreadyExists);
       };
     };
   };
-
-  // public func addTask(taskText : TaskText) : async TaskId {
-  //   let taskId = nextId;
-  //   tasks := Utils.add(tasks, taskText, taskId);
-  //   nextId += 1;
-
-  //   taskId;
-  // };
-
-  // public query func getTasks() : async [Task] {
-  //   tasks;
-  // };
 
   public shared(msg) func showCaller () : async Principal {
     msg.caller
