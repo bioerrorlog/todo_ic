@@ -37,6 +37,11 @@ module {
     about: Text;
   };
 
+  public type ProfileUpdate = {
+    name: Text;
+    about: Text;
+  };
+
   public type Error = {
     #NotFound;
     #AlreadyExists;

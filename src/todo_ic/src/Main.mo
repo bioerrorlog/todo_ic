@@ -10,6 +10,7 @@ actor {
 
   type State = Types.State;
   type Profile = Types.Profile;
+  type ProfileUpdate = Types.ProfileUpdate;
   type Error = Types.Error;
   // type UserId = Types.UserId;
   // type PrincipalUser = Types.PrincipalUser;
@@ -20,18 +21,24 @@ actor {
   };
   // stable var principalUser : PrincipalUser = Trie.empty();
 
-  public shared(msg) func createUser (profile_ : Profile) : async Result.Result<(), Error> {
+  public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
   
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
       return #err(#NotAuthorized);
     };
   
+    let userProfile: Profile = {
+      principal = msg.caller;
+      name = profile_.name;
+      about = profile_.about;
+    };
+  
     let (newProfiles, existing) = Trie.put(
       state.profiles,
-      keyPrincipal(profile_.principal),
+      keyPrincipal(msg.caller),
       Principal.equal,
-      profile_,
+      userProfile,
     );
 
     // If there is an original value, do not update
