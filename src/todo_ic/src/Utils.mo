@@ -1,18 +1,18 @@
 import Array "mo:base/Array";
 import Types "Types";
 
-module Utils {
+module {
 
-  type Task = Types.Task;
-  type TaskId = Types.TaskId;
-  type TaskText = Types.TaskText;
+  // type Task = Types.Task;
+  // type TaskId = Types.TaskId;
+  // type TaskText = Types.TaskText;
 
-  public func add(tasks : [Task], taskText : TaskText, nextId : TaskId) : [Task] {
-    let task : Task = {
-      id = nextId;
-      status = #todo;
-      taskText = taskText;
-    };
-    Array.append<Task>([task], tasks);
-  };
+  // public func add(tasks : [Task], taskText : TaskText, nextId : TaskId) : [Task] {
+  //   let task : Task = {
+  //     id = nextId;
+  //     status = #todo;
+  //     taskText = taskText;
+  //   };
+  //   Array.append<Task>([task], tasks);
+  // };
 };

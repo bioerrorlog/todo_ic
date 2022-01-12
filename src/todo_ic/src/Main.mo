@@ -15,36 +15,38 @@ actor {
   type Profile = Types.Profile;
   type UserId = Types.UserId;
 
-  stable var state : State = Trie.empty();
-  stable var principalUser : PrincipalUser = Trie.empty();
-  stable var userPrincipal : UserPrincipal = Trie.empty();
-
-  public shared(msg) createUser (profile_ : Profile) : async Result.Result<(), Error> {
-  
-    // Reject Anonymous Identity
-    if(isAnonymous(msg.caller)) {
-      return #err(#NotAuthorized);
-    };
-  
-    let (newProfiles, existing) = Trie.put(
-      state.profiles,
-      profile_.userId,
-      Text.equal,
-      profile_,
-    );
-
-    // If there is an original value, do not update
-    switch(existing) {
-      case null {
-        state.profiles := newProfiles;
-        return #ok(());
-      };
-      // Matches pattern of type - opt Profile
-      case (? v) {
-        return #err(#AlreadyExists);
-      };
-    };
+  stable var state : State = {
+    taskState = Trie.empty();
+    profiles = Trie.empty();
   };
+  stable var principalUser : PrincipalUser = Trie.empty();
+
+  // public shared(msg) func createUser (profile_ : Profile) : async /* Result.Result<(), Error> */ () {
+  
+  //   // Reject Anonymous Identity
+  //   if(isAnonymous(msg.caller)) {
+  //     return #err(#NotAuthorized);
+  //   };
+  
+  //   let (newProfiles, existing) = Trie.put(
+  //     state.profiles,
+  //     profile_.userId,
+  //     Text.equal,
+  //     profile_,
+  //   );
+
+  //   // If there is an original value, do not update
+  //   switch(existing) {
+  //     case null {
+  //       state.profiles := newProfiles;
+  //       return #ok(());
+  //     };
+  //     // Matches pattern of type - opt Profile
+  //     case (? v) {
+  //       return #err(#AlreadyExists);
+  //     };
+  //   };
+  // };
 
   // public func addTask(taskText : TaskText) : async TaskId {
   //   let taskId = nextId;
@@ -57,6 +59,10 @@ actor {
   // public query func getTasks() : async [Task] {
   //   tasks;
   // };
+
+  public shared(msg) func showCaller () : async Principal {
+    msg.caller
+  };
 
   private func keyText(x : Text) : Trie.Key<Text> {
     { key = x; hash = Text.hash(x) }

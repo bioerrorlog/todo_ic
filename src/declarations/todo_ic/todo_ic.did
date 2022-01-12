@@ -1,28 +1,3 @@
-type TaskText__1 = 
- record {
-   description: text;
-   title: text;
- };
-type TaskText = 
- record {
-   description: text;
-   title: text;
- };
-type TaskStatus = 
- variant {
-   doing;
-   done;
-   todo;
- };
-type TaskId__1 = nat;
-type TaskId = nat;
-type Task = 
- record {
-   id: TaskId;
-   status: TaskStatus;
-   taskText: TaskText;
- };
 service : {
-  addTask: (TaskText__1) -> (TaskId__1);
-  getTasks: () -> (vec Task) query;
+  showCaller: () -> (principal);
 }

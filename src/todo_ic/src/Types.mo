@@ -12,8 +12,8 @@ module {
 
   // stable State - contains no Principal
   public type State = {
-    taskState: Trie2D<UserId, TaskId, TaskState>;
-    profiles: Trie.Trie<UserId, Profiles>;
+    taskState: Trie.Trie2D<UserId, TaskId, TaskState>;
+    profiles: Trie.Trie<UserId, Profile>;
   };
 
   public type TaskState = {
@@ -30,7 +30,7 @@ module {
     #deleted;
   };
 
-  type Profile = {
+  public type Profile = {
     userId: UserId;
     name: Text;
     about: Text;
