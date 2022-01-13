@@ -3,8 +3,8 @@ import { Connect } from './components';
 import { todo_ic } from "../../declarations/todo_ic";
 
 const App = () => {
-  const [name, setName] = React.useState('');
-  const [message, setMessage] = React.useState('');
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
 
   const [connected, setConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
@@ -34,8 +34,10 @@ const App = () => {
   }
 
   return (
-    <div style={{ "fontSize": "30px" }}>
-      <div style={{ "backgroundColor": "yellow" }}>
+    <>
+    <div className='app'>
+    {/* <div style={{ "fontSize": "30px" }}> */}
+      {/* <div style={{ "backgroundColor": "yellow" }}> */}
         <p>Greetings, from DFINITY!</p>
         <p>
           {" "}
@@ -55,8 +57,10 @@ const App = () => {
       <div>
         Greeting is: "
         <span style={{ color: "blue" }}>{message}</span>"
-      </div>
+      {/* </div> */}
+    {/* </div> */}
     </div>
+    </ >
   );
 };
 
