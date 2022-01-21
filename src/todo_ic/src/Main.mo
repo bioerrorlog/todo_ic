@@ -16,14 +16,14 @@ actor {
 
   stable var taskStates: TaskStates = Trie.empty();
 
-  // TODO: Hide Principal, use userId instead.
+  // TODO: Hide Principal from user, use userId instead.
   stable var profiles : Profiles = Trie.empty();
 
   public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
   
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
-      return #err(#NotAuthorized);
+      return #err(#notAuthorized);
     };
   
     let userProfile: Profile = {
@@ -46,7 +46,7 @@ actor {
         return #ok(());
       };
       case (? v) {
-        return #err(#AlreadyExists);
+        return #err(#alreadyExists);
       };
     };
   };
@@ -56,7 +56,7 @@ actor {
 
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
-      return #err(#NotAuthorized);
+      return #err(#notAuthorized);
     };
   
     let userProfile: Profile = {
