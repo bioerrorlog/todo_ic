@@ -15,6 +15,8 @@ actor {
   type Error = Types.Error;
 
   stable var taskStates: TaskStates = Trie.empty();
+
+  // TODO: Hide Principal, use userId instead.
   stable var profiles : Profiles = Trie.empty();
 
   public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
@@ -49,12 +51,37 @@ actor {
     };
   };
 
-  public shared(msg) func showCaller () : async Principal {
-    msg.caller
+  public shared(msg) func updateUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
+    // TODO refactor: remove duplications to createUser
+
+    // Reject Anonymous Identity
+    if(isAnonymous(msg.caller)) {
+      return #err(#NotAuthorized);
+    };
+  
+    let userProfile: Profile = {
+      principal = msg.caller;
+      name = profile_.name;
+      about = profile_.about;
+    };
+  
+    profiles := Trie.put(
+      profiles,
+      keyPrincipal(msg.caller),
+      Principal.equal,
+      userProfile,
+    ).0;
+
+    return #ok(())
   };
 
-  public func greet(name : Text) : async Text {
-    return "Hello, " # name # "!";
+  public shared(msg) func listProfiles () : async Profiles {
+    // TODO: convert to array
+    profiles
+  };
+
+  public shared(msg) func showCaller () : async Principal {
+    msg.caller
   };
 
   private func keyText(x : Text) : Trie.Key<Text> {
@@ -67,5 +94,10 @@ actor {
 
   private func isAnonymous(caller: Principal) : Bool {
     Principal.equal(caller, Principal.fromText("2vxsx-fae"))
+  };
+
+  // Debug
+  public func greet(name : Text) : async Text {
+    return "Hello, " # name # "!";
   };
 };
