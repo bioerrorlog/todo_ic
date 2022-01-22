@@ -4,23 +4,23 @@ import Types "../src/Types";
 
 Debug.print("Module Test: Utils");
 
-do {
-  Debug.print("  Utils.add");
+// do {
+//   Debug.print("  Utils.add");
 
-  var tasks : [Types.Task] = [];
-  var nextId : Nat = 100;
-  let task : Types.TaskText = {
-    title = "Title 001";
-    description = "This is description";
-  };
+//   var tasks : [Types.Task] = [];
+//   var nextId : Nat = 100;
+//   let task : Types.TaskText = {
+//     title = "Title 001";
+//     description = "This is description";
+//   };
 
-  let tasksExpected : [Types.Task] = [
-    {
-      id = nextId;
-      status = #todo;
-      taskText = task;
-    },
-  ];
-  assert(Utils.add(tasks, task, nextId) == tasksExpected);
-  Debug.print("PASS");
-};
+//   let tasksExpected : [Types.Task] = [
+//     {
+//       id = nextId;
+//       status = #todo;
+//       taskText = task;
+//     },
+//   ];
+//   assert(Utils.add(tasks, task, nextId) == tasksExpected);
+//   Debug.print("PASS");
+// };
