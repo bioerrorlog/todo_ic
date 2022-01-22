@@ -9,9 +9,11 @@ import Utils "Utils";
 actor {
 
   type TaskStates = Types.TaskStates;
+  type TaskState = Types.TaskState;
+  type TaskId = Types.TaskId;
   type Profiles = Types.Profiles;
   type Profile = Types.Profile;
-  type ProfileUpdate = Types.ProfileUpdate;
+  type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
 
   stable var taskStates: TaskStates = Trie.empty();
@@ -19,7 +21,7 @@ actor {
   // TODO: Hide Principal from user, use userId instead.
   stable var profiles : Profiles = Trie.empty();
 
-  public shared(msg) func createUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
+  public shared(msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
   
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
@@ -51,7 +53,7 @@ actor {
     };
   };
 
-  public shared(msg) func updateUser (profile_ : ProfileUpdate) : async Result.Result<(), Error> {
+  public shared(msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
     // TODO refactor: remove duplications to createUser
 
     // Reject Anonymous Identity
@@ -78,6 +80,20 @@ actor {
   public shared(msg) func listProfiles () : async Profiles {
     // TODO: convert to array
     profiles
+  };
+
+
+  public shared(msg) func putTask (taskState_ : TaskState) : async Result.Result<TaskId, Error> {
+    // TODO: High cost operation?
+    taskStates := Trie.put2D <Principal, TaskId, TaskState>(
+      taskStates,
+      keyPrincipal(msg.caller),
+      Principal.equal,
+      keyText(taskState_.id),
+      Text.equal,
+      taskState_
+    );
+    #ok(taskState_.id)
   };
 
   public shared(msg) func showCaller () : async Principal {

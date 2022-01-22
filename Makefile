@@ -40,11 +40,9 @@ module_test:
 canister_test:
 	# TODO: use ic-repl
 
-	# addTask
-	dfx canister call todo_ic addTask '(record { title="Task 001"; description="Write test code"; })'
-	# getTasks
-	dfx canister call todo_ic getTasks \
-		| grep 'taskText = record { title = "Task 001"; description = "Write test code" };' && echo 'PASS'
+	dfx canister call todo_ic listProfiles \
+		| grep '(variant { "empty" })' && echo 'PASS'
+	dfx canister call todo_ic createProfile '(record {about="this is test user"; name="BioErrorLog_2"})'
 
 .PHONY: all_test
 all_test: module_test canister_test

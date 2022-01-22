@@ -30,11 +30,12 @@ module {
     about: Text;
   };
 
-  public type ProfileUpdate = {
+  public type ProfileTemplate = {
     name: Text;
     about: Text;
   };
 
+  // TODO: Split for each use case
   public type Error = {
     #notFound;
     #alreadyExists;

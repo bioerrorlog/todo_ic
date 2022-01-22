@@ -4,6 +4,27 @@ type Trie =
    "empty";
    leaf: Leaf;
  };
+type TaskStatus = 
+ variant {
+   deleted;
+   doing;
+   done;
+   todo;
+ };
+type TaskState = 
+ record {
+   description: text;
+   id: TaskId;
+   status: TaskStatus;
+   title: text;
+ };
+type TaskId__1 = text;
+type TaskId = text;
+type Result_1 = 
+ variant {
+   err: Error;
+   ok: TaskId__1;
+ };
 type Result = 
  variant {
    err: Error;
@@ -15,7 +36,7 @@ type Profiles =
    "empty";
    leaf: Leaf;
  };
-type ProfileUpdate = 
+type ProfileTemplate = 
  record {
    about: text;
    name: text;
@@ -47,9 +68,9 @@ type Key =
 type Hash = nat32;
 type Error = 
  variant {
-   AlreadyExists;
-   NotAuthorized;
-   NotFound;
+   alreadyExists;
+   notAuthorized;
+   notFound;
  };
 type Branch = 
  record {
@@ -66,9 +87,10 @@ type AssocList =
        List;
      };
 service : {
-  createUser: (ProfileUpdate) -> (Result);
+  createProfile: (ProfileTemplate) -> (Result);
   greet: (text) -> (text);
   listProfiles: () -> (Profiles);
+  putTask: (TaskState) -> (Result_1);
   showCaller: () -> (principal);
-  updateUser: (ProfileUpdate) -> (Result);
+  updateProfile: (ProfileTemplate) -> (Result);
 }
