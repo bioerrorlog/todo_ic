@@ -1,4 +1,5 @@
 BACKEND_CANISTER=todo_ic
+FRONTEND_CANISTER=$(BACKEND_CANISTER)_assets 
 
 WASM_OUTDIR=_wasm_out
 
@@ -26,7 +27,7 @@ upgrade: build
 reinstall: build
 	# The --mode=reinstall is only valid when specifying a single canister
 	echo yes | dfx canister install $(BACKEND_CANISTER) --mode reinstall
-	echo yes | dfx canister install $(BACKEND_CANISTER)_assets --mode reinstall
+	echo yes | dfx canister install $(FRONTEND_CANISTER)--mode reinstall
 
 .PHONY: module_test
 module_test:
