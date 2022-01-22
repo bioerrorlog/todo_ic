@@ -46,7 +46,7 @@ canister_test:
 	dfx canister call todo_ic listProfiles
 	dfx canister call todo_ic updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})'
 	dfx canister call todo_ic listProfiles
-	dfx canister call todo_ic putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status="todo"})'
+	dfx canister call todo_ic putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})'
 
 .PHONY: all_test
 all_test: module_test canister_test
