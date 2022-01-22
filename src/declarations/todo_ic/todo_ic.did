@@ -127,10 +127,10 @@ type AssocList =
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   greet: (text) -> (text);
-  listMyTasks: () -> (opt Trie);
-  listProfiles: () -> (Profiles);
-  listTasksByUserId: (principal) -> (opt Trie);
+  listMyTasks: () -> (opt Trie) query;
+  listProfiles: () -> (Profiles) query;
+  listTasksByUserId: (principal) -> (opt Trie) query;
   putTask: (Task) -> (Result_1);
-  showCaller: () -> (principal);
+  showCaller: () -> (principal) query;
   updateProfile: (ProfileTemplate) -> (Result);
 }

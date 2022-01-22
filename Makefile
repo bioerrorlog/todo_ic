@@ -45,11 +45,14 @@ canister_test:
 
 	dfx canister call $(BACKEND_CANISTER) listProfiles \
 		| grep '(variant { "empty" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})'
+	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})' \
+		| grep '(variant { ok })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})'
+	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})' \
+		| grep '(variant { ok })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})'
+	dfx canister call $(BACKEND_CANISTER) putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})' \
+		| grep '(variant { ok = "0000001" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listMyTasks
 	dfx canister call $(BACKEND_CANISTER) listTasksByUserId "(principal \"$(shell dfx identity get-principal)\")"
 

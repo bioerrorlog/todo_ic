@@ -21,7 +21,7 @@ actor {
   // TODO: Hide Principal from user, use userId instead.
   stable var profiles : Profiles = Trie.empty();
 
-  public shared(msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
+  public shared (msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
   
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
@@ -53,8 +53,8 @@ actor {
     };
   };
 
-  public shared(msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
-    // TODO refactor: remove duplications to createUser
+  public shared (msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
+    // TODO refactor: remove duplications with createUser
 
     // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
@@ -77,13 +77,13 @@ actor {
     return #ok(())
   };
 
-  public func listProfiles () : async Profiles {
+  public query func listProfiles () : async Profiles {
     // TODO: return only necessary parts
     profiles
   };
 
 
-  public shared(msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
+  public shared (msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
     // TODO: High cost operation?
     taskStates := Trie.put2D <Principal, TaskId, Task>(
       taskStates,
@@ -96,15 +96,15 @@ actor {
     #ok(taskState_.id)
   };
 
-  public shared(msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
-    listTasksByUser_(msg.caller)
+  public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
+    listTasksByUserId_(msg.caller)
   };
 
-  public shared(msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
-    listTasksByUser_(user_)
+  public query (msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
+    listTasksByUserId_(user_)
   };
 
-  private func listTasksByUser_ (user_ : Principal) : ?Trie.Trie<TaskId, Task> {
+  private func listTasksByUserId_ (user_ : Principal) : ?Trie.Trie<TaskId, Task> {
     Trie.find(
       taskStates,
       keyPrincipal(user_),
@@ -112,7 +112,7 @@ actor {
     )
   };
 
-  public shared(msg) func showCaller () : async Principal {
+  public query (msg) func showCaller () : async Principal {
     msg.caller
   };
 

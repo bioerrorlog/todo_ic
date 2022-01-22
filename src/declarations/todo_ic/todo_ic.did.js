@@ -63,11 +63,11 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'createProfile' : IDL.Func([ProfileTemplate], [Result], []),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
-    'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], []),
-    'listProfiles' : IDL.Func([], [Profiles], []),
-    'listTasksByUserId' : IDL.Func([IDL.Principal], [IDL.Opt(Trie)], []),
+    'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], ['query']),
+    'listProfiles' : IDL.Func([], [Profiles], ['query']),
+    'listTasksByUserId' : IDL.Func([IDL.Principal], [IDL.Opt(Trie)], ['query']),
     'putTask' : IDL.Func([Task], [Result_1], []),
-    'showCaller' : IDL.Func([], [IDL.Principal], []),
+    'showCaller' : IDL.Func([], [IDL.Principal], ['query']),
     'updateProfile' : IDL.Func([ProfileTemplate], [Result], []),
   });
 };
