@@ -51,7 +51,7 @@ canister_test:
 	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})'
 	dfx canister call $(BACKEND_CANISTER) listMyTasks
-	dfx canister call $(BACKEND_CANISTER) listTasksByUserId $(shell dfx identity get-principal)
+	dfx canister call $(BACKEND_CANISTER) listTasksByUserId "(principal \"$(shell dfx identity get-principal)\")"
 
 .PHONY: all_test
 all_test: module_test canister_test
