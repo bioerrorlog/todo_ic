@@ -1,6 +1,8 @@
+BACKEND_CANISTER=todo_ic
+
 WASM_OUTDIR=_wasm_out
 
-BACKEND_DIR=src/todo_ic
+BACKEND_DIR=src/$(BACKEND_CANISTER)
 
 BACKEND_TEST_DIR=$(BACKEND_DIR)/tests
 
@@ -23,8 +25,8 @@ upgrade: build
 .PHONY: reinstall
 reinstall: build
 	# The --mode=reinstall is only valid when specifying a single canister
-	echo yes | dfx canister install todo_ic --mode reinstall
-	echo yes | dfx canister install todo_ic_assets --mode reinstall
+	echo yes | dfx canister install $(BACKEND_CANISTER) --mode reinstall
+	echo yes | dfx canister install $(BACKEND_CANISTER)_assets --mode reinstall
 
 .PHONY: module_test
 module_test:
@@ -39,14 +41,17 @@ module_test:
 .PHONY: canister_test
 canister_test:
 	# TODO: use ic-repl
+	# TODO: assert
 
-	dfx canister call todo_ic listProfiles \
+	dfx canister call $(BACKEND_CANISTER) listProfiles \
 		| grep '(variant { "empty" })' && echo 'PASS'
-	dfx canister call todo_ic createProfile '(record {about="this is test user"; name="BioErrorLog_0"})'
-	dfx canister call todo_ic listProfiles
-	dfx canister call todo_ic updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})'
-	dfx canister call todo_ic listProfiles
-	dfx canister call todo_ic putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})'
+	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})'
+	dfx canister call $(BACKEND_CANISTER) listProfiles
+	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})'
+	dfx canister call $(BACKEND_CANISTER) listProfiles
+	dfx canister call $(BACKEND_CANISTER) putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})'
+	dfx canister call $(BACKEND_CANISTER) listMyTasks
+	dfx canister call $(BACKEND_CANISTER) listTasksByUserId $(shell dfx identity get-principal)
 
 .PHONY: all_test
 all_test: module_test canister_test

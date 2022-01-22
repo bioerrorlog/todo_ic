@@ -1,3 +1,9 @@
+type Trie_1 = 
+ variant {
+   branch: Branch_1;
+   "empty";
+   leaf: Leaf_1;
+ };
 type Trie = 
  variant {
    branch: Branch;
@@ -32,9 +38,9 @@ type Result =
  };
 type Profiles = 
  variant {
-   branch: Branch;
+   branch: Branch_1;
    "empty";
-   leaf: Leaf;
+   leaf: Leaf_1;
  };
 type ProfileTemplate = 
  record {
@@ -47,23 +53,41 @@ type Profile =
    name: text;
    "principal": principal;
  };
+type List_1 = 
+ opt record {
+       record {
+         Key_1;
+         Profile;
+       };
+       List_1;
+     };
 type List = 
  opt record {
        record {
          Key;
-         Profile;
+         Task;
        };
        List;
      };
+type Leaf_1 = 
+ record {
+   keyvals: AssocList_1;
+   size: nat;
+ };
 type Leaf = 
  record {
    keyvals: AssocList;
    size: nat;
  };
-type Key = 
+type Key_1 = 
  record {
    hash: Hash;
    key: principal;
+ };
+type Key = 
+ record {
+   hash: Hash;
+   key: TaskId__1;
  };
 type Hash = nat32;
 type Error = 
@@ -72,24 +96,40 @@ type Error =
    notAuthorized;
    notFound;
  };
+type Branch_1 = 
+ record {
+   left: Trie_1;
+   right: Trie_1;
+   size: nat;
+ };
 type Branch = 
  record {
    left: Trie;
    right: Trie;
    size: nat;
  };
+type AssocList_1 = 
+ opt record {
+       record {
+         Key_1;
+         Profile;
+       };
+       List_1;
+     };
 type AssocList = 
  opt record {
        record {
          Key;
-         Profile;
+         Task;
        };
        List;
      };
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   greet: (text) -> (text);
+  listMyTasks: () -> (opt Trie);
   listProfiles: () -> (Profiles);
+  listTasksByUserId: (principal) -> (opt Trie);
   putTask: (Task) -> (Result_1);
   showCaller: () -> (principal);
   updateProfile: (ProfileTemplate) -> (Result);

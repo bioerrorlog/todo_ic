@@ -77,8 +77,8 @@ actor {
     return #ok(())
   };
 
-  public shared(msg) func listProfiles () : async Profiles {
-    // TODO: convert to array
+  public func listProfiles () : async Profiles {
+    // TODO: return only necessary parts
     profiles
   };
 
@@ -94,6 +94,22 @@ actor {
       taskState_
     );
     #ok(taskState_.id)
+  };
+
+  public shared(msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
+    listTasksByUser_(msg.caller)
+  };
+
+  public shared(msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
+    listTasksByUser_(user_)
+  };
+
+  private func listTasksByUser_ (user_ : Principal) : ?Trie.Trie<TaskId, Task> {
+    Trie.find(
+      taskStates,
+      keyPrincipal(user_),
+      Principal.equal,
+    )
   };
 
   public shared(msg) func showCaller () : async Principal {
