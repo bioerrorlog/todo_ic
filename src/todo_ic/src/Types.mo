@@ -6,11 +6,11 @@ module {
 
   public type TaskId = Text;
 
-  public type TaskStates = Trie.Trie2D<Principal, TaskId, TaskState>;
+  public type TaskStates = Trie.Trie2D<Principal, TaskId, Task>;
 
   public type Profiles = Trie.Trie<Principal, Profile>;
 
-  public type TaskState = {
+  public type Task = {
     id: TaskId;
     title: Text;
     description: Text;

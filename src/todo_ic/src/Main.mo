@@ -9,7 +9,7 @@ import Utils "Utils";
 actor {
 
   type TaskStates = Types.TaskStates;
-  type TaskState = Types.TaskState;
+  type Task = Types.Task;
   type TaskId = Types.TaskId;
   type Profiles = Types.Profiles;
   type Profile = Types.Profile;
@@ -83,9 +83,9 @@ actor {
   };
 
 
-  public shared(msg) func putTask (taskState_ : TaskState) : async Result.Result<TaskId, Error> {
+  public shared(msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
     // TODO: High cost operation?
-    taskStates := Trie.put2D <Principal, TaskId, TaskState>(
+    taskStates := Trie.put2D <Principal, TaskId, Task>(
       taskStates,
       keyPrincipal(msg.caller),
       Principal.equal,

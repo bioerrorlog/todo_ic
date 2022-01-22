@@ -42,7 +42,11 @@ canister_test:
 
 	dfx canister call todo_ic listProfiles \
 		| grep '(variant { "empty" })' && echo 'PASS'
-	dfx canister call todo_ic createProfile '(record {about="this is test user"; name="BioErrorLog_2"})'
+	dfx canister call todo_ic createProfile '(record {about="this is test user"; name="BioErrorLog_0"})'
+	dfx canister call todo_ic listProfiles
+	dfx canister call todo_ic updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})'
+	dfx canister call todo_ic listProfiles
+	dfx canister call todo_ic putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status="todo"})'
 
 .PHONY: all_test
 all_test: module_test canister_test

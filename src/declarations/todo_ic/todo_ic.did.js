@@ -36,7 +36,7 @@ export const idlFactory = ({ IDL }) => {
     'todo' : IDL.Null,
     'doing' : IDL.Null,
   });
-  const TaskState = IDL.Record({
+  const Task = IDL.Record({
     'id' : TaskId,
     'status' : TaskStatus,
     'title' : IDL.Text,
@@ -48,7 +48,7 @@ export const idlFactory = ({ IDL }) => {
     'createProfile' : IDL.Func([ProfileTemplate], [Result], []),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'listProfiles' : IDL.Func([], [Profiles], []),
-    'putTask' : IDL.Func([TaskState], [Result_1], []),
+    'putTask' : IDL.Func([Task], [Result_1], []),
     'showCaller' : IDL.Func([], [IDL.Principal], []),
     'updateProfile' : IDL.Func([ProfileTemplate], [Result], []),
   });

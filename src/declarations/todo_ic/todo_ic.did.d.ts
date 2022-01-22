@@ -21,14 +21,14 @@ export type Result = { 'ok' : null } |
   { 'err' : Error };
 export type Result_1 = { 'ok' : TaskId__1 } |
   { 'err' : Error };
-export type TaskId = string;
-export type TaskId__1 = string;
-export interface TaskState {
+export interface Task {
   'id' : TaskId,
   'status' : TaskStatus,
   'title' : string,
   'description' : string,
 }
+export type TaskId = string;
+export type TaskId__1 = string;
 export type TaskStatus = { 'deleted' : null } |
   { 'done' : null } |
   { 'todo' : null } |
@@ -40,7 +40,7 @@ export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
   'greet' : (arg_0: string) => Promise<string>,
   'listProfiles' : () => Promise<Profiles>,
-  'putTask' : (arg_0: TaskState) => Promise<Result_1>,
+  'putTask' : (arg_0: Task) => Promise<Result_1>,
   'showCaller' : () => Promise<Principal>,
   'updateProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
 }

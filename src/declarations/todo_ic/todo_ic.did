@@ -11,15 +11,15 @@ type TaskStatus =
    done;
    todo;
  };
-type TaskState = 
+type TaskId__1 = text;
+type TaskId = text;
+type Task = 
  record {
    description: text;
    id: TaskId;
    status: TaskStatus;
    title: text;
  };
-type TaskId__1 = text;
-type TaskId = text;
 type Result_1 = 
  variant {
    err: Error;
@@ -90,7 +90,7 @@ service : {
   createProfile: (ProfileTemplate) -> (Result);
   greet: (text) -> (text);
   listProfiles: () -> (Profiles);
-  putTask: (TaskState) -> (Result_1);
+  putTask: (Task) -> (Result_1);
   showCaller: () -> (principal);
   updateProfile: (ProfileTemplate) -> (Result);
 }
