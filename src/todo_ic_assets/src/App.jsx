@@ -1,64 +1,107 @@
 import React, { useState, useEffect } from 'react';
-import { Connect } from './components';
-import { todo_ic } from "../../declarations/todo_ic";
+import PlugConnect from '@psychedelic/plug-connect';
+import {
+  todo_ic,
+  canisterId,
+  idlFactory,
+} from "../../declarations/todo_ic";
 
 const App = () => {
-  const [name, setName] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState('');  // For debug
+  const [message, setMessage] = useState('');  // For debug
 
   const [connected, setConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
   const [actor, setActor] = useState(false);
 
+  const whitelist = [canisterId];
+  const network = `http://${canisterId}.localhost:8000`;
+  
   const doGreet = async () => {
-    const greeting = await todo_ic.greet(name);
-    setMessage(greeting);
+    // For debug
+    const greeting = await actor.greet(name);
+    // const greeting = await todo_ic.greet(name);
+    setMessage(`${greeting} and ${principalId}`);
   }
 
   const handleConnect = async () => {
-    setConnected(true);
 
     if (!window.ic.plug.agent) {
-      const whitelist = [process.env.PLUG_COIN_FLIP_CANISTER_ID];
-      await window.ic?.plug?.createAgent(whitelist);
+      await window.ic?.plug?.createAgent({whitelist, network});
     }
 
-    // Create an actor to interact with the NNS Canister
-    // we pass the NNS Canister id and the interface factory
-    const NNSUiActor = await window.ic.plug.createActor({
-      canisterId: process.env.PLUG_COIN_FLIP_CANISTER_ID,
+    // Create an actor to interact with the basckend Canister
+    const actor = await window.ic.plug.createActor({
+      canisterId: canisterId,
       interfaceFactory: idlFactory,
     });
 
-    setActor(NNSUiActor);
+    setActor(actor);
+    setConnected(true);
   }
+
+  useEffect(async () => {
+    if (!window.ic?.plug?.agent) {
+      setActor(false);
+      setConnected(false);
+      window.location.hash = '/connect';
+    }
+  }, []);
+
+  useEffect(async () => {
+    if (connected) {
+      const principal = await window.ic.plug.agent.getPrincipal();
+
+      if (principal) {
+        setPrincipalId(principal.toText());
+      }
+    } else {
+      window.location.hash = '/connect';
+    }
+  }, [connected]);
+
+  useEffect(async () => {
+    await window?.ic?.plug?.agent?.fetchRootKey();
+    console.log("fetchRootKey!!!!!!!!!!!!!!! in outsde");
+      if (process.env.DFX_NETWORK == "local") {
+        await window.ic.plug.agent.fetchRootKey();
+        console.log("fetchRootKey!!!!!!!!!!!!!!!");
+      };
+  }, []);
 
   return (
     <>
     <div className='app'>
-    {/* <div style={{ "fontSize": "30px" }}> */}
-      {/* <div style={{ "backgroundColor": "yellow" }}> */}
-        <p>Greetings, from DFINITY!</p>
-        <p>
-          {" "}
-          Type your message in the Name input field, then click{" "}
-          <b> Get Greeting</b> to display the result.
-        </p>
+      <div className="content">
+        <div style={{ margin: "30px" }}>
+          {connected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
+            <PlugConnect
+              host={network}
+              whitelist={whitelist}
+              dark
+              onConnectCallback={handleConnect}
+            />
+          )}
+        </div>
+
+        {/* Greet func for Debug */}
+        <div style={{ margin: "30px" }}>
+          <input
+            id="name"
+            value={name}
+            onChange={(ev) => setName(ev.target.value)}
+          ></input>
+          <button onClick={doGreet}>Greet</button>
+        </div>
+        <div>
+          Greet response: "
+          <span>{message}</span>"
+        </div>
+        
+        {/* Image uploader */}
+        <div style={{ margin: "30px" }}>
+        </div>
       </div>
-      <Connect handleConnect={handleConnect} />
-      <div style={{ margin: "30px" }}>
-        <input
-          id="name"
-          value={name}
-          onChange={(ev) => setName(ev.target.value)}
-        ></input>
-        <button onClick={doGreet}>Get Greeting!</button>
-      </div>
-      <div>
-        Greeting is: "
-        <span style={{ color: "blue" }}>{message}</span>"
-      {/* </div> */}
-    {/* </div> */}
     </div>
     </ >
   );
