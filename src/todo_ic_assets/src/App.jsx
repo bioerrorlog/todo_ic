@@ -53,13 +53,11 @@ const App = () => {
 
   const onDragEnd = result => {
     const { destination, source, draggableId, type } = result;
-    //If there is no destination
+
     if (!destination) {return}
     
-    //If source and destination is the same
     if (destination.droppableId === source.droppableId && destination.index === source.index) { return }
     
-    //If you're dragging columns
     if (type === 'column') {
         const newColumnOrder = Array.from(data.columnOrder);
         newColumnOrder.splice(source.index, 1);
