@@ -166,7 +166,7 @@ const App = () => {
           </div>
 
           {/* Greet func for Debug */}
-          <div style={{ margin: "30px" }}>
+          {/* <div style={{ margin: "30px" }}>
             <input
               id="name"
               value={name}
@@ -179,7 +179,7 @@ const App = () => {
             <span>{message}</span>"
           </div>
           <div style={{ margin: "30px" }}>
-          </div>
+          </div> */}
 
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId='all-columns' direction='horizontal' type='column'>
