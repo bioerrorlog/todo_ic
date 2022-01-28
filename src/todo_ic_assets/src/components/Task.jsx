@@ -44,14 +44,16 @@ const Task = (props) => {
                 isOpen={isOpen}
                 placement='right'
                 onClose={onClose}
+                size="xl"
             >
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>Create your account</DrawerHeader>
+                    <DrawerHeader>{props.task.content}</DrawerHeader>
 
                     <DrawerBody>
-                        <Input placeholder='Type here...' />
+                        {/* <Input placeholder='Type here...' /> */}
+                        ** Contents here **
                     </DrawerBody>
 
                     <DrawerFooter>
