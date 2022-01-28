@@ -17,7 +17,7 @@ const Title = styled.h3`
 `;
 const TaskList = styled.div`
     padding: 8px;
-    background-color: ${props => (props.isDraggingOver ? 'skyblue' : 'inherit')};
+    background-color: ${props => (props.isDraggingOver ? '#E2E8F0' : 'inherit')};
     min-height:100px;
 `;
 

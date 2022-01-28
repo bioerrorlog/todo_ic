@@ -1,6 +1,6 @@
+import { Box } from "@chakra-ui/react"
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import styled from 'styled-components'
 import PlugConnect from '@psychedelic/plug-connect';
 import dataset from './dataset' // For debug
 import Column from './components/Column'
@@ -9,10 +9,6 @@ import {
   canisterId,
   idlFactory,
 } from "../../declarations/todo_ic";
-
-const Container = styled.div`
-    display : flex;
-`
 
 const App = () => {
   const [data, setData] = useState(dataset)
@@ -152,52 +148,48 @@ const App = () => {
 
   return (
     <>
-      <div className='app'>
-        <div className="content">
-          <div style={{ margin: "30px" }}>
-            {connected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
-              <PlugConnect
-                host={network}
-                whitelist={whitelist}
-                dark
-                onConnectCallback={handleConnect}
-              />
-            )}
-          </div>
+      <Box m={30}>
+        {connected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
+          <PlugConnect
+            host={network}
+            whitelist={whitelist}
+            dark
+            onConnectCallback={handleConnect}
+          />
+        )}
+      </Box>
 
-          {/* Greet func for Debug */}
-          {/* <div style={{ margin: "30px" }}>
-            <input
-              id="name"
-              value={name}
-              onChange={(ev) => setName(ev.target.value)}
-            ></input>
-            <button onClick={doGreet}>Greet</button>
-          </div>
-          <div>
-            Greet response: "
-            <span>{message}</span>"
-          </div>
-          <div style={{ margin: "30px" }}>
-          </div> */}
-
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId='all-columns' direction='horizontal' type='column'>
-              {(provided) => (
-                <Container {...provided.droppableProps} ref={provided.innerRef}>
-                  {data.columnOrder.map((id, index) => {
-                    const column = data.columns[id]
-                    const tasks = column.taskIds.map(taskId => data.tasks[taskId])
-
-                    return <Column key={column.id} column={column} tasks={tasks} index={index} />
-                  })}
-                  {provided.placeholder}
-                </Container>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </div>
+      {/* Greet func for Debug */}
+      {/* <div style={{ margin: "30px" }}>
+        <input
+          id="name"
+          value={name}
+          onChange={(ev) => setName(ev.target.value)}
+        ></input>
+        <button onClick={doGreet}>Greet</button>
       </div>
+      <div>
+        Greet response: "
+        <span>{message}</span>"
+      </div>
+      <div style={{ margin: "30px" }}>
+      </div> */}
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId='all-columns' direction='horizontal' type='column'>
+          {(provided) => (
+            <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
+              {data.columnOrder.map((id, index) => {
+                const column = data.columns[id]
+                const tasks = column.taskIds.map(taskId => data.tasks[taskId])
+
+                return <Column key={column.id} column={column} tasks={tasks} index={index} />
+              })}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>
     </ >
   );
 };

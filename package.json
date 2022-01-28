@@ -41,7 +41,11 @@
     "last 2 edge version"
   ],
   "dependencies": {
+    "@chakra-ui/react": "^1.8.0",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@psychedelic/plug-connect": "^0.1.4",
+    "framer-motion": "^5.6.0",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
