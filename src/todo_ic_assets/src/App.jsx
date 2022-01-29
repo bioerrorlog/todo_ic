@@ -15,6 +15,7 @@ import {
 
 const App = () => {
   const [myTasks, setMyTasks] = useState()
+  const [allTasks, setAllTasks] = useState()
 
   const [data, setData] = useState(dataset)
 
@@ -35,12 +36,15 @@ const App = () => {
     setMessage(`${greeting} and ${principalId}`);
   }
 
-  const listMyTasks = async () => {
-    if (!connected) return;
-    // const greeting = await actor.greet(name);
-    const allTasks = await actor.listAllTasks(); // For debug: listAllTasks instead of listMyTasks
-    setMyTasks(allTasks);
+  const fetchAllTasks = async () => {
+    if (!connected) {
+      console.log("Not connected")
+      return
+    }
+    const allTasks = await actor.fetchAllTasks()
+    setAllTasks(allTasks)
     console.log(allTasks)
+    console.log(data)
   }
 
   const handleConnect = async () => {
@@ -176,7 +180,7 @@ const App = () => {
           />
         )}
       </Box>
-      <Button variant='outline' ml={30} onClick={listMyTasks}>listMyTasks</Button>
+      <Button variant='outline' ml={30} onClick={fetchAllTasks}>fetchAllTasks</Button>
 
       {/* Greet func for Debug */}
       {/* <div style={{ margin: "30px" }}>

@@ -120,8 +120,8 @@ actor {
     #ok(thisTaskId)
   };
 
-  public query func fetchAllTasks () : async [(TaskId, Task)] {
-    Iter.toArray(taskMap.entries())
+  public query func fetchAllTasks () : async [Task] {
+    Iter.toArray(taskMap.vals())
   };
 
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
