@@ -19,12 +19,6 @@ type TaskStatus =
  };
 type TaskId__1 = nat;
 type TaskId = nat;
-type TaskContents = 
- record {
-   description: text;
-   status: TaskStatus;
-   title: text;
- };
 type Task = 
  record {
    description: text;
@@ -102,6 +96,11 @@ type Error =
    notAuthorized;
    notFound;
  };
+type CreateTaskTemplate = 
+ record {
+   description: text;
+   title: text;
+ };
 type Branch_1 = 
  record {
    left: Trie_1;
@@ -132,12 +131,13 @@ type AssocList =
      };
 service : {
   createProfile: (ProfileTemplate) -> (Result);
-  createTask: (TaskContents) -> (Result_1);
+  createTask: (CreateTaskTemplate) -> (Result_1);
   fetchAllTasks: () -> (vec record {
                               TaskId;
                               Task;
                             }) query;
   greet: (text) -> (text);
+  initialize: () -> ();
   listMyTasks: () -> (opt Trie) query;
   listProfiles: () -> (Profiles) query;
   listTasksByUserId: (principal) -> (opt Trie) query;

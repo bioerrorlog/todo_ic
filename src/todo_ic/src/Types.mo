@@ -19,10 +19,9 @@ module {
     status: TaskStatus;
   };
 
-  public type TaskContents = {
+  public type CreateTaskTemplate = {
     title: Text;
     description: Text;
-    status: TaskStatus;
   };
 
   public type TaskMap = HashMap.HashMap<TaskId, Task>;

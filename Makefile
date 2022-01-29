@@ -43,6 +43,7 @@ module_test:
 canister_test:
 	# TODO: use ic-repl
 	# TODO: assert
+	dfx canister call $(BACKEND_CANISTER) initialize
 
 	dfx canister call $(BACKEND_CANISTER) listProfiles \
 		| grep '(variant { "empty" })' && echo 'PASS'
@@ -52,10 +53,13 @@ canister_test:
 	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})' \
 		| grep '(variant { ok })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) putTask '(record {id="0000001"; title="Task title 001" ; description="This is description." ; status=variant {todo}})' \
-		| grep '(variant { ok = "0000001" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) listMyTasks
-	dfx canister call $(BACKEND_CANISTER) listTasksByUserId "(principal \"$(shell dfx identity get-principal)\")"
+	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 001" ; description="This is description."})' \
+		| grep '(variant { ok = 0 : nat })' && echo 'PASS'
+	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
+	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
+		| grep '(variant { ok = 1 : nat })' && echo 'PASS'
+	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
+	# dfx canister call $(BACKEND_CANISTER) listTasksByUserId "(principal \"$(shell dfx identity get-principal)\")"
 
 .PHONY: all_test
 all_test: module_test canister_test

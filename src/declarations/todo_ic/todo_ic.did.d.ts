@@ -3,6 +3,7 @@ export type AssocList = [] | [[[Key, Task], List]];
 export type AssocList_1 = [] | [[[Key_1, Profile], List_1]];
 export interface Branch { 'left' : Trie, 'size' : bigint, 'right' : Trie }
 export interface Branch_1 { 'left' : Trie_1, 'size' : bigint, 'right' : Trie_1 }
+export interface CreateTaskTemplate { 'title' : string, 'description' : string }
 export type Error = { 'notAuthorized' : null } |
   { 'alreadyExists' : null } |
   { 'notFound' : null };
@@ -32,11 +33,6 @@ export interface Task {
   'title' : string,
   'description' : string,
 }
-export interface TaskContents {
-  'status' : TaskStatus,
-  'title' : string,
-  'description' : string,
-}
 export type TaskId = bigint;
 export type TaskId__1 = bigint;
 export type TaskStatus = { 'deleted' : null } |
@@ -51,9 +47,10 @@ export type Trie_1 = { 'branch' : Branch_1 } |
   { 'empty' : null };
 export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
-  'createTask' : (arg_0: TaskContents) => Promise<Result_1>,
+  'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_1>,
   'fetchAllTasks' : () => Promise<Array<[TaskId, Task]>>,
   'greet' : (arg_0: string) => Promise<string>,
+  'initialize' : () => Promise<undefined>,
   'listMyTasks' : () => Promise<[] | [Trie]>,
   'listProfiles' : () => Promise<Profiles>,
   'listTasksByUserId' : (arg_0: Principal) => Promise<[] | [Trie]>,

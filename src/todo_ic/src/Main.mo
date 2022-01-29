@@ -14,7 +14,7 @@ actor {
 
   type TaskStates = Types.TaskStates;
   type Task = Types.Task;
-  type TaskContents = Types.TaskContents;
+  type CreateTaskTemplate = Types.CreateTaskTemplate;
   type TaskId = Types.TaskId;
   type TaskMap = Types.TaskMap;
   type Profiles = Types.Profiles;
@@ -105,7 +105,7 @@ actor {
   //   #ok(taskState_.id)
   // };
 
-  public shared (msg) func createTask (taskContents_ : TaskContents) : async Result.Result<TaskId, Error> {
+  public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
     let thisTaskId : TaskId = nextTaskId;
     taskMap.put(
       thisTaskId,
@@ -113,7 +113,7 @@ actor {
         id = thisTaskId;
         title = taskContents_.title;
         description = taskContents_.description;
-        status = taskContents_.status;
+        status = #todo;
       }
     );
     nextTaskId += 1;
@@ -159,5 +159,15 @@ actor {
   // Debug
   public func greet(name : Text) : async Text {
     return "Hello, " # name # "!";
+  };
+
+  public func initialize () : async () {
+    // Debug
+    // TODO: restrict to canister owner
+
+    nextTaskId := 0;
+    taskMap := HashMap.HashMap<TaskId, Task>(1, Nat.equal, Hash.hash);
+    taskStates := Trie.empty();
+    profiles := Trie.empty();
   };
 };
