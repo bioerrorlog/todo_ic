@@ -1,10 +1,12 @@
+import HashMap "mo:base/HashMap";
+import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 
 module {
 
-  public type TaskId = Text;
+  public type TaskId = Nat;
 
   public type TaskStates = Trie.Trie2D<Principal, TaskId, Task>;
 
@@ -16,6 +18,14 @@ module {
     description: Text;
     status: TaskStatus;
   };
+
+  public type TaskContents = {
+    title: Text;
+    description: Text;
+    status: TaskStatus;
+  };
+
+  public type TaskMap = HashMap.HashMap<TaskId, Task>;
 
   public type TaskStatus = {
     #todo;

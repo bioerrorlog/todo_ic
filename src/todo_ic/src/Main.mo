@@ -1,3 +1,7 @@
+import Hash "mo:base/Hash";
+import Iter "mo:base/Iter";
+import HashMap "mo:base/HashMap";
+import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
@@ -10,11 +14,16 @@ actor {
 
   type TaskStates = Types.TaskStates;
   type Task = Types.Task;
+  type TaskContents = Types.TaskContents;
   type TaskId = Types.TaskId;
+  type TaskMap = Types.TaskMap;
   type Profiles = Types.Profiles;
   type Profile = Types.Profile;
   type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
+
+  private stable var nextTaskId : TaskId = 0; // TODO: uuid
+  private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Nat.equal, Hash.hash);
 
   stable var taskStates: TaskStates = Trie.empty();
 
@@ -83,22 +92,36 @@ actor {
   };
 
 
-  public shared (msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
-    // TODO: High cost operation?
-    taskStates := Trie.put2D <Principal, TaskId, Task>(
-      taskStates,
-      keyPrincipal(msg.caller),
-      Principal.equal,
-      keyText(taskState_.id),
-      Text.equal,
-      taskState_
+  // public shared (msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
+  //   // TODO: High cost operation?
+  //   taskStates := Trie.put2D <Principal, TaskId, Task>(
+  //     taskStates,
+  //     keyPrincipal(msg.caller),
+  //     Principal.equal,
+  //     keyText(taskState_.id),
+  //     Text.equal,
+  //     taskState_
+  //   );
+  //   #ok(taskState_.id)
+  // };
+
+  public shared (msg) func createTask (taskContents_ : TaskContents) : async Result.Result<TaskId, Error> {
+    let thisTaskId : TaskId = nextTaskId;
+    taskMap.put(
+      thisTaskId,
+      {
+        id = thisTaskId;
+        title = taskContents_.title;
+        description = taskContents_.description;
+        status = taskContents_.status;
+      }
     );
-    #ok(taskState_.id)
+    nextTaskId += 1;
+    #ok(thisTaskId)
   };
 
-  public query func listAllTasks () : async TaskStates {
-    // For debug
-    taskStates
+  public query func fetchAllTasks () : async [(TaskId, Task)] {
+    Iter.toArray(taskMap.entries())
   };
 
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
