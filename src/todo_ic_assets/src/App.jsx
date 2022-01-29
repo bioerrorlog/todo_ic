@@ -1,4 +1,7 @@
-import { Box } from "@chakra-ui/react"
+import { 
+  Box,
+  Button,
+} from "@chakra-ui/react"
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
@@ -11,6 +14,8 @@ import {
 } from "../../declarations/todo_ic";
 
 const App = () => {
+  const [myTasks, setMyTasks] = useState()
+
   const [data, setData] = useState(dataset)
 
   const [name, setName] = useState('');  // For debug
@@ -28,6 +33,14 @@ const App = () => {
     const greeting = await actor.greet(name);
     // const greeting = await todo_ic.greet(name);
     setMessage(`${greeting} and ${principalId}`);
+  }
+
+  const listMyTasks = async () => {
+    if (!connected) return;
+    // const greeting = await actor.greet(name);
+    const allTasks = await actor.listAllTasks(); // For debug: listAllTasks instead of listMyTasks
+    setMyTasks(allTasks);
+    console.log(allTasks)
   }
 
   const handleConnect = async () => {
@@ -66,11 +79,11 @@ const App = () => {
         return;
     }
 
-    //Anything below this happens if you're dragging tasks
+    // Anything below this happens if you're dragging tasks
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
-    //If dropped inside the same column
+    // If dropped inside the same column
     if (start === finish) {
         const newTaskIds = Array.from(start.taskIds);
         newTaskIds.splice(source.index, 1);
@@ -90,7 +103,7 @@ const App = () => {
         return;
     }
 
-    //If dropped in a different column
+    // If dropped in a different column
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -121,9 +134,13 @@ const App = () => {
     if (!window.ic?.plug?.agent) {
       setActor(false);
       setConnected(false);
-      window.location.hash = '/connect';
     }
   }, []);
+
+  // useEffect(async () => {
+  //   // Debug
+  //   listMyTasks()
+  // }, []);
 
   useEffect(async () => {
     if (connected) {
@@ -135,16 +152,17 @@ const App = () => {
     } else {
       window.location.hash = '/connect';
     }
+    console.log(`connected: ${connected}`)
   }, [connected]);
 
-  useEffect(async () => {
-    await window?.ic?.plug?.agent?.fetchRootKey();
-    console.log("fetchRootKey!!!!!!!!!!!!!!! in outsde");
-      if (process.env.DFX_NETWORK == "local") {
-        await window.ic.plug.agent.fetchRootKey();
-        console.log("fetchRootKey!!!!!!!!!!!!!!!");
-      };
-  }, []);
+  // useEffect(async () => {
+  //   await window?.ic?.plug?.agent?.fetchRootKey();
+  //   console.log("fetchRootKey!!!!!!!!!!!!!!! in outsde");
+  //     if (process.env.DFX_NETWORK == "local") {
+  //       await window.ic.plug.agent.fetchRootKey();
+  //       console.log("fetchRootKey!!!!!!!!!!!!!!!");
+  //     };
+  // }, []);
 
   return (
     <>
@@ -158,6 +176,7 @@ const App = () => {
           />
         )}
       </Box>
+      <Button variant='outline' ml={30} onClick={listMyTasks}>listMyTasks</Button>
 
       {/* Greet func for Debug */}
       {/* <div style={{ margin: "30px" }}>

@@ -96,6 +96,11 @@ actor {
     #ok(taskState_.id)
   };
 
+  public query func listAllTasks () : async TaskStates {
+    // For debug
+    taskStates
+  };
+
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
     listTasksByUserId_(msg.caller)
   };

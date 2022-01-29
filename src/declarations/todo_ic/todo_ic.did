@@ -1,3 +1,15 @@
+type Trie_3 = 
+ variant {
+   branch: Branch_3;
+   "empty";
+   leaf: Leaf_3;
+ };
+type Trie_2 = 
+ variant {
+   branch: Branch_2;
+   "empty";
+   leaf: Leaf_2;
+ };
 type Trie_1 = 
  variant {
    branch: Branch_1;
@@ -10,12 +22,25 @@ type Trie =
    "empty";
    leaf: Leaf;
  };
+type Task__1 = 
+ record {
+   description: text;
+   id: TaskId;
+   status: TaskStatus;
+   title: text;
+ };
 type TaskStatus = 
  variant {
    deleted;
    doing;
    done;
    todo;
+ };
+type TaskStates = 
+ variant {
+   branch: Branch_2;
+   "empty";
+   leaf: Leaf_2;
  };
 type TaskId__1 = text;
 type TaskId = text;
@@ -53,6 +78,22 @@ type Profile =
    name: text;
    "principal": principal;
  };
+type List_3 = 
+ opt record {
+       record {
+         Key_1;
+         Trie_3;
+       };
+       List_3;
+     };
+type List_2 = 
+ opt record {
+       record {
+         Key_2;
+         Task__1;
+       };
+       List_2;
+     };
 type List_1 = 
  opt record {
        record {
@@ -69,6 +110,16 @@ type List =
        };
        List;
      };
+type Leaf_3 = 
+ record {
+   keyvals: AssocList_3;
+   size: nat;
+ };
+type Leaf_2 = 
+ record {
+   keyvals: AssocList_2;
+   size: nat;
+ };
 type Leaf_1 = 
  record {
    keyvals: AssocList_1;
@@ -78,6 +129,11 @@ type Leaf =
  record {
    keyvals: AssocList;
    size: nat;
+ };
+type Key_2 = 
+ record {
+   hash: Hash;
+   key: TaskId;
  };
 type Key_1 = 
  record {
@@ -96,6 +152,18 @@ type Error =
    notAuthorized;
    notFound;
  };
+type Branch_3 = 
+ record {
+   left: Trie_3;
+   right: Trie_3;
+   size: nat;
+ };
+type Branch_2 = 
+ record {
+   left: Trie_2;
+   right: Trie_2;
+   size: nat;
+ };
 type Branch_1 = 
  record {
    left: Trie_1;
@@ -108,6 +176,22 @@ type Branch =
    right: Trie;
    size: nat;
  };
+type AssocList_3 = 
+ opt record {
+       record {
+         Key_2;
+         Task__1;
+       };
+       List_2;
+     };
+type AssocList_2 = 
+ opt record {
+       record {
+         Key_1;
+         Trie_3;
+       };
+       List_3;
+     };
 type AssocList_1 = 
  opt record {
        record {
@@ -127,6 +211,7 @@ type AssocList =
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   greet: (text) -> (text);
+  listAllTasks: () -> (TaskStates) query;
   listMyTasks: () -> (opt Trie) query;
   listProfiles: () -> (Profiles) query;
   listTasksByUserId: (principal) -> (opt Trie) query;
