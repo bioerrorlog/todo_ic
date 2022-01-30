@@ -27,8 +27,9 @@ module {
   public type TaskMap = HashMap.HashMap<TaskId, Task>;
 
   public type TaskStatus = {
-    #todo;
-    #doing;
+    #backlog;
+    #inProgress;
+    #review
     #done;
     #deleted;
   };
