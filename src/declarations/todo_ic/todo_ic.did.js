@@ -18,10 +18,11 @@ export const idlFactory = ({ IDL }) => {
   const Result_1 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
   const TaskId__1 = IDL.Nat;
   const TaskStatus = IDL.Variant({
+    'review' : IDL.Null,
     'deleted' : IDL.Null,
     'done' : IDL.Null,
-    'todo' : IDL.Null,
-    'doing' : IDL.Null,
+    'inProgress' : IDL.Null,
+    'backlog' : IDL.Null,
   });
   const Task = IDL.Record({
     'id' : TaskId__1,

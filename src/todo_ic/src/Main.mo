@@ -113,7 +113,7 @@ actor {
         id = thisTaskId;
         title = taskContents_.title;
         description = taskContents_.description;
-        status = #todo;
+        status = #backlog;
       }
     );
     nextTaskId += 1;

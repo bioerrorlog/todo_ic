@@ -12,10 +12,11 @@ type Trie =
  };
 type TaskStatus = 
  variant {
+   backlog;
    deleted;
-   doing;
    done;
-   todo;
+   inProgress;
+   review;
  };
 type TaskId__1 = nat;
 type TaskId = nat;

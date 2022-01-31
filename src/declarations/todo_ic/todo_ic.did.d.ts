@@ -35,10 +35,11 @@ export interface Task {
 }
 export type TaskId = bigint;
 export type TaskId__1 = bigint;
-export type TaskStatus = { 'deleted' : null } |
+export type TaskStatus = { 'review' : null } |
+  { 'deleted' : null } |
   { 'done' : null } |
-  { 'todo' : null } |
-  { 'doing' : null };
+  { 'inProgress' : null } |
+  { 'backlog' : null };
 export type Trie = { 'branch' : Branch } |
   { 'leaf' : Leaf } |
   { 'empty' : null };
