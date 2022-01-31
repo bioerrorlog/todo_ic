@@ -12,20 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MOC_VERSION: 0.6.18
-      VESSEL_VERSION: v0.6.2
+      VESSEL_VERSION: 0.6.2
       DFX_VERSION: 0.8.4
+      WASMTIME_VERSION: 0.33.0
     steps:
       - uses: actions/checkout@v2
       - name: install dfx/moc/vessel
         uses:  aviate-labs/setup-dfx@v0.2.3
         with:
-          dfx-version: 0.8.4
+          dfx-version: $DFX_VERSION
           install-moc: true
-          vessel-version: 0.6.2
+          vessel-version: $VESSEL_VERSION
       - name: install wasmtime
         uses: mwilliamson/setup-wasmtime-action@v1
         with:
-          wasmtime-version: "0.33.0"
+          wasmtime-version: $WASMTIME_VERSION
       - name: show versions
         run: |
           dfx --version
