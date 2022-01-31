@@ -12,6 +12,7 @@ import {
   canisterId,
   idlFactory,
 } from "../../declarations/todo_ic";
+import { convertArrayToObject } from './utils';
 
 const App = () => {
   const [myTasks, setMyTasks] = useState()
@@ -42,9 +43,11 @@ const App = () => {
       return
     }
     const allTasks = await actor.fetchAllTasks()
-    setAllTasks(allTasks)
+
     console.log(allTasks)
+    console.log(convertArrayToObject(allTasks, "id"))
     console.log(data)
+    setAllTasks(allTasks)
   }
 
   const handleConnect = async () => {
