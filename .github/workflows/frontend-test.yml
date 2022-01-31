@@ -15,7 +15,7 @@ jobs:
       - name: Install npm-cli-login
         run: npm install -g npm-cli-login
       - name: Login npm
-        run: npm-cli-login -u ${{ secrets.USER_NAME }} -e ${{ secrets.EMAIL }} -p ${{ secrets.GITHUB_TOKEN }} -r https://npm.pkg.github.com -s @Psychedelic
+        run: npm-cli-login -u ${{ secrets.USER_NAME }} -e ${{ secrets.EMAIL }} -p ${{ secrets.PAT }} -r https://npm.pkg.github.com -s @Psychedelic
       - name: npm install
         run: npm install
       - name: Run jest
