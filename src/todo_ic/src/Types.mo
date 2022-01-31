@@ -29,7 +29,7 @@ module {
   public type TaskStatus = {
     #backlog;
     #inProgress;
-    #review
+    #review;
     #done;
     #deleted;
   };
