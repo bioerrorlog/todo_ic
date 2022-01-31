@@ -1,5 +1,4 @@
 import { convertArrayToObject } from './utils';
-// const convertArrayToObject = require('./utils');
 
 describe('convertArrayToObject', () => {
     test('convert with number item', () => {
