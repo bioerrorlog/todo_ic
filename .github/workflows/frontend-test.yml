@@ -13,6 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: npm install
-        run: npm install
+        run: |
+          npm login --registry=https://npm.pkg.github.com --scope=@Psychedelic
+          npm install
       - name: Run jest
         run: npm test
