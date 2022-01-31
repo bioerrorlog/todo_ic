@@ -17,8 +17,24 @@ describe('convertArrayToObject', () => {
         '3': { id: 3, description: 'This is description 3.' },
       };
 
-      console.log(convertArrayToObject(input, 'id'))
+      expect(convertArrayToObject(input, 'id')).toStrictEqual(output);
+    });
 
-      expect(convertArrayToObject(input, 'id')).toBe(output);
+    test('convert with string item', () => {
+      const input = [
+        { id: 'aaa', description: 'This is description 0.' },
+        { id: 'bbb', description: 'This is description 1.' },
+        { id: 'ccc', description: 'This is description 2.' },
+        { id: 'ddd', description: 'This is description 3.' },
+      ];
+  
+      const output = {
+        'aaa': { id: 'aaa', description: 'This is description 0.' },
+        'bbb': { id: 'bbb', description: 'This is description 1.' },
+        'ccc': { id: 'ccc', description: 'This is description 2.' },
+        'ddd': { id: 'ddd', description: 'This is description 3.' },
+      };
+
+      expect(convertArrayToObject(input, 'id')).toStrictEqual(output);
     });
   });
