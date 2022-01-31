@@ -13,7 +13,7 @@ jobs:
     env:
       # MOC_VERSION: 0.6.18
       VESSEL_VERSION: 0.6.2
-      DFX_VERSION: 0.9.0
+      DFX_VERSION: 0.8.4
       WASMTIME_VERSION: 0.33.0
     steps:
       - uses: actions/checkout@v2
