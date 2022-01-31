@@ -13,7 +13,7 @@ jobs:
     env:
       # MOC_VERSION: 0.6.18
       VESSEL_VERSION: 0.6.2
-      DFX_VERSION: 0.8.4
+      DFX_VERSION: 0.9.0
       WASMTIME_VERSION: 0.33.0
     steps:
       - uses: actions/checkout@v2
@@ -33,9 +33,9 @@ jobs:
           moc --version
           vessel --version
           wasmtime -V
-      - name: motoko type checking
-        run: |
-          for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
+      # - name: motoko type checking
+      #   run: |
+      #     for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
       - name: module test
         run: |
           make module_test
