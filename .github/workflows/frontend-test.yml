@@ -10,6 +10,12 @@ on:
 jobs:
   frontend-test:
     runs-on: ubuntu-latest
+    env:
+      # MOC_VERSION: 0.6.18
+      VESSEL_VERSION: 0.6.2
+      DFX_VERSION: 0.8.4
+      WASMTIME_VERSION: 0.33.0
+      FRONTEND_CANISTER: todo_ic_assets
     steps:
       - uses: actions/checkout@v2
       - name: Install npm-cli-login
@@ -20,3 +26,19 @@ jobs:
         run: npm install
       - name: Run jest
         run: npm test
+      - name: Install dfx/moc/vessel
+        uses:  aviate-labs/setup-dfx@v0.2.3
+        with:
+          dfx-version: ${{ env.DFX_VERSION }}
+          install-moc: true
+          vessel-version: ${{ env.VESSEL_VERSION }}
+      - name: Show versions
+        run: |
+          dfx --version
+          moc --version
+          vessel --version
+      - name: Deploy canister
+        run: |
+          dfx start --background
+          dfx deploy --no-wallet ${{ env.FRONTEND_CANISTER }}
+          dfx stop

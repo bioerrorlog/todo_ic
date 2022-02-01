@@ -15,6 +15,7 @@ jobs:
       VESSEL_VERSION: 0.6.2
       DFX_VERSION: 0.8.4
       WASMTIME_VERSION: 0.33.0
+      BACKEND_CANISTER: todo_ic
     steps:
       - uses: actions/checkout@v2
       - name: install dfx/moc/vessel
@@ -35,13 +36,13 @@ jobs:
           wasmtime -V
       # - name: motoko type checking
       #   run: |
-      #     for i in src/todo_ic/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
+      #     for i in src/${{ env.BACKEND_CANISTER }}/src/*.mo ; do $(vessel bin)/moc $(vessel sources) --check $i ; done
       - name: module test
         run: |
           make module_test
       - name: canister test
         run: |
           dfx start --background
-          dfx deploy --no-wallet todo_ic
+          dfx deploy --no-wallet ${{ env.BACKEND_CANISTER }}
           make canister_test
           dfx stop
