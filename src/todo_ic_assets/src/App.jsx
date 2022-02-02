@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import { dataset, columnDataSet } from './dataset' // For debug
+import { taskDataset, columnDataset } from './dataset' // For debug
 import Column from './components/Column'
 import {
   todo_ic,
@@ -18,8 +18,8 @@ const App = () => {
   const [myTasks, setMyTasks] = useState()
   const [allTasks, setAllTasks] = useState()
 
-  const [data, setData] = useState(dataset)
-  const [columnData, setColumnData] = useState(columnDataSet)
+  const [data, setData] = useState(taskDataset)
+  const [columnData, setColumnData] = useState(columnDataset)
 
   const [name, setName] = useState('');  // For debug
   const [message, setMessage] = useState('');  // For debug
