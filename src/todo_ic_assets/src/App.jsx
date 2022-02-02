@@ -18,7 +18,7 @@ const App = () => {
   const [myTasks, setMyTasks] = useState()
   const [allTasks, setAllTasks] = useState()
 
-  const [data, setData] = useState(taskDataset)
+  const [taskData, setData] = useState(taskDataset)
   const [columnData, setColumnData] = useState(columnDataset)
 
   const [name, setName] = useState('');  // For debug
@@ -48,7 +48,7 @@ const App = () => {
 
     console.log(allTasks)
     console.log(convertArrayToObject(allTasks, "id"))
-    console.log(data)
+    console.log(taskData)
     setAllTasks(convertArrayToObject(allTasks, "id"))
   }
 
@@ -198,7 +198,7 @@ const App = () => {
             <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
               {columnData.columnOrder.map((id, index) => {
                 const column = columnData.columns[id]
-                const tasks = column.taskIds.map(taskId => data.tasks[taskId])
+                const tasks = column.taskIds.map(taskId => taskData[taskId])
 
                 return <Column key={column.id} column={column} tasks={tasks} index={index} />
               })}
