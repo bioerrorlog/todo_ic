@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import dataset from './dataset' // For debug
+import { dataset, columnDataSet } from './dataset' // For debug
 import Column from './components/Column'
 import {
   todo_ic,
@@ -19,6 +19,7 @@ const App = () => {
   const [allTasks, setAllTasks] = useState()
 
   const [data, setData] = useState(dataset)
+  const [columnData, setColumnData] = useState(columnDataSet)
 
   const [name, setName] = useState('');  // For debug
   const [message, setMessage] = useState('');  // For debug
@@ -38,6 +39,7 @@ const App = () => {
   }
 
   const fetchAllTasks = async () => {
+    console.log('start fetchAllTasks')
     if (!connected) {
       console.log("Not connected")
       return
@@ -47,7 +49,7 @@ const App = () => {
     console.log(allTasks)
     console.log(convertArrayToObject(allTasks, "id"))
     console.log(data)
-    setAllTasks(allTasks)
+    setAllTasks(convertArrayToObject(allTasks, "id"))
   }
 
   const handleConnect = async () => {
@@ -74,21 +76,10 @@ const App = () => {
     
     if (destination.droppableId === source.droppableId && destination.index === source.index) { return }
     
-    if (type === 'column') {
-        const newColumnOrder = Array.from(data.columnOrder);
-        newColumnOrder.splice(source.index, 1);
-        newColumnOrder.splice(destination.index, 0, draggableId);
-        const newState = {
-            ...data,
-            columnOrder: newColumnOrder
-        }
-        setData(newState)
-        return;
-    }
+    if (type === 'column') { return }
 
-    // Anything below this happens if you're dragging tasks
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
+    const start = columnData.columns[source.droppableId];
+    const finish = columnData.columns[destination.droppableId];
 
     // If dropped inside the same column
     if (start === finish) {
@@ -100,13 +91,13 @@ const App = () => {
             taskIds: newTaskIds
         }
         const newState = {
-            ...data,
+            ...columnData,
             columns: {
-                ...data.columns,
+                ...columnData.columns,
                 [newColumn.id]: newColumn
             }
         }
-        setData(newState)
+        setColumnData(newState)
         return;
     }
 
@@ -126,15 +117,15 @@ const App = () => {
     }
 
     const newState = {
-        ...data,
+        ...columnData,
         columns: {
-            ...data.columns,
+            ...columnData.columns,
             [newStart.id]: newStart,
             [newFinish.id]: newFinish
         }
     }
 
-    setData(newState)
+    setColumnData(newState)
   }
 
   useEffect(async () => {
@@ -205,8 +196,8 @@ const App = () => {
         <Droppable droppableId='all-columns' direction='horizontal' type='column'>
           {(provided) => (
             <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
-              {data.columnOrder.map((id, index) => {
-                const column = data.columns[id]
+              {columnData.columnOrder.map((id, index) => {
+                const column = columnData.columns[id]
                 const tasks = column.taskIds.map(taskId => data.tasks[taskId])
 
                 return <Column key={column.id} column={column} tasks={tasks} index={index} />
