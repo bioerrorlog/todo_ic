@@ -83,34 +83,34 @@ const App = () => {
 
     // If dropped inside the same column
     if (start === finish) {
-        const newTaskIds = Array.from(start.taskIds);
-        newTaskIds.splice(source.index, 1);
-        newTaskIds.splice(destination.index, 0, draggableId);
-        const newColumn = {
-            ...start,
-            taskIds: newTaskIds
-        }
-        const newState = {
-            ...columnData,
-            [newColumn.id]: newColumn
-        }
-        setColumnData(newState)
-        return;
+      const newTaskIds = Array.from(start.taskIds);
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+      const newColumn = {
+        ...start,
+        taskIds: newTaskIds
+      }
+      const newState = {
+        ...columnData,
+        [newColumn.id]: newColumn
+      }
+      setColumnData(newState)
+      return;
     }
 
     // If dropped in a different column
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
-        ...start,
-        taskIds: startTaskIds
+      ...start,
+      taskIds: startTaskIds
     }
     
     const finishTaskIds = Array.from(finish.taskIds);
     finishTaskIds.splice(destination.index, 0, draggableId);
     const newFinish = {
-        ...finish,
-        taskIds: finishTaskIds
+      ...finish,
+      taskIds: finishTaskIds
     }
 
     const newState = {
