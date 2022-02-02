@@ -12,5 +12,6 @@ export const columnDataset = {
     "review": { id: "review", title: "Review", taskIds: [] },
     "done": { id: "done", title: "Done", taskIds: ["task-4"] },
   },
-  columnOrder: ["backlog", "inProgress", "review", "done"],
 }
+
+export const columnOrder = ["backlog", "inProgress", "review", "done"]

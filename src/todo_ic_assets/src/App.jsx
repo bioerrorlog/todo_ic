@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDataset, columnDataset } from './dataset' // For debug
+import { taskDataset, columnDataset, columnOrder } from './dataset' // For debug
 import Column from './components/Column'
 import {
   todo_ic,
@@ -196,7 +196,7 @@ const App = () => {
         <Droppable droppableId='all-columns' direction='horizontal' type='column'>
           {(provided) => (
             <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
-              {columnData.columnOrder.map((id, index) => {
+              {columnOrder.map((id, index) => {
                 const column = columnData.columns[id]
                 const tasks = column.taskIds.map(taskId => taskData[taskId])
 
