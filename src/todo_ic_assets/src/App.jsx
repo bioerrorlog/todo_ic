@@ -78,8 +78,8 @@ const App = () => {
     
     if (type === 'column') { return }
 
-    const start = columnData.columns[source.droppableId];
-    const finish = columnData.columns[destination.droppableId];
+    const start = columnData[source.droppableId];
+    const finish = columnData[destination.droppableId];
 
     // If dropped inside the same column
     if (start === finish) {
@@ -92,10 +92,7 @@ const App = () => {
         }
         const newState = {
             ...columnData,
-            columns: {
-                ...columnData.columns,
-                [newColumn.id]: newColumn
-            }
+            [newColumn.id]: newColumn
         }
         setColumnData(newState)
         return;
@@ -117,12 +114,9 @@ const App = () => {
     }
 
     const newState = {
-        ...columnData,
-        columns: {
-            ...columnData.columns,
-            [newStart.id]: newStart,
-            [newFinish.id]: newFinish
-        }
+      ...columnData,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish
     }
 
     setColumnData(newState)
@@ -197,7 +191,7 @@ const App = () => {
           {(provided) => (
             <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
               {columnOrder.map((id, index) => {
-                const column = columnData.columns[id]
+                const column = columnData[id]
                 const tasks = column.taskIds.map(taskId => taskData[taskId])
 
                 return <Column key={column.id} column={column} tasks={tasks} index={index} />

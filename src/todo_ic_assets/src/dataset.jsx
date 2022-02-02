@@ -6,12 +6,10 @@ export const taskDataset = {
 }
 
 export const columnDataset = {
-  columns: {
-    "backlog": { id: "backlog", title: "Backlog", taskIds: ['task-1']},
-    "inProgress": { id: "inProgress", title: "In progress", taskIds: ['task-2', 'task-3'] },
-    "review": { id: "review", title: "Review", taskIds: [] },
-    "done": { id: "done", title: "Done", taskIds: ["task-4"] },
-  },
+  "backlog": { id: "backlog", title: "Backlog", taskIds: ['task-1']},
+  "inProgress": { id: "inProgress", title: "In progress", taskIds: ['task-2', 'task-3'] },
+  "review": { id: "review", title: "Review", taskIds: [] },
+  "done": { id: "done", title: "Done", taskIds: ["task-4"] },
 }
 
 export const columnOrder = ["backlog", "inProgress", "review", "done"]
