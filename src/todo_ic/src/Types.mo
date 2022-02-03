@@ -19,6 +19,13 @@ module {
     status: TaskStatus;
   };
 
+  public type TaskOrders = {
+    backlog: [TaskId];
+    inProgress: [TaskId];
+    review: [TaskId];
+    done: [TaskId];
+  };
+
   public type CreateTaskTemplate = {
     title: Text;
     description: Text;

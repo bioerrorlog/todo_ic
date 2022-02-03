@@ -1,3 +1,4 @@
+import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import HashMap "mo:base/HashMap";
@@ -17,6 +18,7 @@ actor {
   type CreateTaskTemplate = Types.CreateTaskTemplate;
   type TaskId = Types.TaskId;
   type TaskMap = Types.TaskMap;
+  type TaskOrders = Types.TaskOrders;
   type Profiles = Types.Profiles;
   type Profile = Types.Profile;
   type ProfileTemplate = Types.ProfileTemplate;
@@ -24,6 +26,13 @@ actor {
 
   private stable var nextTaskId : TaskId = 0; // TODO: uuid
   private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Nat.equal, Hash.hash);
+  private var taskOrders : TaskOrders = {
+    // Is Array.init better?
+    backlog = [];
+    inProgress = [];
+    review = [];
+    done = [];
+  };
 
   stable var taskStates: TaskStates = Trie.empty();
 
@@ -107,15 +116,24 @@ actor {
 
   public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
     let thisTaskId : TaskId = nextTaskId;
-    taskMap.put(
-      thisTaskId,
-      {
-        id = thisTaskId;
-        title = taskContents_.title;
-        description = taskContents_.description;
-        status = #backlog;
-      }
-    );
+    let thisTask : Task = {
+      id = thisTaskId;
+      title = taskContents_.title;
+      description = taskContents_.description;
+      status = #backlog;
+    };
+  
+    taskMap.put(thisTaskId, thisTask);
+
+    // TODO: Array.append is deprecated
+    // taskOrders.backlog := Array.append<TaskId>(taskOrders.backlog [thisTaskId]);
+    taskOrders := {
+      backlog = Array.append<TaskId>(taskOrders.backlog, [thisTaskId]);
+      inProgress = taskOrders.inProgress;
+      review = taskOrders.review;
+      done = taskOrders.done;
+    };
+
     nextTaskId += 1;
     #ok(thisTaskId)
   };

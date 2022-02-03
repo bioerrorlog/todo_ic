@@ -50,6 +50,7 @@ const App = () => {
     console.log(convertArrayToObject(allTasks, "id"))
     console.log(taskData)
     setAllTasks(convertArrayToObject(allTasks, "id"))
+    setData(convertArrayToObject(allTasks, "id"))
   }
 
   const handleConnect = async () => {
