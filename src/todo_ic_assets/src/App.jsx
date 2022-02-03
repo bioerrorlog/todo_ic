@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDataset, columnDataset, columnOrder } from './dataset' // For debug
+import { taskDataset, taskOrderDataset, columnDataset, columnOrder } from './dataset' // For debug
 import Column from './components/Column'
 import {
   todo_ic,
@@ -16,10 +16,11 @@ import { convertArrayToObject } from './utils';
 
 const App = () => {
   const [myTasks, setMyTasks] = useState()
-  const [allTasks, setAllTasks] = useState()
+  // const [allTasks, setAllTasks] = useState()
 
-  const [taskData, setData] = useState(taskDataset)
-  const [columnData, setColumnData] = useState(columnDataset)
+  const [taskState, setTaskState] = useState({tasks: taskDataset, columns: columnDataset})
+  // const [taskData, setTaskData] = useState(taskDataset)
+  // const [columnData, setColumnData] = useState(columnDataset)
 
   const [name, setName] = useState('');  // For debug
   const [message, setMessage] = useState('');  // For debug
@@ -47,10 +48,42 @@ const App = () => {
     const allTasks = await actor.fetchAllTasks()
 
     console.log(allTasks)
-    console.log(convertArrayToObject(allTasks, "id"))
-    console.log(taskData)
-    setAllTasks(convertArrayToObject(allTasks, "id"))
-    setData(convertArrayToObject(allTasks, "id"))
+    // console.log(convertArrayToObject(allTasks, "id"))
+    // console.log(taskState['task'])
+    console.log(allTasks[0])
+    console.log(convertArrayToObject(allTasks[0], 'id'))
+    // setTaskData(convertArrayToObject(allTasks[0], 'id'))
+
+    // TODO: refactor
+    const newColumnData = {
+      'backlog': { ...taskState.columns['backlog'], taskIds: allTasks[1]['backlog']},
+      'inProgress': { ...taskState.columns['inProgress'], taskIds: allTasks[1]['inProgress']},
+      'review': { ...taskState.columns['review'], taskIds: allTasks[1]['review']},
+      'done': { ...taskState.columns['done'], taskIds: allTasks[1]['done']},
+    }
+    const newTaskState = {
+      ...taskState,
+      tasks: convertArrayToObject(allTasks[0], 'id'),
+      columns: newColumnData,
+    }
+    setTaskState(newTaskState)
+    
+
+    // {
+    //   "backlog": { id: "backlog", title: "Backlog", taskIds: ['task-1']},
+    //   "inProgress": { id: "inProgress", title: "In progress", taskIds: ['task-2', 'task-3'] },
+    //   "review": { id: "review", title: "Review", taskIds: [] },
+    //   "done": { id: "done", title: "Done", taskIds: ["task-4"] },
+    // }
+    // const newColumnOrder = {
+    //   ...columnData,
+    //   ...columnData['backlog']: newStart,
+    //   [newFinish.id]: newFinish
+    // }
+
+    // setColumnData(newState)
+    // setAllTasks(convertArrayToObject(allTasks, "id"))
+    // setData(convertArrayToObject(allTasks, "id"))
   }
 
   const handleConnect = async () => {
@@ -79,8 +112,8 @@ const App = () => {
     
     if (type === 'column') { return }
 
-    const start = columnData[source.droppableId];
-    const finish = columnData[destination.droppableId];
+    const start = taskState.columns[source.droppableId];
+    const finish = taskState.columns[destination.droppableId];
 
     // If dropped inside the same column
     if (start === finish) {
@@ -91,11 +124,14 @@ const App = () => {
         ...start,
         taskIds: newTaskIds
       }
-      const newState = {
-        ...columnData,
-        [newColumn.id]: newColumn
+      const newTaskState = {
+        ...taskState,
+        columns: {
+          ...taskState.columns,
+          [newColumn.id]: newColumn,
+        }
       }
-      setColumnData(newState)
+      setTaskState(newTaskState)
       return;
     }
 
@@ -114,13 +150,15 @@ const App = () => {
       taskIds: finishTaskIds
     }
 
-    const newState = {
-      ...columnData,
-      [newStart.id]: newStart,
-      [newFinish.id]: newFinish
+    const newTaskState = {
+      ...taskState,
+      columns: {
+        ...taskState.columns,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish,
+      }
     }
-
-    setColumnData(newState)
+    setTaskState(newTaskState)
   }
 
   useEffect(async () => {
@@ -192,8 +230,8 @@ const App = () => {
           {(provided) => (
             <Box display="flex" {...provided.droppableProps} ref={provided.innerRef}>
               {columnOrder.map((id, index) => {
-                const column = columnData[id]
-                const tasks = column.taskIds.map(taskId => taskData[taskId])
+                const column = taskState.columns[id]
+                const tasks = column.taskIds.map(taskId => taskState.tasks[taskId])
 
                 return <Column key={column.id} column={column} tasks={tasks} index={index} />
               })}
