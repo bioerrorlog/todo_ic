@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDataset, taskOrderDataset, columnDataset, columnOrder } from './dataset' // For debug
+import { taskDataset, columnDataset, columnOrder } from './dataset' // For debug
 import Column from './components/Column'
 import {
   todo_ic,
@@ -47,13 +47,6 @@ const App = () => {
     }
     const allTasks = await actor.fetchAllTasks()
 
-    console.log(allTasks)
-    // console.log(convertArrayToObject(allTasks, "id"))
-    // console.log(taskState['task'])
-    console.log(allTasks[0])
-    console.log(convertArrayToObject(allTasks[0], 'id'))
-    // setTaskData(convertArrayToObject(allTasks[0], 'id'))
-
     // TODO: refactor
     const newColumnData = {
       'backlog': { ...taskState.columns['backlog'], taskIds: allTasks[1]['backlog']},
@@ -66,24 +59,9 @@ const App = () => {
       tasks: convertArrayToObject(allTasks[0], 'id'),
       columns: newColumnData,
     }
+    console.log(taskState)
+    console.log(newTaskState)
     setTaskState(newTaskState)
-    
-
-    // {
-    //   "backlog": { id: "backlog", title: "Backlog", taskIds: ['task-1']},
-    //   "inProgress": { id: "inProgress", title: "In progress", taskIds: ['task-2', 'task-3'] },
-    //   "review": { id: "review", title: "Review", taskIds: [] },
-    //   "done": { id: "done", title: "Done", taskIds: ["task-4"] },
-    // }
-    // const newColumnOrder = {
-    //   ...columnData,
-    //   ...columnData['backlog']: newStart,
-    //   [newFinish.id]: newFinish
-    // }
-
-    // setColumnData(newState)
-    // setAllTasks(convertArrayToObject(allTasks, "id"))
-    // setData(convertArrayToObject(allTasks, "id"))
   }
 
   const handleConnect = async () => {

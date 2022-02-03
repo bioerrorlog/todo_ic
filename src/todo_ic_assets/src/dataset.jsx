@@ -5,13 +5,6 @@ export const taskDataset = {
   "task-4": { id: "task-4", content: "Content for task-4" },
 }
 
-export const taskOrderDataset = {
-  "backlog": ['task-1'],
-  "inProgress": ['task-2', 'task-3'],
-  "review": [],
-  "done": ["task-4"],
-}
-
 export const columnDataset = {
   "backlog": { id: "backlog", title: "Backlog", taskIds: ['task-1']},
   "inProgress": { id: "inProgress", title: "In progress", taskIds: ['task-2', 'task-3'] },
