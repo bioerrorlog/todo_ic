@@ -35,6 +35,12 @@ export interface Task {
 }
 export type TaskId = bigint;
 export type TaskId__1 = bigint;
+export interface TaskOrders {
+  'review' : Array<TaskId__1>,
+  'done' : Array<TaskId__1>,
+  'inProgress' : Array<TaskId__1>,
+  'backlog' : Array<TaskId__1>,
+}
 export type TaskStatus = { 'review' : null } |
   { 'deleted' : null } |
   { 'done' : null } |
@@ -49,7 +55,7 @@ export type Trie_1 = { 'branch' : Branch_1 } |
 export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
   'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_1>,
-  'fetchAllTasks' : () => Promise<Array<Task>>,
+  'fetchAllTasks' : () => Promise<[Array<Task>, TaskOrders]>,
   'greet' : (arg_0: string) => Promise<string>,
   'initialize' : () => Promise<undefined>,
   'listMyTasks' : () => Promise<[] | [Trie]>,

@@ -18,6 +18,13 @@ type TaskStatus =
    inProgress;
    review;
  };
+type TaskOrders = 
+ record {
+   backlog: vec TaskId__1;
+   done: vec TaskId__1;
+   inProgress: vec TaskId__1;
+   review: vec TaskId__1;
+ };
 type TaskId__1 = nat;
 type TaskId = nat;
 type Task = 
@@ -133,7 +140,7 @@ type AssocList =
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   createTask: (CreateTaskTemplate) -> (Result_1);
-  fetchAllTasks: () -> (vec Task) query;
+  fetchAllTasks: () -> (vec Task, TaskOrders) query;
   greet: (text) -> (text);
   initialize: () -> ();
   listMyTasks: () -> (opt Trie) query;

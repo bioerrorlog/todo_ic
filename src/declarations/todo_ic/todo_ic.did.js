@@ -30,6 +30,12 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
+  const TaskOrders = IDL.Record({
+    'review' : IDL.Vec(TaskId__1),
+    'done' : IDL.Vec(TaskId__1),
+    'inProgress' : IDL.Vec(TaskId__1),
+    'backlog' : IDL.Vec(TaskId__1),
+  });
   const Branch = IDL.Record({
     'left' : Trie,
     'size' : IDL.Nat,
@@ -68,7 +74,7 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'createProfile' : IDL.Func([ProfileTemplate], [Result], []),
     'createTask' : IDL.Func([CreateTaskTemplate], [Result_1], []),
-    'fetchAllTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),
+    'fetchAllTasks' : IDL.Func([], [IDL.Vec(Task), TaskOrders], ['query']),
     'greet' : IDL.Func([IDL.Text], [IDL.Text], []),
     'initialize' : IDL.Func([], [], []),
     'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], ['query']),
