@@ -147,13 +147,19 @@ const App = () => {
   return (
     <>
       <Box m={30}>
-        {plugConnected ? `Connected to plug`: (
-          <PlugConnect
-            host={network}
-            whitelist={whitelist}
-            dark
-            onConnectCallback={handleConnect}
-          />
+        {plugConnected ? `My tasks`: (
+          <Box>
+            <PlugConnect
+              host={network}
+              whitelist={whitelist}
+              dark
+              onConnectCallback={handleConnect}
+            />
+            <Box mt={30}>
+              Global tasks
+            </Box>
+            
+          </Box>
         )}
       </Box>
 
