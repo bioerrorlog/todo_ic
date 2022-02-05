@@ -180,7 +180,7 @@ const App = () => {
           <PlugConnect
             host={network}
             whitelist={whitelist}
-            dark
+            // dark
             onConnectCallback={handleConnect}
           />
         )}
