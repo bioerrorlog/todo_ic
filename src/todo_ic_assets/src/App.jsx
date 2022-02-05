@@ -25,12 +25,7 @@ const App = () => {
   const network = `http://${canisterId}.localhost:8000`;
 
   const fetchAllTasks = async () => {
-    console.log('start fetchAllTasks')
-    if (!plugConnected) {
-      console.log("Not plug connected")
-      return
-    }
-    const allTasks = await actor.fetchAllTasks()
+    const allTasks = await todo_ic.fetchAllTasks()
 
     // TODO: refactor
     const newColumnData = {
@@ -44,8 +39,8 @@ const App = () => {
       tasks: convertArrayToObject(allTasks[0], 'id'),
       columns: newColumnData,
     }
-    console.log(taskState)
-    console.log(newTaskState)
+    // console.log(taskState)
+    // console.log(newTaskState)
     setTaskState(newTaskState)
   }
 
@@ -142,28 +137,25 @@ const App = () => {
     console.log(`plugConnected: ${plugConnected}`)
   }, [plugConnected]);
 
-  // useEffect(async () => {
-  //   await window?.ic?.plug?.agent?.fetchRootKey();
-  //   console.log("fetchRootKey!!!!!!!!!!!!!!! in outsde");
-  //     if (process.env.DFX_NETWORK == "local") {
-  //       await window.ic.plug.agent.fetchRootKey();
-  //       console.log("fetchRootKey!!!!!!!!!!!!!!!");
-  //     };
-  // }, []);
+  useEffect(async () => {
+    if (plugConnected) {
+      fetchAllTasks()
+      // TODO: fetchAllMyTasks()
+    }
+  }, [plugConnected]);
 
   return (
     <>
       <Box m={30}>
-        {plugConnected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
+        {plugConnected ? `Connected to plug`: (
           <PlugConnect
             host={network}
             whitelist={whitelist}
-            // dark
+            dark
             onConnectCallback={handleConnect}
           />
         )}
       </Box>
-      <Button variant='outline' ml={30} onClick={fetchAllTasks}>fetchAllTasks</Button>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='all-columns' direction='horizontal' type='column'>
