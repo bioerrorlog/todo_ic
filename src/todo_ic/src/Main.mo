@@ -186,6 +186,13 @@ actor {
 
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
+    taskOrders := {
+      // Is Array.init better?
+      backlog = [];
+      inProgress = [];
+      review = [];
+      done = [];
+    };
     taskStates := Trie.empty();
     profiles := Trie.empty();
   };
