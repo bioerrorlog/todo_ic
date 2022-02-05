@@ -21,6 +21,10 @@ const Container = styled.div`
     margin-bottom:8px;
     border-radius:2px;
     background-color:${props => (props.isDragging ? '#A0AEC0' : 'white')};
+    &:hover {
+        cursor: pointer;
+        background-color: #A0AEC0;
+    }
 `
 const Task = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
