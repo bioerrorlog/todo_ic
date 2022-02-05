@@ -17,7 +17,7 @@ import { convertArrayToObject } from './utils';
 const App = () => {
   const [taskState, setTaskState] = useState({tasks: taskDataset, columns: columnDataset})
 
-  const [connected, setConnected] = useState(false);
+  const [plugConnected, setPlugConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
   const [actor, setActor] = useState(false);
 
@@ -26,8 +26,8 @@ const App = () => {
 
   const fetchAllTasks = async () => {
     console.log('start fetchAllTasks')
-    if (!connected) {
-      console.log("Not connected")
+    if (!plugConnected) {
+      console.log("Not plug connected")
       return
     }
     const allTasks = await actor.fetchAllTasks()
@@ -62,7 +62,7 @@ const App = () => {
     });
 
     setActor(actor);
-    setConnected(true);
+    setPlugConnected(true);
   }
 
 
@@ -127,20 +127,20 @@ const App = () => {
   useEffect(async () => {
     if (!window.ic?.plug?.agent) {
       setActor(false);
-      setConnected(false);
+      setPlugConnected(false);
     }
   }, []);
 
   useEffect(async () => {
-    if (connected) {
+    if (plugConnected) {
       const principal = await window.ic.plug.agent.getPrincipal();
 
       if (principal) {
         setPrincipalId(principal.toText());
       }
     }
-    console.log(`connected: ${connected}`)
-  }, [connected]);
+    console.log(`plugConnected: ${plugConnected}`)
+  }, [plugConnected]);
 
   // useEffect(async () => {
   //   await window?.ic?.plug?.agent?.fetchRootKey();
@@ -154,7 +154,7 @@ const App = () => {
   return (
     <>
       <Box m={30}>
-        {connected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
+        {plugConnected ? `Connected to plug: ${principalId} to canister ${canisterId}`: (
           <PlugConnect
             host={network}
             whitelist={whitelist}
