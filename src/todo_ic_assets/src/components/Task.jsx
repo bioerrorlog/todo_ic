@@ -35,7 +35,7 @@ const Task = (props) => {
                         isDragging={snapshot.isDragging}
                         onClick={onOpen}
                     >
-                        {props.task.content}
+                        {props.task.title}
                     </Container>
                 )}
             </Draggable>
@@ -49,11 +49,10 @@ const Task = (props) => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>{props.task.content}</DrawerHeader>
+                    <DrawerHeader>{props.task.title}</DrawerHeader>
 
                     <DrawerBody>
-                        {/* <Input placeholder='Type here...' /> */}
-                        ** Contents here **
+                        {props.task.description}
                     </DrawerBody>
 
                     <DrawerFooter>
