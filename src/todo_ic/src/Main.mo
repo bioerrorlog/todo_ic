@@ -24,8 +24,8 @@ actor {
   type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
 
-  private stable var nextTaskId : TaskId = 0; // TODO: uuid
-  private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Nat.equal, Hash.hash);
+  private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
+  private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
   private var taskOrders : TaskOrders = {
     // Is Array.init better?
     backlog = [];
@@ -115,7 +115,7 @@ actor {
   // };
 
   public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
-    let thisTaskId : TaskId = nextTaskId;
+    let thisTaskId : TaskId = Nat.toText(nextTaskIdSeed);
     let thisTask : Task = {
       id = thisTaskId;
       title = taskContents_.title;
@@ -134,7 +134,7 @@ actor {
       done = taskOrders.done;
     };
 
-    nextTaskId += 1;
+    nextTaskIdSeed += 1;
     #ok(thisTaskId)
   };
 
@@ -184,8 +184,8 @@ actor {
     // Debug
     // TODO: restrict to canister owner
 
-    nextTaskId := 0;
-    taskMap := HashMap.HashMap<TaskId, Task>(1, Nat.equal, Hash.hash);
+    nextTaskIdSeed := 0;
+    taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
     taskStates := Trie.empty();
     profiles := Trie.empty();
   };

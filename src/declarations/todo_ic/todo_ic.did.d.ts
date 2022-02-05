@@ -33,8 +33,8 @@ export interface Task {
   'title' : string,
   'description' : string,
 }
-export type TaskId = bigint;
-export type TaskId__1 = bigint;
+export type TaskId = string;
+export type TaskId__1 = string;
 export interface TaskOrders {
   'review' : Array<TaskId__1>,
   'done' : Array<TaskId__1>,

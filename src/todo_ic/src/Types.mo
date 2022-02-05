@@ -6,7 +6,7 @@ import Trie "mo:base/Trie";
 
 module {
 
-  public type TaskId = Nat;
+  public type TaskId = Text;
 
   public type TaskStates = Trie.Trie2D<Principal, TaskId, Task>;
 

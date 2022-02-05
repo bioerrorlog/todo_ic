@@ -14,9 +14,9 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
-  const TaskId = IDL.Nat;
+  const TaskId = IDL.Text;
   const Result_1 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
-  const TaskId__1 = IDL.Nat;
+  const TaskId__1 = IDL.Text;
   const TaskStatus = IDL.Variant({
     'review' : IDL.Null,
     'deleted' : IDL.Null,

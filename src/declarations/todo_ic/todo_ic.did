@@ -25,8 +25,8 @@ type TaskOrders =
    inProgress: vec TaskId__1;
    review: vec TaskId__1;
  };
-type TaskId__1 = nat;
-type TaskId = nat;
+type TaskId__1 = text;
+type TaskId = text;
 type Task = 
  record {
    description: text;
