@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDataset, columnDataset, columnOrder } from './dataset' // For debug
+import { taskDatasetEmpty, columnDatasetEmpty, columnOrder } from './constant'
 import Column from './components/Column'
 import {
   todo_ic,
@@ -15,7 +15,7 @@ import {
 import { convertArrayToObject } from './utils';
 
 const App = () => {
-  const [taskState, setTaskState] = useState({tasks: taskDataset, columns: columnDataset})
+  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: columnDatasetEmpty})
 
   const [plugConnected, setPlugConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
@@ -136,6 +136,10 @@ const App = () => {
     }
     console.log(`plugConnected: ${plugConnected}`)
   }, [plugConnected]);
+
+  useEffect(async () => {
+    fetchAllTasks()
+  }, []);
 
   useEffect(async () => {
     if (plugConnected) {
