@@ -54,10 +54,10 @@ canister_test:
 		| grep '(variant { ok })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 001" ; description="This is description."})' \
-		| grep '(variant { ok = 0 : nat })' && echo 'PASS'
+		| grep '(variant { ok = "0" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
-		| grep '(variant { ok = 1 : nat })' && echo 'PASS'
+		| grep '(variant { ok = "1" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
 	# dfx canister call $(BACKEND_CANISTER) listTasksByUserId "(principal \"$(shell dfx identity get-principal)\")"
 
