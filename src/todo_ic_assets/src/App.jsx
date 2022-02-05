@@ -15,15 +15,7 @@ import {
 import { convertArrayToObject } from './utils';
 
 const App = () => {
-  const [myTasks, setMyTasks] = useState()
-  // const [allTasks, setAllTasks] = useState()
-
   const [taskState, setTaskState] = useState({tasks: taskDataset, columns: columnDataset})
-  // const [taskData, setTaskData] = useState(taskDataset)
-  // const [columnData, setColumnData] = useState(columnDataset)
-
-  const [name, setName] = useState('');  // For debug
-  const [message, setMessage] = useState('');  // For debug
 
   const [connected, setConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
@@ -31,13 +23,6 @@ const App = () => {
 
   const whitelist = [canisterId];
   const network = `http://${canisterId}.localhost:8000`;
-  
-  const doGreet = async () => {
-    // For debug
-    const greeting = await actor.greet(name);
-    // const greeting = await todo_ic.greet(name);
-    setMessage(`${greeting} and ${principalId}`);
-  }
 
   const fetchAllTasks = async () => {
     console.log('start fetchAllTasks')
@@ -146,11 +131,6 @@ const App = () => {
     }
   }, []);
 
-  // useEffect(async () => {
-  //   // Debug
-  //   listMyTasks()
-  // }, []);
-
   useEffect(async () => {
     if (connected) {
       const principal = await window.ic.plug.agent.getPrincipal();
@@ -158,8 +138,6 @@ const App = () => {
       if (principal) {
         setPrincipalId(principal.toText());
       }
-    } else {
-      window.location.hash = '/connect';
     }
     console.log(`connected: ${connected}`)
   }, [connected]);
@@ -186,22 +164,6 @@ const App = () => {
         )}
       </Box>
       <Button variant='outline' ml={30} onClick={fetchAllTasks}>fetchAllTasks</Button>
-
-      {/* Greet func for Debug */}
-      {/* <div style={{ margin: "30px" }}>
-        <input
-          id="name"
-          value={name}
-          onChange={(ev) => setName(ev.target.value)}
-        ></input>
-        <button onClick={doGreet}>Greet</button>
-      </div>
-      <div>
-        Greet response: "
-        <span>{message}</span>"
-      </div>
-      <div style={{ margin: "30px" }}>
-      </div> */}
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='all-columns' direction='horizontal' type='column'>

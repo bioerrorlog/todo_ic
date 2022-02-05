@@ -100,20 +100,6 @@ actor {
     profiles
   };
 
-
-  // public shared (msg) func putTask (taskState_ : Task) : async Result.Result<TaskId, Error> {
-  //   // TODO: High cost operation?
-  //   taskStates := Trie.put2D <Principal, TaskId, Task>(
-  //     taskStates,
-  //     keyPrincipal(msg.caller),
-  //     Principal.equal,
-  //     keyText(taskState_.id),
-  //     Text.equal,
-  //     taskState_
-  //   );
-  //   #ok(taskState_.id)
-  // };
-
   public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
     let thisTaskId : TaskId = Nat.toText(nextTaskIdSeed);
     let thisTask : Task = {
@@ -173,11 +159,6 @@ actor {
 
   private func isAnonymous(caller: Principal) : Bool {
     Principal.equal(caller, Principal.fromText("2vxsx-fae"))
-  };
-
-  // Debug
-  public func greet(name : Text) : async Text {
-    return "Hello, " # name # "!";
   };
 
   public func initialize () : async () {
