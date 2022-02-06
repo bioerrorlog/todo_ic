@@ -9,7 +9,7 @@ import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 
 import Types "Types";
-import Utils "Utils";
+import U "Utils";
 
 actor {
 
@@ -122,10 +122,7 @@ actor {
       status = #backlog;
     };
 
-    let oldTaskOrders : TaskOrders = switch(userTaskOrders.get(msg.caller)){
-      case null {emptyTaskOrders};
-      case (? v) {v};
-    };
+    let oldTaskOrders : TaskOrders = U.getHashMapWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders);
     let newTaskOrders : TaskOrders = {
       backlog = Array.append<TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
