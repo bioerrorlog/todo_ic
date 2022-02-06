@@ -59,7 +59,7 @@ canister_test:
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
 		| grep '(variant { ok = "1" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
-	dfx canister call $(BACKEND_CANISTER) fetchAllMyTasks "(principal \"$(shell dfx identity get-principal)\")"
+	# dfx canister call $(BACKEND_CANISTER) fetchAllMyTasks "(principal \"$(shell dfx identity get-principal)\")"
 
 .PHONY: all_test
 all_test: module_test canister_test
