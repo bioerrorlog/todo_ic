@@ -24,8 +24,12 @@ actor {
   type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
 
+  // TODO: Stable state
   private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
   private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
+  private var userTaskOrders : HashMap.HashMap<Principal, TaskOrders> = HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
+  
+  // TODO: Remove duplicates: global taskOrder is not needed
   private var taskOrders : TaskOrders = {
     // Is Array.init better?
     backlog = [];
@@ -39,9 +43,15 @@ actor {
   // TODO: Hide Principal from user, use userId instead.
   stable var profiles : Profiles = Trie.empty();
 
+  private let emptyTaskOrders = {
+    // Is Array.init better?
+    backlog = [];
+    inProgress = [];
+    review = [];
+    done = [];
+  };
+
   public shared (msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
-  
-    // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
@@ -74,7 +84,6 @@ actor {
   public shared (msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
     // TODO refactor: remove duplications with createUser
 
-    // Reject Anonymous Identity
     if(isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
@@ -101,6 +110,10 @@ actor {
   };
 
   public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
+    if(isAnonymous(msg.caller)) {
+      return #err(#notAuthorized);
+    };
+
     let thisTaskId : TaskId = Nat.toText(nextTaskIdSeed);
     let thisTask : Task = {
       id = thisTaskId;
@@ -108,13 +121,24 @@ actor {
       description = taskContents_.description;
       status = #backlog;
     };
+
+    let oldTaskOrders : TaskOrders = switch(userTaskOrders.get(msg.caller)){
+      case null {emptyTaskOrders};
+      case (? v) {v};
+    };
+    let newTaskOrders : TaskOrders = {
+      backlog = Array.append<TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
+      inProgress = oldTaskOrders.inProgress;
+      review = oldTaskOrders.review;
+      done = oldTaskOrders.done;
+    };
   
     taskMap.put(thisTaskId, thisTask);
-
-    // TODO: Array.append is deprecated
-    // taskOrders.backlog := Array.append<TaskId>(taskOrders.backlog [thisTaskId]);
+    userTaskOrders.put(msg.caller, newTaskOrders);
+    
+    // TODO: Remove duplicates: global taskOrder
     taskOrders := {
-      backlog = Array.append<TaskId>(taskOrders.backlog, [thisTaskId]);
+      backlog = Array.append<TaskId>(taskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = taskOrders.inProgress;
       review = taskOrders.review;
       done = taskOrders.done;
@@ -125,6 +149,11 @@ actor {
   };
 
   public query func fetchAllTasks () : async ([Task], TaskOrders) {
+    let taskArray_ = Iter.toArray(taskMap.vals());
+    (taskArray_, taskOrders)
+  };
+
+  public query (msg) func fetchAllMyTasks () : async ([Task], TaskOrders) {
     let taskArray_ = Iter.toArray(taskMap.vals());
     (taskArray_, taskOrders)
   };
@@ -167,6 +196,7 @@ actor {
 
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
+    userTaskOrders := HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
     taskOrders := {
       // Is Array.init better?
       backlog = [];

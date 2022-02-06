@@ -39,8 +39,25 @@ const App = () => {
       tasks: convertArrayToObject(allTasks[0], 'id'),
       columns: newColumnData,
     }
-    // console.log(taskState)
-    // console.log(newTaskState)
+    setTaskState(newTaskState)
+  }
+
+  const fetchAllMyTasks = async () => {
+    // TODO: remove duplication with fetchAllTasks
+    const allTasks = await todo_ic.fetchAllMyTasks()
+
+    // TODO: refactor
+    const newColumnData = {
+      'backlog': { ...taskState.columns['backlog'], taskIds: allTasks[1]['backlog']},
+      'inProgress': { ...taskState.columns['inProgress'], taskIds: allTasks[1]['inProgress']},
+      'review': { ...taskState.columns['review'], taskIds: allTasks[1]['review']},
+      'done': { ...taskState.columns['done'], taskIds: allTasks[1]['done']},
+    }
+    const newTaskState = {
+      ...taskState,
+      tasks: convertArrayToObject(allTasks[0], 'id'),
+      columns: newColumnData,
+    }
     setTaskState(newTaskState)
   }
 
@@ -143,8 +160,7 @@ const App = () => {
 
   useEffect(async () => {
     if (plugConnected) {
-      fetchAllTasks()
-      // TODO: fetchAllMyTasks()
+      fetchAllMyTasks()
     }
   }, [plugConnected]);
 
