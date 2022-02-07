@@ -52,7 +52,6 @@ module {
     about: Text;
   };
 
-  // TODO: Split for each use case
   public type Error = {
     #notFound;
     #alreadyExists;
