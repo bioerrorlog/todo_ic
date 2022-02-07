@@ -29,7 +29,6 @@ actor {
   private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
   private var userTaskOrders : HashMap.HashMap<Principal, TaskOrders> = HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
   
-  // TODO: Remove duplicates: global taskOrder is not needed
   private var taskOrders : TaskOrders = {
     // Is Array.init better?
     backlog = [];
@@ -133,9 +132,8 @@ actor {
     taskMap.put(thisTaskId, thisTask);
     userTaskOrders.put(msg.caller, newTaskOrders);
     
-    // TODO: Remove duplicates: global taskOrder
     taskOrders := {
-      backlog = Array.append<TaskId>(taskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
+      backlog = Array.append<TaskId>([thisTaskId], taskOrders.backlog); // TODO: Array.append is deprecated
       inProgress = taskOrders.inProgress;
       review = taskOrders.review;
       done = taskOrders.done;
@@ -150,9 +148,11 @@ actor {
     (taskArray_, taskOrders)
   };
 
-  public query (msg) func fetchAllMyTasks () : async ([Task], TaskOrders) {
-    let taskArray_ = Iter.toArray(taskMap.vals());
-    (taskArray_, taskOrders)
+  public query (msg) func listMyTaskOrders () : async ?TaskOrders {
+    if(isAnonymous(msg.caller)) {
+      return null;
+    };
+    userTaskOrders.get(msg.caller)
   };
 
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
@@ -183,6 +183,7 @@ actor {
     { key = x; hash = Principal.hash(x) }
   };
 
+  // TODO: replace with Principal.isAnonymous
   private func isAnonymous(caller: Principal) : Bool {
     Principal.equal(caller, Principal.fromText("2vxsx-fae"))
   };
