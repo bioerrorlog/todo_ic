@@ -1,6 +1,5 @@
 import { 
   Box,
-  Button,
 } from "@chakra-ui/react"
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -25,18 +24,18 @@ const App = () => {
   const network = `http://${canisterId}.localhost:8000`;
 
   const fetchAllTasks = async () => {
-    const allTasks = await todo_ic.fetchAllTasks()
+    const allTasks = await todo_ic.listAllTasks()
+    const globalTaskOrders = await todo_ic.getGlobalTaskOrders()
 
-    // TODO: refactor
     const newColumnData = {
-      'backlog': { ...taskState.columns['backlog'], taskIds: allTasks[1]['backlog']},
-      'inProgress': { ...taskState.columns['inProgress'], taskIds: allTasks[1]['inProgress']},
-      'review': { ...taskState.columns['review'], taskIds: allTasks[1]['review']},
-      'done': { ...taskState.columns['done'], taskIds: allTasks[1]['done']},
+      'backlog': { ...taskState.columns['backlog'], taskIds: globalTaskOrders.backlog},
+      'inProgress': { ...taskState.columns['inProgress'], taskIds: globalTaskOrders.inProgress},
+      'review': { ...taskState.columns['review'], taskIds: globalTaskOrders.review},
+      'done': { ...taskState.columns['done'], taskIds: globalTaskOrders.done},
     }
     const newTaskState = {
       ...taskState,
-      tasks: convertArrayToObject(allTasks[0], 'id'),
+      tasks: convertArrayToObject(allTasks, 'id'),
       columns: newColumnData,
     }
     setTaskState(newTaskState)

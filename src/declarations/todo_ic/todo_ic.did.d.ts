@@ -55,9 +55,10 @@ export type Trie_1 = { 'branch' : Branch_1 } |
 export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
   'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_1>,
-  'fetchAllTasks' : () => Promise<[Array<Task>, TaskOrders]>,
+  'getGlobalTaskOrders' : () => Promise<TaskOrders>,
+  'getMyTaskOrders' : () => Promise<[] | [TaskOrders]>,
   'initialize' : () => Promise<undefined>,
-  'listMyTaskOrders' : () => Promise<[] | [TaskOrders]>,
+  'listAllTasks' : () => Promise<Array<Task>>,
   'listMyTasks' : () => Promise<[] | [Trie]>,
   'listProfiles' : () => Promise<Profiles>,
   'listTasksByUserId' : (arg_0: Principal) => Promise<[] | [Trie]>,

@@ -55,11 +55,12 @@ canister_test:
 	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 001" ; description="This is description 1."})' \
 		| grep '(variant { ok = "0" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
 		| grep '(variant { ok = "1" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) fetchAllTasks
-	dfx canister call $(BACKEND_CANISTER) listMyTaskOrders "(principal \"$(shell dfx identity get-principal)\")"
+	dfx canister call $(BACKEND_CANISTER) listAllTasks
+	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders
+	dfx canister call $(BACKEND_CANISTER) getMyTaskOrders "(principal \"$(shell dfx identity get-principal)\")"
+	echo "End of canister tests"
 
 .PHONY: all_test
 all_test: module_test canister_test

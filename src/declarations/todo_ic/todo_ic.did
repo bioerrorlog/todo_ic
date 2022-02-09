@@ -140,9 +140,10 @@ type AssocList =
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   createTask: (CreateTaskTemplate) -> (Result_1);
-  fetchAllTasks: () -> (vec Task, TaskOrders) query;
+  getGlobalTaskOrders: () -> (TaskOrders) query;
+  getMyTaskOrders: () -> (opt TaskOrders) query;
   initialize: () -> ();
-  listMyTaskOrders: () -> (opt TaskOrders) query;
+  listAllTasks: () -> (vec Task) query;
   listMyTasks: () -> (opt Trie) query;
   listProfiles: () -> (Profiles) query;
   listTasksByUserId: (principal) -> (opt Trie) query;

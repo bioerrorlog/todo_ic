@@ -143,12 +143,15 @@ actor {
     #ok(thisTaskId)
   };
 
-  public query func fetchAllTasks () : async ([Task], TaskOrders) {
-    let taskArray_ = Iter.toArray(taskMap.vals());
-    (taskArray_, taskOrders)
+  public query func listAllTasks () : async [Task] {
+    Iter.toArray(taskMap.vals())
   };
 
-  public query (msg) func listMyTaskOrders () : async ?TaskOrders {
+  public query func getGlobalTaskOrders () : async TaskOrders {
+    taskOrders
+  };
+
+  public query (msg) func getMyTaskOrders () : async ?TaskOrders {
     if(isAnonymous(msg.caller)) {
       return null;
     };
