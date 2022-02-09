@@ -62,6 +62,6 @@ export interface _SERVICE {
   'listMyTasks' : () => Promise<[] | [Trie]>,
   'listProfiles' : () => Promise<Profiles>,
   'listTasksByUserId' : (arg_0: Principal) => Promise<[] | [Trie]>,
-  'showCaller' : () => Promise<Principal>,
+  'showCaller' : () => Promise<string>,
   'updateProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
 }

@@ -81,7 +81,7 @@ export const idlFactory = ({ IDL }) => {
     'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], ['query']),
     'listProfiles' : IDL.Func([], [Profiles], ['query']),
     'listTasksByUserId' : IDL.Func([IDL.Principal], [IDL.Opt(Trie)], ['query']),
-    'showCaller' : IDL.Func([], [IDL.Principal], ['query']),
+    'showCaller' : IDL.Func([], [IDL.Text], ['query']),
     'updateProfile' : IDL.Func([ProfileTemplate], [Result], []),
   });
 };

@@ -41,20 +41,23 @@ const App = () => {
     setTaskState(newTaskState)
   }
 
-  const fetchAllMyTasks = async () => {
-    // TODO: remove duplication with fetchAllTasks
-    const allTasks = await todo_ic.fetchAllMyTasks()
+  const fetchMyTaskOrders = async () => {
+    const myTaskOrders = await actor.getMyTaskOrders()
+    console.log(myTaskOrders)
+    console.log(await actor.showCaller())
+    if (myTaskOrders == null) {
+      console.log('My task orders no existed')
+      return
+    }
 
-    // TODO: refactor
     const newColumnData = {
-      'backlog': { ...taskState.columns['backlog'], taskIds: allTasks[1]['backlog']},
-      'inProgress': { ...taskState.columns['inProgress'], taskIds: allTasks[1]['inProgress']},
-      'review': { ...taskState.columns['review'], taskIds: allTasks[1]['review']},
-      'done': { ...taskState.columns['done'], taskIds: allTasks[1]['done']},
+      'backlog': { ...taskState.columns['backlog'], taskIds: myTaskOrders.backlog},
+      'inProgress': { ...taskState.columns['inProgress'], taskIds: myTaskOrders.inProgress},
+      'review': { ...taskState.columns['review'], taskIds: myTaskOrders.review},
+      'done': { ...taskState.columns['done'], taskIds: myTaskOrders.done},
     }
     const newTaskState = {
       ...taskState,
-      tasks: convertArrayToObject(allTasks[0], 'id'),
       columns: newColumnData,
     }
     setTaskState(newTaskState)
@@ -159,7 +162,7 @@ const App = () => {
 
   useEffect(async () => {
     if (plugConnected) {
-      fetchAllMyTasks()
+      fetchMyTaskOrders()
     }
   }, [plugConnected]);
 

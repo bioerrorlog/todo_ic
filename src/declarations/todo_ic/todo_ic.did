@@ -147,6 +147,6 @@ service : {
   listMyTasks: () -> (opt Trie) query;
   listProfiles: () -> (Profiles) query;
   listTasksByUserId: (principal) -> (opt Trie) query;
-  showCaller: () -> (principal) query;
+  showCaller: () -> (text) query;
   updateProfile: (ProfileTemplate) -> (Result);
 }

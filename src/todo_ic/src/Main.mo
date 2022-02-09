@@ -168,8 +168,8 @@ actor {
     )
   };
 
-  public query (msg) func showCaller () : async Principal {
-    msg.caller
+  public query (msg) func showCaller () : async Text {
+    Principal.toText(msg.caller)
   };
 
   private func keyText(x : Text) : Trie.Key<Text> {
