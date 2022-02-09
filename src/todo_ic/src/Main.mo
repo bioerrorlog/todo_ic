@@ -24,31 +24,25 @@ actor {
   type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
 
+  let emptyTaskOrders : TaskOrders = {
+    // Is Array.init better?
+    backlog = [];
+    inProgress = [];
+    review = [];
+    done = [];
+  };
+
   // TODO: Stable state
   private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
   private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
   private var userTaskOrders : HashMap.HashMap<Principal, TaskOrders> = HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
   
-  private var taskOrders : TaskOrders = {
-    // Is Array.init better?
-    backlog = [];
-    inProgress = [];
-    review = [];
-    done = [];
-  };
+  private stable var taskOrders : TaskOrders = emptyTaskOrders;
 
   stable var taskStates: TaskStates = Trie.empty();
 
   // TODO: Hide Principal from user, use userId instead.
   stable var profiles : Profiles = Trie.empty();
-
-  private let emptyTaskOrders = {
-    // Is Array.init better?
-    backlog = [];
-    inProgress = [];
-    review = [];
-    done = [];
-  };
 
   public shared (msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
     if(isAnonymous(msg.caller)) {
@@ -198,13 +192,7 @@ actor {
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
     userTaskOrders := HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
-    taskOrders := {
-      // Is Array.init better?
-      backlog = [];
-      inProgress = [];
-      review = [];
-      done = [];
-    };
+    taskOrders := emptyTaskOrders;
     taskStates := Trie.empty();
     profiles := Trie.empty();
   };
