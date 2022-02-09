@@ -145,11 +145,11 @@ actor {
     taskOrders
   };
 
-  public query (msg) func getMyTaskOrders () : async ?TaskOrders {
+  public query (msg) func getMyTaskOrders () : async TaskOrders {
     if(isAnonymous(msg.caller)) {
-      return null;
+      return emptyTaskOrders;
     };
-    userTaskOrders.get(msg.caller)
+    U.getHashMapWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders)
   };
 
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {

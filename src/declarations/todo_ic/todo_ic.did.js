@@ -75,7 +75,7 @@ export const idlFactory = ({ IDL }) => {
     'createProfile' : IDL.Func([ProfileTemplate], [Result], []),
     'createTask' : IDL.Func([CreateTaskTemplate], [Result_1], []),
     'getGlobalTaskOrders' : IDL.Func([], [TaskOrders], ['query']),
-    'getMyTaskOrders' : IDL.Func([], [IDL.Opt(TaskOrders)], ['query']),
+    'getMyTaskOrders' : IDL.Func([], [TaskOrders], ['query']),
     'initialize' : IDL.Func([], [], []),
     'listAllTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),
     'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], ['query']),

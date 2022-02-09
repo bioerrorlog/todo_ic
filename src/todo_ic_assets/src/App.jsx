@@ -42,13 +42,10 @@ const App = () => {
   }
 
   const fetchMyTaskOrders = async () => {
+    // Slow response with plug agent
+    console.log('fetchMyTaskOrders start')
     const myTaskOrders = await actor.getMyTaskOrders()
-    console.log(myTaskOrders)
-    console.log(await actor.showCaller())
-    if (myTaskOrders == null) {
-      console.log('My task orders no existed')
-      return
-    }
+    console.log('End fetching')
 
     const newColumnData = {
       'backlog': { ...taskState.columns['backlog'], taskIds: myTaskOrders.backlog},
@@ -60,6 +57,7 @@ const App = () => {
       ...taskState,
       columns: newColumnData,
     }
+
     setTaskState(newTaskState)
   }
 

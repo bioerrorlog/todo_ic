@@ -141,7 +141,7 @@ service : {
   createProfile: (ProfileTemplate) -> (Result);
   createTask: (CreateTaskTemplate) -> (Result_1);
   getGlobalTaskOrders: () -> (TaskOrders) query;
-  getMyTaskOrders: () -> (opt TaskOrders) query;
+  getMyTaskOrders: () -> (TaskOrders) query;
   initialize: () -> ();
   listAllTasks: () -> (vec Task) query;
   listMyTasks: () -> (opt Trie) query;

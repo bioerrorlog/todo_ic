@@ -56,7 +56,7 @@ export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
   'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_1>,
   'getGlobalTaskOrders' : () => Promise<TaskOrders>,
-  'getMyTaskOrders' : () => Promise<[] | [TaskOrders]>,
+  'getMyTaskOrders' : () => Promise<TaskOrders>,
   'initialize' : () => Promise<undefined>,
   'listAllTasks' : () => Promise<Array<Task>>,
   'listMyTasks' : () => Promise<[] | [Trie]>,
