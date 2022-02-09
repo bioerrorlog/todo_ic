@@ -1,5 +1,6 @@
 import { 
   Box,
+  Button,
 } from "@chakra-ui/react"
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -42,6 +43,10 @@ const App = () => {
   }
 
   const fetchMyTaskOrders = async () => {
+    if (!plugConnected) {
+      console.log('Not authorized')
+      return
+    }
     // Slow response with plug agent
     console.log('fetchMyTaskOrders start')
     const myTaskOrders = await actor.getMyTaskOrders()
@@ -59,6 +64,12 @@ const App = () => {
     }
 
     setTaskState(newTaskState)
+  }
+
+  const createTask = async () => {
+    console.log('start creteTask')
+
+    fetchMyTaskOrders()
   }
 
   const handleConnect = async () => {
@@ -182,6 +193,7 @@ const App = () => {
           </Box>
         )}
       </Box>
+      <Button variant='outline' ml={30} onClick={createTask}>createTask</Button>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='all-columns' direction='horizontal' type='column'>
