@@ -180,7 +180,6 @@ actor {
     { key = x; hash = Principal.hash(x) }
   };
 
-  // TODO: replace with Principal.isAnonymous
   private func isAnonymous(caller: Principal) : Bool {
     Principal.equal(caller, Principal.fromText("2vxsx-fae"))
   };
