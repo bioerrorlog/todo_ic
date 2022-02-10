@@ -20,6 +20,13 @@ let
      ]
   -}
   overrides =
-    [] : List Package
+    [
+        {
+          name = "base",
+          repo = "https://github.com/dfinity/motoko-base",
+          version = "dfx-0.8.4",
+          dependencies = [] : List Text
+        }
+    ] : List Package
 
 in  upstream # additions # overrides
