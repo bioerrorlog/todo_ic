@@ -7,6 +7,8 @@ BACKEND_DIR=src/$(BACKEND_CANISTER)
 
 BACKEND_TEST_DIR=$(BACKEND_DIR)/tests
 
+EX_ID=$(shell dfx identity whoami)
+
 .PHONY: all
 all: build
 
@@ -45,6 +47,9 @@ canister_test:
 	# TODO: assert
 	dfx canister call $(BACKEND_CANISTER) initialize
 
+	# Can call as principal identity
+	dfx identity use default
+
 	dfx canister call $(BACKEND_CANISTER) listProfiles \
 		| grep '(variant { "empty" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})' \
@@ -52,15 +57,34 @@ canister_test:
 	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})' \
 		| grep '(variant { ok })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 001" ; description="This is description 1."})' \
 		| grep '(variant { ok = "0" })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
 		| grep '(variant { ok = "1" })' && echo 'PASS'
+	dfx canister call $(BACKEND_CANISTER) getMyTaskOrders "(principal \"$(shell dfx identity get-principal)\")"
+	dfx canister call $(BACKEND_CANISTER) listProfiles
 	dfx canister call $(BACKEND_CANISTER) listAllTasks
 	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders
-	dfx canister call $(BACKEND_CANISTER) getMyTaskOrders "(principal \"$(shell dfx identity get-principal)\")"
-	echo "End of canister tests"
+
+	# Can't call as anonymous identity
+	dfx identity use anonymous
+
+	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is anonymous user"; name="anonimous_0"})' \
+		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
+	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated anonymous user"; name="anonimous_1"})' \
+		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
+	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Anonymous task title 001" ; description="This is anonymous 1."})' \
+		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
+
+	# Can call as anonymous identity
+	dfx identity use anonymous
+
+	dfx canister call $(BACKEND_CANISTER) listProfiles
+	dfx canister call $(BACKEND_CANISTER) listAllTasks
+	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders
+
+	dfx identity use $(EX_ID)
+	echo "SUCCEED: All canister tests passed"
 
 .PHONY: all_test
 all_test: module_test canister_test
