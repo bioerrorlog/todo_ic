@@ -35,11 +35,12 @@ reinstall: build
 module_test:
 	rm -rf $(WASM_OUTDIR)
 	mkdir $(WASM_OUTDIR)
-	for i in $(BACKEND_TEST_DIR)/*.mo; do \
+	for i in $(BACKEND_TEST_DIR)/*Test.mo; do \
 		$(shell vessel bin)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i; \
 		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm; \
 	done
 	rm -rf $(WASM_OUTDIR)
+	echo "SUCCEED: All module tests passed"
 
 .PHONY: canister_test
 canister_test:
