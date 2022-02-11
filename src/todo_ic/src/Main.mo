@@ -9,7 +9,7 @@ import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 
 import Types "Types";
-import U "Utils";
+import HU "HashMapUtils";
 
 actor {
 
@@ -115,7 +115,7 @@ actor {
       status = #backlog;
     };
 
-    let oldTaskOrders : TaskOrders = U.getHashMapWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders);
+    let oldTaskOrders : TaskOrders = HU.getWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders);
     let newTaskOrders : TaskOrders = {
       backlog = Array.append<TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
@@ -149,7 +149,7 @@ actor {
     if(isAnonymous(msg.caller)) {
       return emptyTaskOrders;
     };
-    U.getHashMapWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders)
+    HU.getWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders)
   };
 
   public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
