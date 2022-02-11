@@ -66,12 +66,12 @@ actor {
     switch(existing) {
       case null {
         profiles := newProfiles;
-        return #ok(());
+        #ok(())
       };
       case (? v) {
-        return #err(#alreadyExists);
+        #err(#alreadyExists)
       };
-    };
+    }
   };
 
   public shared (msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
@@ -94,7 +94,7 @@ actor {
       userProfile,
     ).0;
 
-    return #ok(())
+    #ok(())
   };
 
   public query func listProfiles () : async Profiles {
