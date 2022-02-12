@@ -156,25 +156,25 @@ actor {
     listTasksByUserId_(msg.caller)
   };
 
-  public query (msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
-    listTasksByUserId_(user_)
-  };
+  // public query (msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
+  //   listTasksByUserId_(user_)
+  // };
 
-  private func listTasksByUserId_ (user_ : Principal) : ?Trie.Trie<TaskId, Task> {
-    Trie.find(
-      taskStates,
-      keyPrincipal(user_),
-      Principal.equal,
-    )
-  };
+  // private func listTasksByUserId_ (user_ : Principal) : ?Trie.Trie<TaskId, Task> {
+  //   Trie.find(
+  //     taskStates,
+  //     keyPrincipal(user_),
+  //     Principal.equal,
+  //   )
+  // };
 
   public query (msg) func showCaller () : async Text {
     Principal.toText(msg.caller)
   };
 
-  private func keyText(x : Text) : Trie.Key<Text> {
-    { key = x; hash = Text.hash(x) }
-  };
+  // private func keyText(x : Text) : Trie.Key<Text> {
+  //   { key = x; hash = Text.hash(x) }
+  // };
 
   private func keyPrincipal(x : Principal) : Trie.Key<Principal> {
     { key = x; hash = Principal.hash(x) }
