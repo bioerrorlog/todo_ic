@@ -1,8 +1,6 @@
 export const idlFactory = ({ IDL }) => {
-  const Branch_1 = IDL.Rec();
+  const Branch = IDL.Rec();
   const List = IDL.Rec();
-  const List_1 = IDL.Rec();
-  const Trie = IDL.Rec();
   const ProfileTemplate = IDL.Record({ 'about' : IDL.Text, 'name' : IDL.Text });
   const Error = IDL.Variant({
     'notAuthorized' : IDL.Null,
@@ -14,14 +12,14 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
-  const TaskId = IDL.Text;
-  const Result_1 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
   const TaskId__1 = IDL.Text;
+  const Result_1 = IDL.Variant({ 'ok' : TaskId__1, 'err' : Error });
+  const TaskId = IDL.Text;
   const TaskOrders = IDL.Record({
-    'review' : IDL.Vec(TaskId__1),
-    'done' : IDL.Vec(TaskId__1),
-    'inProgress' : IDL.Vec(TaskId__1),
-    'backlog' : IDL.Vec(TaskId__1),
+    'review' : IDL.Vec(TaskId),
+    'done' : IDL.Vec(TaskId),
+    'inProgress' : IDL.Vec(TaskId),
+    'backlog' : IDL.Vec(TaskId),
   });
   const TaskStatus = IDL.Variant({
     'review' : IDL.Null,
@@ -31,44 +29,30 @@ export const idlFactory = ({ IDL }) => {
     'backlog' : IDL.Null,
   });
   const Task = IDL.Record({
-    'id' : TaskId__1,
+    'id' : TaskId,
     'status' : TaskStatus,
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
-  const Branch = IDL.Record({
-    'left' : Trie,
-    'size' : IDL.Nat,
-    'right' : Trie,
-  });
   const Hash = IDL.Nat32;
-  const Key = IDL.Record({ 'key' : TaskId, 'hash' : Hash });
-  List.fill(IDL.Opt(IDL.Tuple(IDL.Tuple(Key, Task), List)));
-  const AssocList = IDL.Opt(IDL.Tuple(IDL.Tuple(Key, Task), List));
-  const Leaf = IDL.Record({ 'size' : IDL.Nat, 'keyvals' : AssocList });
-  Trie.fill(
-    IDL.Variant({ 'branch' : Branch, 'leaf' : Leaf, 'empty' : IDL.Null })
-  );
-  const Key_1 = IDL.Record({ 'key' : IDL.Principal, 'hash' : Hash });
+  const Key = IDL.Record({ 'key' : IDL.Principal, 'hash' : Hash });
   const Profile = IDL.Record({
     'principal' : IDL.Principal,
     'about' : IDL.Text,
     'name' : IDL.Text,
   });
-  List_1.fill(IDL.Opt(IDL.Tuple(IDL.Tuple(Key_1, Profile), List_1)));
-  const AssocList_1 = IDL.Opt(IDL.Tuple(IDL.Tuple(Key_1, Profile), List_1));
-  const Leaf_1 = IDL.Record({ 'size' : IDL.Nat, 'keyvals' : AssocList_1 });
-  const Trie_1 = IDL.Variant({
-    'branch' : Branch_1,
-    'leaf' : Leaf_1,
+  List.fill(IDL.Opt(IDL.Tuple(IDL.Tuple(Key, Profile), List)));
+  const AssocList = IDL.Opt(IDL.Tuple(IDL.Tuple(Key, Profile), List));
+  const Leaf = IDL.Record({ 'size' : IDL.Nat, 'keyvals' : AssocList });
+  const Trie = IDL.Variant({
+    'branch' : Branch,
+    'leaf' : Leaf,
     'empty' : IDL.Null,
   });
-  Branch_1.fill(
-    IDL.Record({ 'left' : Trie_1, 'size' : IDL.Nat, 'right' : Trie_1 })
-  );
+  Branch.fill(IDL.Record({ 'left' : Trie, 'size' : IDL.Nat, 'right' : Trie }));
   const Profiles = IDL.Variant({
-    'branch' : Branch_1,
-    'leaf' : Leaf_1,
+    'branch' : Branch,
+    'leaf' : Leaf,
     'empty' : IDL.Null,
   });
   return IDL.Service({
@@ -78,9 +62,7 @@ export const idlFactory = ({ IDL }) => {
     'getMyTaskOrders' : IDL.Func([], [TaskOrders], ['query']),
     'initialize' : IDL.Func([], [], []),
     'listAllTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),
-    'listMyTasks' : IDL.Func([], [IDL.Opt(Trie)], ['query']),
     'listProfiles' : IDL.Func([], [Profiles], ['query']),
-    'listTasksByUserId' : IDL.Func([IDL.Principal], [IDL.Opt(Trie)], ['query']),
     'showCaller' : IDL.Func([], [IDL.Text], ['query']),
     'updateProfile' : IDL.Func([ProfileTemplate], [Result], []),
   });

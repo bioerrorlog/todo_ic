@@ -10,6 +10,7 @@ import Trie "mo:base/Trie";
 
 import Types "Types";
 import UH "Utils/HashMap";
+import UP "Utils/Principal";
 
 actor {
 
@@ -45,7 +46,7 @@ actor {
   stable var profiles : Profiles = Trie.empty();
 
   public shared (msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
-    if(isAnonymous(msg.caller)) {
+    if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
   
@@ -77,7 +78,7 @@ actor {
   public shared (msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
     // TODO refactor: remove duplications with createUser
 
-    if(isAnonymous(msg.caller)) {
+    if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
   
@@ -103,7 +104,7 @@ actor {
   };
 
   public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
-    if(isAnonymous(msg.caller)) {
+    if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
 
@@ -146,15 +147,15 @@ actor {
   };
 
   public query (msg) func getMyTaskOrders () : async TaskOrders {
-    if(isAnonymous(msg.caller)) {
+    if(UP.isAnonymous(msg.caller)) {
       return emptyTaskOrders;
     };
     UH.getWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders)
   };
 
-  public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
-    listTasksByUserId_(msg.caller)
-  };
+  // public query (msg) func listMyTasks () : async ?Trie.Trie<TaskId, Task> {
+  //   listTasksByUserId_(msg.caller)
+  // };
 
   // public query (msg) func listTasksByUserId (user_ : Principal) : async ?Trie.Trie<TaskId, Task> {
   //   listTasksByUserId_(user_)
@@ -180,9 +181,9 @@ actor {
     { key = x; hash = Principal.hash(x) }
   };
 
-  private func isAnonymous(caller: Principal) : Bool {
-    Principal.equal(caller, Principal.fromText("2vxsx-fae"))
-  };
+  // private func isAnonymous(caller: Principal) : Bool {
+  //   Principal.equal(caller, Principal.fromText("2vxsx-fae"))
+  // };
 
   public func initialize () : async () {
     // Debug

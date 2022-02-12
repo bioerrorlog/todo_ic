@@ -1,9 +1,3 @@
-type Trie_1 = 
- variant {
-   branch: Branch_1;
-   "empty";
-   leaf: Leaf_1;
- };
 type Trie = 
  variant {
    branch: Branch;
@@ -20,24 +14,24 @@ type TaskStatus =
  };
 type TaskOrders = 
  record {
-   backlog: vec TaskId__1;
-   done: vec TaskId__1;
-   inProgress: vec TaskId__1;
-   review: vec TaskId__1;
+   backlog: vec TaskId;
+   done: vec TaskId;
+   inProgress: vec TaskId;
+   review: vec TaskId;
  };
 type TaskId__1 = text;
 type TaskId = text;
 type Task = 
  record {
    description: text;
-   id: TaskId__1;
+   id: TaskId;
    status: TaskStatus;
    title: text;
  };
 type Result_1 = 
  variant {
    err: Error;
-   ok: TaskId;
+   ok: TaskId__1;
  };
 type Result = 
  variant {
@@ -46,9 +40,9 @@ type Result =
  };
 type Profiles = 
  variant {
-   branch: Branch_1;
+   branch: Branch;
    "empty";
-   leaf: Leaf_1;
+   leaf: Leaf;
  };
 type ProfileTemplate = 
  record {
@@ -61,41 +55,23 @@ type Profile =
    name: text;
    "principal": principal;
  };
-type List_1 = 
- opt record {
-       record {
-         Key_1;
-         Profile;
-       };
-       List_1;
-     };
 type List = 
  opt record {
        record {
          Key;
-         Task;
+         Profile;
        };
        List;
      };
-type Leaf_1 = 
- record {
-   keyvals: AssocList_1;
-   size: nat;
- };
 type Leaf = 
  record {
    keyvals: AssocList;
    size: nat;
  };
-type Key_1 = 
- record {
-   hash: Hash;
-   key: principal;
- };
 type Key = 
  record {
    hash: Hash;
-   key: TaskId;
+   key: principal;
  };
 type Hash = nat32;
 type Error = 
@@ -109,31 +85,17 @@ type CreateTaskTemplate =
    description: text;
    title: text;
  };
-type Branch_1 = 
- record {
-   left: Trie_1;
-   right: Trie_1;
-   size: nat;
- };
 type Branch = 
  record {
    left: Trie;
    right: Trie;
    size: nat;
  };
-type AssocList_1 = 
- opt record {
-       record {
-         Key_1;
-         Profile;
-       };
-       List_1;
-     };
 type AssocList = 
  opt record {
        record {
          Key;
-         Task;
+         Profile;
        };
        List;
      };
@@ -144,9 +106,7 @@ service : {
   getMyTaskOrders: () -> (TaskOrders) query;
   initialize: () -> ();
   listAllTasks: () -> (vec Task) query;
-  listMyTasks: () -> (opt Trie) query;
   listProfiles: () -> (Profiles) query;
-  listTasksByUserId: (principal) -> (opt Trie) query;
   showCaller: () -> (text) query;
   updateProfile: (ProfileTemplate) -> (Result);
 }
