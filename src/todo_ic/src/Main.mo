@@ -144,8 +144,7 @@ actor {
   };
 
   public func initialize () : async () {
-    // Debug
-    // TODO: restrict to canister owner
+    // TODO: restrict to canister owner call
 
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
