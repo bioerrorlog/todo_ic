@@ -5,7 +5,7 @@ import Text "mo:base/Text";
 import U "../src/Utils/HashMap";
 import T "../src/Types";
 
-Debug.print("Module Test: HashMapUtils");
+Debug.print("Module Test: Utils/HashMap");
 
 do {
   Debug.print("  getWithInitVal returns its associated value if it existed");
