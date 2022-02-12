@@ -12,13 +12,6 @@ module {
 
   public type Profiles = Trie.Trie<Principal, Profile>;
 
-  public type Task = {
-    id: TaskId;
-    title: Text;
-    description: Text;
-    status: TaskStatus;
-  };
-
   public type TaskOrders = {
     backlog: [TaskId];
     inProgress: [TaskId];
@@ -31,6 +24,11 @@ module {
     description: Text;
   };
 
+  public type Task = CreateTaskTemplate and {
+    id: TaskId;
+    status: TaskStatus;
+  };
+
   public type TaskMap = HashMap.HashMap<TaskId, Task>;
 
   public type TaskStatus = {
@@ -41,15 +39,13 @@ module {
     #deleted;
   };
 
-  public type Profile = {
-    principal: Principal;
+  public type ProfileTemplate = {
     name: Text;
     about: Text;
   };
 
-  public type ProfileTemplate = {
-    name: Text;
-    about: Text;
+  public type Profile = ProfileTemplate and {
+    principal: Principal;
   };
 
   public type Error = {
