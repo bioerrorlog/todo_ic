@@ -2,6 +2,7 @@ import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Text "mo:base/Text";
 
+import Constants "../src/Constants";
 import U "../src/Utils/HashMap";
 import T "../src/Types";
 
@@ -22,16 +23,9 @@ do {
     done = [];
   };
   input.put(key, taskOrders);
- 
-  let initTaskOrders : T.TaskOrders = {
-    backlog = [];
-    inProgress = [];
-    review = [];
-    done = [];
-  };
 
   let expected = taskOrders;
-  assert(U.getWithInitVal(input, key, initTaskOrders) == expected);
+  assert(U.getWithInitVal(input, key, Constants.emptyTaskOrders) == expected);
 };
 
 do {
@@ -48,13 +42,6 @@ do {
   };
   input.put(key, taskOrders);
 
-  let initTaskOrders : T.TaskOrders = {
-    backlog = [];
-    inProgress = [];
-    review = [];
-    done = [];
-  };
-
-  let expected = initTaskOrders;
-  assert(U.getWithInitVal(input, "dummy_key", initTaskOrders) == expected);
+  let expected = Constants.emptyTaskOrders;
+  assert(U.getWithInitVal(input, "dummy_key", Constants.emptyTaskOrders) == expected);
 };
