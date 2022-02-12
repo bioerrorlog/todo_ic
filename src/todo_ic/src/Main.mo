@@ -8,6 +8,7 @@ import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 
+import Constants "Constants";
 import Types "Types";
 import UH "Utils/HashMap";
 import UP "Utils/Principal";
@@ -25,20 +26,12 @@ actor {
   type ProfileTemplate = Types.ProfileTemplate;
   type Error = Types.Error;
 
-  let emptyTaskOrders : TaskOrders = {
-    // Is Array.init better?
-    backlog = [];
-    inProgress = [];
-    review = [];
-    done = [];
-  };
-
   // TODO: Stable state
   private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
   private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
   private var userTaskOrders : HashMap.HashMap<Principal, TaskOrders> = HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
   
-  private stable var taskOrders : TaskOrders = emptyTaskOrders;
+  private stable var taskOrders : TaskOrders = Constants.emptyTaskOrders;
 
   stable var taskStates: TaskStates = Trie.empty();
 
@@ -116,7 +109,7 @@ actor {
       status = #backlog;
     };
 
-    let oldTaskOrders : TaskOrders = UH.getWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders);
+    let oldTaskOrders : TaskOrders = UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders);
     let newTaskOrders : TaskOrders = {
       backlog = Array.append<TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
@@ -148,9 +141,9 @@ actor {
 
   public query (msg) func getMyTaskOrders () : async TaskOrders {
     if(UP.isAnonymous(msg.caller)) {
-      return emptyTaskOrders;
+      return Constants.emptyTaskOrders;
     };
-    UH.getWithInitVal(userTaskOrders, msg.caller, emptyTaskOrders)
+    UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders)
   };
 
   public query (msg) func showCaller () : async Text {
@@ -168,7 +161,7 @@ actor {
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
     userTaskOrders := HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
-    taskOrders := emptyTaskOrders;
+    taskOrders := Constants.emptyTaskOrders;
     taskStates := Trie.empty();
     profiles := Trie.empty();
   };
