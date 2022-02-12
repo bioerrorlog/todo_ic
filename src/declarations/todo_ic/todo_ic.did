@@ -19,7 +19,6 @@ type TaskOrders =
    inProgress: vec TaskId;
    review: vec TaskId;
  };
-type TaskId__1 = text;
 type TaskId = text;
 type Task = 
  record {
@@ -31,7 +30,7 @@ type Task =
 type Result_1 = 
  variant {
    err: Error;
-   ok: TaskId__1;
+   ok: TaskId;
  };
 type Result = 
  variant {

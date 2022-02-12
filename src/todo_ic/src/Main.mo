@@ -9,41 +9,30 @@ import Text "mo:base/Text";
 import Trie "mo:base/Trie";
 
 import Constants "Constants";
-import Types "Types";
+import T "Types";
 import UH "Utils/HashMap";
 import UP "Utils/Principal";
 
 actor {
 
-  type TaskStates = Types.TaskStates;
-  type Task = Types.Task;
-  type CreateTaskTemplate = Types.CreateTaskTemplate;
-  type TaskId = Types.TaskId;
-  type TaskMap = Types.TaskMap;
-  type TaskOrders = Types.TaskOrders;
-  type Profiles = Types.Profiles;
-  type Profile = Types.Profile;
-  type ProfileTemplate = Types.ProfileTemplate;
-  type Error = Types.Error;
-
   // TODO: Stable state
   private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
-  private var taskMap : TaskMap = HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
-  private var userTaskOrders : HashMap.HashMap<Principal, TaskOrders> = HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
+  private var taskMap : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
+  private var userTaskOrders : HashMap.HashMap<Principal, T.TaskOrders> = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
   
-  private stable var taskOrders : TaskOrders = Constants.emptyTaskOrders;
+  private stable var taskOrders : T.TaskOrders = Constants.emptyTaskOrders;
 
-  stable var taskStates: TaskStates = Trie.empty();
+  stable var taskStates: T.TaskStates = Trie.empty();
 
   // TODO: Hide Principal from user, use userId instead.
-  stable var profiles : Profiles = Trie.empty();
+  stable var profiles : T.Profiles = Trie.empty();
 
-  public shared (msg) func createProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
+  public shared (msg) func createProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
     if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
   
-    let userProfile: Profile = {
+    let userProfile: T.Profile = {
       principal = msg.caller;
       name = profile_.name;
       about = profile_.about;
@@ -68,14 +57,14 @@ actor {
     }
   };
 
-  public shared (msg) func updateProfile (profile_ : ProfileTemplate) : async Result.Result<(), Error> {
+  public shared (msg) func updateProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
     // TODO refactor: remove duplications with createUser
 
     if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
   
-    let userProfile: Profile = {
+    let userProfile: T.Profile = {
       principal = msg.caller;
       name = profile_.name;
       about = profile_.about;
@@ -91,27 +80,27 @@ actor {
     #ok(())
   };
 
-  public query func listProfiles () : async Profiles {
+  public query func listProfiles () : async T.Profiles {
     // TODO: return only necessary parts
     profiles
   };
 
-  public shared (msg) func createTask (taskContents_ : CreateTaskTemplate) : async Result.Result<TaskId, Error> {
+  public shared (msg) func createTask (taskContents_ : T.CreateTaskTemplate) : async Result.Result<T.TaskId, T.Error> {
     if(UP.isAnonymous(msg.caller)) {
       return #err(#notAuthorized);
     };
 
-    let thisTaskId : TaskId = Nat.toText(nextTaskIdSeed);
-    let thisTask : Task = {
+    let thisTaskId : T.TaskId = Nat.toText(nextTaskIdSeed);
+    let thisTask : T.Task = {
       id = thisTaskId;
       title = taskContents_.title;
       description = taskContents_.description;
       status = #backlog;
     };
 
-    let oldTaskOrders : TaskOrders = UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders);
-    let newTaskOrders : TaskOrders = {
-      backlog = Array.append<TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
+    let oldTaskOrders : T.TaskOrders = UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders);
+    let newTaskOrders : T.TaskOrders = {
+      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
       review = oldTaskOrders.review;
       done = oldTaskOrders.done;
@@ -121,7 +110,7 @@ actor {
     userTaskOrders.put(msg.caller, newTaskOrders);
     
     taskOrders := {
-      backlog = Array.append<TaskId>([thisTaskId], taskOrders.backlog); // TODO: Array.append is deprecated
+      backlog = Array.append<T.TaskId>([thisTaskId], taskOrders.backlog); // TODO: Array.append is deprecated
       inProgress = taskOrders.inProgress;
       review = taskOrders.review;
       done = taskOrders.done;
@@ -131,15 +120,15 @@ actor {
     #ok(thisTaskId)
   };
 
-  public query func listAllTasks () : async [Task] {
+  public query func listAllTasks () : async [T.Task] {
     Iter.toArray(taskMap.vals())
   };
 
-  public query func getGlobalTaskOrders () : async TaskOrders {
+  public query func getGlobalTaskOrders () : async T.TaskOrders {
     taskOrders
   };
 
-  public query (msg) func getMyTaskOrders () : async TaskOrders {
+  public query (msg) func getMyTaskOrders () : async T.TaskOrders {
     if(UP.isAnonymous(msg.caller)) {
       return Constants.emptyTaskOrders;
     };
@@ -159,8 +148,8 @@ actor {
     // TODO: restrict to canister owner
 
     nextTaskIdSeed := 0;
-    taskMap := HashMap.HashMap<TaskId, Task>(1, Text.equal, Text.hash);
-    userTaskOrders := HashMap.HashMap<Principal, TaskOrders>(1, Principal.equal, Principal.hash);
+    taskMap := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
+    userTaskOrders := HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
     taskOrders := Constants.emptyTaskOrders;
     taskStates := Trie.empty();
     profiles := Trie.empty();

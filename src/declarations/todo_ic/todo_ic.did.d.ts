@@ -20,7 +20,7 @@ export type Profiles = { 'branch' : Branch } |
   { 'empty' : null };
 export type Result = { 'ok' : null } |
   { 'err' : Error };
-export type Result_1 = { 'ok' : TaskId__1 } |
+export type Result_1 = { 'ok' : TaskId } |
   { 'err' : Error };
 export interface Task {
   'id' : TaskId,
@@ -29,7 +29,6 @@ export interface Task {
   'description' : string,
 }
 export type TaskId = string;
-export type TaskId__1 = string;
 export interface TaskOrders {
   'review' : Array<TaskId>,
   'done' : Array<TaskId>,

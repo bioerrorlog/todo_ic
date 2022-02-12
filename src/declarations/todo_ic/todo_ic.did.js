@@ -12,9 +12,8 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
-  const TaskId__1 = IDL.Text;
-  const Result_1 = IDL.Variant({ 'ok' : TaskId__1, 'err' : Error });
   const TaskId = IDL.Text;
+  const Result_1 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
   const TaskOrders = IDL.Record({
     'review' : IDL.Vec(TaskId),
     'done' : IDL.Vec(TaskId),
