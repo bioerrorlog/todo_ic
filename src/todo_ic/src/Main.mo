@@ -10,7 +10,7 @@ import Trie "mo:base/Trie";
 
 import Constants "Constants";
 import T "Types";
-import UH "Utils/HashMap";
+import TH "TaskHandler";
 import UP "Utils/Principal";
 
 actor {
@@ -98,7 +98,7 @@ actor {
       status = #backlog;
     };
 
-    let oldTaskOrders : T.TaskOrders = UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders);
+    let oldTaskOrders : T.TaskOrders = TH.getTaskOrdersByUserId(userTaskOrders, msg.caller);
     let newTaskOrders : T.TaskOrders = {
       backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [thisTaskId]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
@@ -132,7 +132,7 @@ actor {
     if(UP.isAnonymous(msg.caller)) {
       return Constants.emptyTaskOrders;
     };
-    UH.getWithInitVal(userTaskOrders, msg.caller, Constants.emptyTaskOrders)
+    TH.getTaskOrdersByUserId(userTaskOrders, msg.caller)
   };
 
   public query (msg) func showCaller () : async Text {
