@@ -35,7 +35,7 @@ jobs:
           wasmtime -V
       - name: motoko type checking
         run: |
-          for i in src/${{ env.BACKEND_CANISTER }}/**.mo ; do $(dfx cache show)/moc $(vessel sources) --check $i ; done
+          for i in src/${{ env.BACKEND_CANISTER }}/**/*.mo ; do $(dfx cache show)/moc $(vessel sources) --check $i ; done
       - name: module test
         run: |
           make module_test
