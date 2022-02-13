@@ -19,6 +19,8 @@ module {
     done: [TaskId];
   };
 
+  public type UserTaskOrders = HashMap.HashMap<Principal, TaskOrders>;
+
   public type CreateTaskTemplate = {
     title: Text;
     description: Text;
@@ -29,8 +31,6 @@ module {
     status: TaskStatus;
   };
 
-  public type TaskMap = HashMap.HashMap<TaskId, Task>;
-
   public type TaskStatus = {
     #backlog;
     #inProgress;
@@ -38,6 +38,8 @@ module {
     #done;
     #deleted;
   };
+  
+  public type TaskMap = HashMap.HashMap<TaskId, Task>;
 
   public type ProfileTemplate = {
     name: Text;

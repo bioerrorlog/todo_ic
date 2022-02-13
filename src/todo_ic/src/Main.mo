@@ -18,7 +18,7 @@ actor {
   // TODO: Stable state
   private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
   private var taskMap : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
-  private var userTaskOrders : HashMap.HashMap<Principal, T.TaskOrders> = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
+  private var userTaskOrders : T.UserTaskOrders = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
   
   private stable var grobalTaskOrders : T.TaskOrders = Constants.emptyTaskOrders;
 
