@@ -13,7 +13,7 @@ jobs:
     env:
       # MOC_VERSION: 0.6.18
       VESSEL_VERSION: 0.6.2
-      DFX_VERSION: 0.8.4
+      DFX_VERSION: 0.9.0
       WASMTIME_VERSION: 0.33.0
       FRONTEND_CANISTER: todo_ic_assets
     steps:
