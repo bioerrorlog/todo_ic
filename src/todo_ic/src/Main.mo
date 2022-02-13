@@ -20,7 +20,7 @@ actor {
   private var taskMap : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
   private var userTaskOrders : HashMap.HashMap<Principal, T.TaskOrders> = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
   
-  private stable var taskOrders : T.TaskOrders = Constants.emptyTaskOrders;
+  private stable var grobalTaskOrders : T.TaskOrders = Constants.emptyTaskOrders;
 
   stable var taskStates: T.TaskStates = Trie.empty();
 
@@ -109,11 +109,11 @@ actor {
     taskMap.put(thisTaskId, thisTask);
     userTaskOrders.put(msg.caller, newTaskOrders);
     
-    taskOrders := {
-      backlog = Array.append<T.TaskId>([thisTaskId], taskOrders.backlog); // TODO: Array.append is deprecated
-      inProgress = taskOrders.inProgress;
-      review = taskOrders.review;
-      done = taskOrders.done;
+    grobalTaskOrders := {
+      backlog = Array.append<T.TaskId>([thisTaskId], grobalTaskOrders.backlog); // TODO: Array.append is deprecated
+      inProgress = grobalTaskOrders.inProgress;
+      review = grobalTaskOrders.review;
+      done = grobalTaskOrders.done;
     };
 
     nextTaskIdSeed += 1;
@@ -125,7 +125,7 @@ actor {
   };
 
   public query func getGlobalTaskOrders () : async T.TaskOrders {
-    taskOrders
+    grobalTaskOrders
   };
 
   public query (msg) func getMyTaskOrders () : async T.TaskOrders {
@@ -149,7 +149,7 @@ actor {
     nextTaskIdSeed := 0;
     taskMap := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
     userTaskOrders := HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
-    taskOrders := Constants.emptyTaskOrders;
+    grobalTaskOrders := Constants.emptyTaskOrders;
     taskStates := Trie.empty();
     profiles := Trie.empty();
   };
