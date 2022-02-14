@@ -16,7 +16,7 @@ import UP "Utils/Principal";
 actor {
 
   // TODO: Stable state
-  private stable var nextTaskIdSeed : Nat = 0; // TODO: uuid
+  private stable var nextTaskIdSeed : Nat = 0;
   private var taskMap : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
   private var userTaskOrders : T.UserTaskOrders = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
   
@@ -90,7 +90,7 @@ actor {
       return #err(#notAuthorized);
     };
 
-    let thisTaskId : T.TaskId = Nat.toText(nextTaskIdSeed);
+    let thisTaskId : T.TaskId = getNextTaskId();
     let thisTask : T.Task = {
       id = thisTaskId;
       title = taskContents_.title;
@@ -116,7 +116,6 @@ actor {
       done = grobalTaskOrders.done;
     };
 
-    nextTaskIdSeed += 1;
     #ok(thisTaskId)
   };
 
@@ -137,6 +136,11 @@ actor {
 
   public query (msg) func showCaller () : async Text {
     Principal.toText(msg.caller)
+  };
+
+  private func getNextTaskId() : T.TaskId {
+    nextTaskIdSeed += 1;
+    Nat.toText(nextTaskIdSeed)
   };
 
   private func keyPrincipal(x : Principal) : Trie.Key<Principal> {
