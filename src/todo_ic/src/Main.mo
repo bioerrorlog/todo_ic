@@ -1,7 +1,7 @@
 import Array "mo:base/Array";
 import Hash "mo:base/Hash";
-import Iter "mo:base/Iter";
 import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
