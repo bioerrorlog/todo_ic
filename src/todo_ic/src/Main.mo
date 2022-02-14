@@ -121,7 +121,7 @@ actor {
     getTaskOrdersByUserId_(msg.caller)
   };
 
-  private func getNextTaskId() : T.TaskId {
+  private func getNextTaskId_() : T.TaskId {
     nextTaskIdSeed += 1;
     Nat.toText(nextTaskIdSeed)
   };
@@ -131,7 +131,7 @@ actor {
   };
 
   private func prepareNewTask_(taskContents_ : T.CreateTaskTemplate) : (T.Task, T.TaskId) {
-    let newTaskId : T.TaskId = getNextTaskId();
+    let newTaskId : T.TaskId = getNextTaskId_();
     let newTask : T.Task = {
       id = newTaskId;
       title = taskContents_.title;
