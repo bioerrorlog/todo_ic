@@ -90,7 +90,7 @@ actor {
       return #err(#notAuthorized);
     };
 
-    let (thisTask, thisTaskId) = prepareNewTask(taskContents_);
+    let (thisTask, thisTaskId) = prepareNewTask_(taskContents_);
     let newTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);
   
     taskMap.put(thisTaskId, thisTask);
@@ -118,7 +118,7 @@ actor {
     if(UP.isAnonymous(msg.caller)) {
       return Constants.emptyTaskOrders;
     };
-    TH.getTaskOrdersByUserId(userTaskOrders, msg.caller)
+    getTaskOrdersByUserId_(msg.caller)
   };
 
   private func getNextTaskId() : T.TaskId {
@@ -126,7 +126,11 @@ actor {
     Nat.toText(nextTaskIdSeed)
   };
 
-  private func prepareNewTask(taskContents_ : T.CreateTaskTemplate) : (T.Task, T.TaskId) {
+  private func getTaskOrdersByUserId_(user : Principal) : T.TaskOrders {
+    TH.getTaskOrdersByUserId(userTaskOrders, user)
+  };
+
+  private func prepareNewTask_(taskContents_ : T.CreateTaskTemplate) : (T.Task, T.TaskId) {
     let newTaskId : T.TaskId = getNextTaskId();
     let newTask : T.Task = {
       id = newTaskId;
@@ -139,7 +143,7 @@ actor {
   };
 
   private func prepareUserNewTaskOrders_(newTaskId_ : T.TaskId, user : Principal) : T.TaskOrders {
-    let oldTaskOrders : T.TaskOrders = TH.getTaskOrdersByUserId(userTaskOrders, user);
+    let oldTaskOrders : T.TaskOrders = getTaskOrdersByUserId_(user);
     let newTaskOrders : T.TaskOrders = {
       backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId_]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
