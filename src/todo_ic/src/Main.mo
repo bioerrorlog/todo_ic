@@ -90,13 +90,7 @@ actor {
       return #err(#notAuthorized);
     };
 
-    let thisTaskId : T.TaskId = getNextTaskId();
-    let thisTask : T.Task = {
-      id = thisTaskId;
-      title = taskContents_.title;
-      description = taskContents_.description;
-      status = #backlog;
-    };
+    let (thisTask, thisTaskId) = prepareNewTask(taskContents_);
 
     let oldTaskOrders : T.TaskOrders = TH.getTaskOrdersByUserId(userTaskOrders, msg.caller);
     let newTaskOrders : T.TaskOrders = {
@@ -134,13 +128,21 @@ actor {
     TH.getTaskOrdersByUserId(userTaskOrders, msg.caller)
   };
 
-  public query (msg) func showCaller () : async Text {
-    Principal.toText(msg.caller)
-  };
-
   private func getNextTaskId() : T.TaskId {
     nextTaskIdSeed += 1;
     Nat.toText(nextTaskIdSeed)
+  };
+
+  private func prepareNewTask(taskContents_ : T.CreateTaskTemplate) : (T.Task, T.TaskId) {
+    let newTaskId : T.TaskId = getNextTaskId();
+    let newTask : T.Task = {
+      id = newTaskId;
+      title = taskContents_.title;
+      description = taskContents_.description;
+      status = #backlog;
+    };
+
+    (newTask, newTaskId)
   };
 
   private func keyPrincipal(x : Principal) : Trie.Key<Principal> {
@@ -156,5 +158,9 @@ actor {
     grobalTaskOrders := Constants.emptyTaskOrders;
     taskStates := Trie.empty();
     profiles := Trie.empty();
+  };
+
+  public query (msg) func showCaller () : async Text {
+    Principal.toText(msg.caller)
   };
 };
