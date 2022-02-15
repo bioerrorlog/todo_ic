@@ -137,14 +137,9 @@ actor {
     (newTask, newTaskId)
   };
 
-  private func prepareUserNewTaskOrders_(newTaskId_ : T.TaskId, user : Principal) : T.TaskOrders {
+  private func prepareUserNewTaskOrders_(newTaskId : T.TaskId, user : Principal) : T.TaskOrders {
     let oldTaskOrders : T.TaskOrders = getTaskOrdersByUserId_(user);
-    let newTaskOrders : T.TaskOrders = {
-      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId_]); // TODO: Array.append is deprecated
-      inProgress = oldTaskOrders.inProgress;
-      review = oldTaskOrders.review;
-      done = oldTaskOrders.done;
-    };
+    let newTaskOrders : T.TaskOrders = TH.appendTaskOrders(oldTaskOrders, newTaskId);
 
     newTaskOrders
   };

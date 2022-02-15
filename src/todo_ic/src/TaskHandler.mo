@@ -1,3 +1,4 @@
+import Array "mo:base/Array";
 import Principal "mo:base/Principal";
 
 import Constants "Constants";
@@ -13,5 +14,20 @@ module {
     userId : Principal
   ) : T.TaskOrders {
     UH.getWithInitVal(userTaskOrders, userId, Constants.emptyTaskOrders)
+  };
+
+  // Append new TaskId to the end of backlog
+  public func appendTaskOrders(
+    oldTaskOrders : T.TaskOrders,
+    newTaskId : T.TaskId
+  ) : T.TaskOrders {
+    let newTaskOrders : T.TaskOrders = {
+      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId]); // TODO: Array.append is deprecated
+      inProgress = oldTaskOrders.inProgress;
+      review = oldTaskOrders.review;
+      done = oldTaskOrders.done;
+    };
+
+    newTaskOrders
   };
 };
