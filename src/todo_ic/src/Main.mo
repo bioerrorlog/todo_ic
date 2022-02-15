@@ -144,14 +144,9 @@ actor {
     newTaskOrders
   };
 
-  private func prepareGlobalNewTaskOrders_(newTaskId_ : T.TaskId) : T.TaskOrders {
+  private func prepareGlobalNewTaskOrders_(newTaskId : T.TaskId) : T.TaskOrders {
     let oldTaskOrders : T.TaskOrders = grobalTaskOrders;
-    let newTaskOrders : T.TaskOrders = {
-      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId_]); // TODO: Array.append is deprecated
-      inProgress = oldTaskOrders.inProgress;
-      review = oldTaskOrders.review;
-      done = oldTaskOrders.done;
-    };
+    let newTaskOrders : T.TaskOrders = TH.appendTaskOrders(oldTaskOrders, newTaskId);
 
     newTaskOrders
   };
