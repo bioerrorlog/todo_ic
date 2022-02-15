@@ -16,16 +16,14 @@ import UP "Utils/Principal";
 actor {
 
   // TODO: Stable state
-  private stable var nextTaskIdSeed : Nat = 0;
-  private var taskMap : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
-  private var userTaskOrders : T.UserTaskOrders = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
-  
-  private stable var grobalTaskOrders : T.TaskOrders = Constants.emptyTaskOrders;
+  private stable var nextTaskIdSeedState : Nat = 0;
+  private var taskMapState : T.TaskMap = HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
 
-  stable var taskStates: T.TaskStates = Trie.empty();
+  private var userTaskOrdersState : T.UserTaskOrders = HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
+  private stable var grobalTaskOrdersState : T.TaskOrders = Constants.emptyTaskOrders;
 
   // TODO: Hide Principal from user, use userId instead.
-  stable var profiles : T.Profiles = Trie.empty();
+  stable var profilesState : T.Profiles = Trie.empty();
 
   public shared (msg) func createProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
     if(UP.isAnonymous(msg.caller)) {
@@ -39,7 +37,7 @@ actor {
     };
   
     let (newProfiles, existing) = Trie.put(
-      profiles,
+      profilesState,
       keyPrincipal(msg.caller),
       Principal.equal,
       userProfile,
@@ -48,7 +46,7 @@ actor {
     // If there is an original value, do not update
     switch(existing) {
       case null {
-        profiles := newProfiles;
+        profilesState := newProfiles;
         #ok(())
       };
       case (? v) {
@@ -70,8 +68,8 @@ actor {
       about = profile_.about;
     };
   
-    profiles := Trie.put(
-      profiles,
+    profilesState := Trie.put(
+      profilesState,
       keyPrincipal(msg.caller),
       Principal.equal,
       userProfile,
@@ -82,7 +80,7 @@ actor {
 
   public query func listProfiles () : async T.Profiles {
     // TODO: return only necessary parts
-    profiles
+    profilesState
   };
 
   public shared (msg) func createTask (taskContents_ : T.CreateTaskTemplate) : async Result.Result<T.TaskId, T.Error> {
@@ -94,19 +92,19 @@ actor {
     let newUserTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);
     let newGlobalTaskOrders = prepareGlobalNewTaskOrders_(thisTaskId);
   
-    taskMap.put(thisTaskId, thisTask);
-    userTaskOrders.put(msg.caller, newUserTaskOrders);
-    grobalTaskOrders := newGlobalTaskOrders;
+    taskMapState.put(thisTaskId, thisTask);
+    userTaskOrdersState.put(msg.caller, newUserTaskOrders);
+    grobalTaskOrdersState := newGlobalTaskOrders;
 
     #ok(thisTaskId)
   };
 
   public query func listAllTasks () : async [T.Task] {
-    Iter.toArray(taskMap.vals())
+    Iter.toArray(taskMapState.vals())
   };
 
   public query func getGlobalTaskOrders () : async T.TaskOrders {
-    grobalTaskOrders
+    grobalTaskOrdersState
   };
 
   public query (msg) func getMyTaskOrders () : async T.TaskOrders {
@@ -117,12 +115,12 @@ actor {
   };
 
   private func getNextTaskId_() : T.TaskId {
-    nextTaskIdSeed += 1;
-    Nat.toText(nextTaskIdSeed)
+    nextTaskIdSeedState += 1;
+    Nat.toText(nextTaskIdSeedState)
   };
 
   private func getTaskOrdersByUserId_(user : Principal) : T.TaskOrders {
-    TH.getTaskOrdersByUserId(userTaskOrders, user)
+    TH.getTaskOrdersByUserId(userTaskOrdersState, user)
   };
 
   private func prepareNewTask_(taskContents_ : T.CreateTaskTemplate) : (T.Task, T.TaskId) {
@@ -145,7 +143,7 @@ actor {
   };
 
   private func prepareGlobalNewTaskOrders_(newTaskId : T.TaskId) : T.TaskOrders {
-    let oldTaskOrders : T.TaskOrders = grobalTaskOrders;
+    let oldTaskOrders : T.TaskOrders = grobalTaskOrdersState;
     let newTaskOrders : T.TaskOrders = TH.appendTaskOrders(oldTaskOrders, newTaskId);
 
     newTaskOrders
@@ -158,12 +156,11 @@ actor {
   public func initialize () : async () {
     // TODO: restrict to canister owner call
 
-    nextTaskIdSeed := 0;
-    taskMap := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
-    userTaskOrders := HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
-    grobalTaskOrders := Constants.emptyTaskOrders;
-    taskStates := Trie.empty();
-    profiles := Trie.empty();
+    nextTaskIdSeedState := 0;
+    taskMapState := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
+    userTaskOrdersState := HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
+    grobalTaskOrdersState := Constants.emptyTaskOrders;
+    profilesState := Trie.empty();
   };
 
   public query (msg) func showCaller () : async Text {
