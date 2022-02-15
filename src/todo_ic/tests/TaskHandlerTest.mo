@@ -42,3 +42,24 @@ do {
   let expected = Constants.emptyTaskOrders;
   assert(TH.getTaskOrdersByUserId(userTaskOrders, notRegisteredUserId) == expected);
 };
+
+do {
+  Debug.print("  appendTaskOrders returns TaskOrders: new TaskId appended to the end of backlog");
+
+  let newTaskId = "target";
+  let oldTaskOrders = {
+      backlog = ["aaa"];
+      inProgress = ["bbb", "ccc"];
+      review = ["ddd"];
+      done = ["eee", "fff", "ggg"];
+    };
+
+  let expected = {
+      backlog = ["aaa", newTaskId];
+      inProgress = ["bbb", "ccc"];
+      review = ["ddd"];
+      done = ["eee", "fff", "ggg"];
+    };
+  let result = TH.appendTaskOrders(oldTaskOrders, newTaskId);
+  assert(result == expected);
+};
