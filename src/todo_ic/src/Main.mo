@@ -91,17 +91,12 @@ actor {
     };
 
     let (thisTask, thisTaskId) = prepareNewTask_(taskContents_);
-    let newTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);
+    let newUserTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);
+    let newGlobalTaskOrders = prepareGlobalNewTaskOrders_(thisTaskId);
   
     taskMap.put(thisTaskId, thisTask);
-    userTaskOrders.put(msg.caller, newTaskOrders);
-    
-    grobalTaskOrders := {
-      backlog = Array.append<T.TaskId>([thisTaskId], grobalTaskOrders.backlog); // TODO: Array.append is deprecated
-      inProgress = grobalTaskOrders.inProgress;
-      review = grobalTaskOrders.review;
-      done = grobalTaskOrders.done;
-    };
+    userTaskOrders.put(msg.caller, newUserTaskOrders);
+    grobalTaskOrders := newGlobalTaskOrders;
 
     #ok(thisTaskId)
   };
@@ -144,6 +139,18 @@ actor {
 
   private func prepareUserNewTaskOrders_(newTaskId_ : T.TaskId, user : Principal) : T.TaskOrders {
     let oldTaskOrders : T.TaskOrders = getTaskOrdersByUserId_(user);
+    let newTaskOrders : T.TaskOrders = {
+      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId_]); // TODO: Array.append is deprecated
+      inProgress = oldTaskOrders.inProgress;
+      review = oldTaskOrders.review;
+      done = oldTaskOrders.done;
+    };
+
+    newTaskOrders
+  };
+
+  private func prepareGlobalNewTaskOrders_(newTaskId_ : T.TaskId) : T.TaskOrders {
+    let oldTaskOrders : T.TaskOrders = grobalTaskOrders;
     let newTaskOrders : T.TaskOrders = {
       backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId_]); // TODO: Array.append is deprecated
       inProgress = oldTaskOrders.inProgress;
