@@ -8,8 +8,6 @@ module {
 
   public type TaskId = Text;
 
-  public type TaskStates = Trie.Trie2D<Principal, TaskId, Task>;
-
   public type Profiles = Trie.Trie<Principal, Profile>;
 
   public type TaskOrders = {
