@@ -8,4 +8,11 @@ module {
       case (? v) {v};
     }
   };
+
+  public func hasVal<K, V>(hashMap:HashMap.HashMap<K, V>, key:K) : Bool {
+    switch(hashMap.get(key)){
+      case null {false};
+      case (? v) {true};
+    }
+  };
 };

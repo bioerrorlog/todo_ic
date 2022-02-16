@@ -54,7 +54,7 @@ canister_test:
 	dfx identity use default
 
 	dfx canister call $(BACKEND_CANISTER) listProfiles \
-		| grep '(variant { "empty" })' && echo 'PASS'
+		| grep '(vec {})' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})' \
 		| grep '(variant { ok })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) listProfiles

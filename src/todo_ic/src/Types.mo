@@ -8,7 +8,7 @@ module {
 
   public type TaskId = Text;
 
-  public type Profiles = Trie.Trie<Principal, Profile>;
+  public type Profiles = HashMap.HashMap<Principal, Profile>;
 
   public type TaskOrders = {
     backlog: [TaskId];

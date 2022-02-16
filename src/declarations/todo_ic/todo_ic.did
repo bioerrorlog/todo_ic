@@ -1,9 +1,3 @@
-type Trie = 
- variant {
-   branch: Branch;
-   "empty";
-   leaf: Leaf;
- };
 type TaskStatus = 
  variant {
    backlog;
@@ -37,12 +31,6 @@ type Result =
    err: Error;
    ok;
  };
-type Profiles = 
- variant {
-   branch: Branch;
-   "empty";
-   leaf: Leaf;
- };
 type ProfileTemplate = 
  record {
    about: text;
@@ -54,25 +42,6 @@ type Profile =
    name: text;
    "principal": principal;
  };
-type List = 
- opt record {
-       record {
-         Key;
-         Profile;
-       };
-       List;
-     };
-type Leaf = 
- record {
-   keyvals: AssocList;
-   size: nat;
- };
-type Key = 
- record {
-   hash: Hash;
-   key: principal;
- };
-type Hash = nat32;
 type Error = 
  variant {
    alreadyExists;
@@ -84,20 +53,6 @@ type CreateTaskTemplate =
    description: text;
    title: text;
  };
-type Branch = 
- record {
-   left: Trie;
-   right: Trie;
-   size: nat;
- };
-type AssocList = 
- opt record {
-       record {
-         Key;
-         Profile;
-       };
-       List;
-     };
 service : {
   createProfile: (ProfileTemplate) -> (Result);
   createTask: (CreateTaskTemplate) -> (Result_1);
@@ -105,7 +60,7 @@ service : {
   getMyTaskOrders: () -> (TaskOrders) query;
   initialize: () -> ();
   listAllTasks: () -> (vec Task) query;
-  listProfiles: () -> (Profiles) query;
+  listProfiles: () -> (vec Profile) query;
   showCaller: () -> (text) query;
   updateProfile: (ProfileTemplate) -> (Result);
 }

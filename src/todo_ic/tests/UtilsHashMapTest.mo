@@ -45,3 +45,27 @@ do {
   let expected = Constants.emptyTaskOrders;
   assert(U.getWithInitVal(input, "dummy_key", Constants.emptyTaskOrders) == expected);
 };
+
+do {
+  Debug.print("  hasVal returns true if key-val exists");
+
+  let map = HashMap.HashMap<Text, Text>(1, Text.equal, Text.hash);
+  let key = "Key_1";
+  let val = "Val_1";
+  map.put(key, val);
+
+  let result = U.hasVal(map, key);
+  assert(result == true);
+};
+
+do {
+  Debug.print("  hasVal returns false if key-val not exists");
+
+  let map = HashMap.HashMap<Text, Text>(1, Text.equal, Text.hash);
+  let key = "Key_1";
+  let val = "Val_1";
+  map.put(key, val);
+
+  let result = U.hasVal(map, "dummy_key");
+  assert(result == false);
+};

@@ -11,6 +11,7 @@ import Trie "mo:base/Trie";
 import Constants "Constants";
 import T "Types";
 import TH "TaskHandler";
+import UH "Utils/HashMap";
 import UP "Utils/Principal";
 
 actor {
@@ -23,70 +24,32 @@ actor {
   private stable var grobalTaskOrdersState : T.TaskOrders = Constants.emptyTaskOrders;
 
   // TODO: Hide Principal from user, use userId instead.
-  stable var profilesState : T.Profiles = Trie.empty();
+  private var profilesState : T.Profiles = HashMap.HashMap<Principal, T.Profile>(1, Principal.equal, Principal.hash);
 
   public shared (msg) func createProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
-    if(UP.isAnonymous(msg.caller)) {
-      return #err(#notAuthorized);
-    };
+    if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
+    if (hasProfile_(msg.caller)) { return #err(#alreadyExists) };
   
-    let userProfile: T.Profile = {
-      principal = msg.caller;
-      name = profile_.name;
-      about = profile_.about;
-    };
-  
-    let (newProfiles, existing) = Trie.put(
-      profilesState,
-      keyPrincipal(msg.caller),
-      Principal.equal,
-      userProfile,
-    );
-
-    // If there is an original value, do not update
-    switch(existing) {
-      case null {
-        profilesState := newProfiles;
-        #ok(())
-      };
-      case (? v) {
-        #err(#alreadyExists)
-      };
-    }
-  };
-
-  public shared (msg) func updateProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
-    // TODO refactor: remove duplications with createUser
-
-    if(UP.isAnonymous(msg.caller)) {
-      return #err(#notAuthorized);
-    };
-  
-    let userProfile: T.Profile = {
-      principal = msg.caller;
-      name = profile_.name;
-      about = profile_.about;
-    };
-  
-    profilesState := Trie.put(
-      profilesState,
-      keyPrincipal(msg.caller),
-      Principal.equal,
-      userProfile,
-    ).0;
-
+    let userProfile: T.Profile = prepareNewProfile_(msg.caller, profile_);
+    profilesState.put(msg.caller, userProfile);
     #ok(())
   };
 
-  public query func listProfiles () : async T.Profiles {
-    // TODO: return only necessary parts
-    profilesState
+  public shared (msg) func updateProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
+    if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
+    if (not hasProfile_(msg.caller)) { return #err(#notFound) };
+  
+    let userProfile: T.Profile = prepareNewProfile_(msg.caller, profile_);
+    profilesState.put(msg.caller, userProfile);
+    #ok(())
+  };
+
+  public query func listProfiles () : async [T.Profile] {
+    Iter.toArray(profilesState.vals())
   };
 
   public shared (msg) func createTask (taskContents_ : T.CreateTaskTemplate) : async Result.Result<T.TaskId, T.Error> {
-    if(UP.isAnonymous(msg.caller)) {
-      return #err(#notAuthorized);
-    };
+    if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
 
     let (thisTask, thisTaskId) = prepareNewTask_(taskContents_);
     let newUserTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);
@@ -108,9 +71,7 @@ actor {
   };
 
   public query (msg) func getMyTaskOrders () : async T.TaskOrders {
-    if(UP.isAnonymous(msg.caller)) {
-      return Constants.emptyTaskOrders;
-    };
+    if (UP.isAnonymous(msg.caller)) { return Constants.emptyTaskOrders }; // TODO: notAuthorized Error
     getTaskOrdersByUserId_(msg.caller)
   };
 
@@ -135,6 +96,16 @@ actor {
     (newTask, newTaskId)
   };
 
+  private func prepareNewProfile_(user : Principal, profileTemplate : T.ProfileTemplate) : T.Profile {
+    let userProfile: T.Profile = {
+      principal = user;
+      name = profileTemplate.name;
+      about = profileTemplate.about;
+    };
+
+    userProfile
+  };
+
   private func prepareUserNewTaskOrders_(newTaskId : T.TaskId, user : Principal) : T.TaskOrders {
     let oldTaskOrders : T.TaskOrders = getTaskOrdersByUserId_(user);
     let newTaskOrders : T.TaskOrders = TH.appendTaskOrders(oldTaskOrders, newTaskId);
@@ -149,6 +120,10 @@ actor {
     newTaskOrders
   };
 
+  private func hasProfile_(user : Principal) : Bool {
+    UH.hasVal(profilesState, user)
+  };
+
   private func keyPrincipal(x : Principal) : Trie.Key<Principal> {
     { key = x; hash = Principal.hash(x) }
   };
@@ -160,7 +135,7 @@ actor {
     taskMapState := HashMap.HashMap<T.TaskId, T.Task>(1, Text.equal, Text.hash);
     userTaskOrdersState := HashMap.HashMap<Principal, T.TaskOrders>(1, Principal.equal, Principal.hash);
     grobalTaskOrdersState := Constants.emptyTaskOrders;
-    profilesState := Trie.empty();
+    profilesState := HashMap.HashMap<Principal, T.Profile>(1, Principal.equal, Principal.hash);
   };
 
   public query (msg) func showCaller () : async Text {
