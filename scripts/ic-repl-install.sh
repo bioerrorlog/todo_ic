@@ -3,8 +3,8 @@
 VERSION=$1
 
 if [ -z $VERSION ] ; then
-    echo "Usage: ic-repl-install.sh <version>"
-    return 1
+    echo "Usage: ic-repl-install.sh <version>" >&2
+    exit 1
 fi
 
 BINDIR=$HOME/bin
