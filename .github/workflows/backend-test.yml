@@ -14,6 +14,7 @@ jobs:
       VESSEL_VERSION: 0.6.2
       DFX_VERSION: 0.9.0
       WASMTIME_VERSION: 0.33.0
+      IC_REPL_VERSION: 0.1.3
       BACKEND_CANISTER: todo_ic
     steps:
       - uses: actions/checkout@v2
@@ -27,12 +28,16 @@ jobs:
         uses: mwilliamson/setup-wasmtime-action@v1
         with:
           wasmtime-version: ${{ env.WASMTIME_VERSION }}
+      - name: install ic-repl
+        run: |
+          ./scripts/ic-repl-install.sh ${{ env.IC_REPL_VERSION }}
       - name: show versions
         run: |
           dfx --version
           moc --version
           vessel --version
           wasmtime -V
+          ic-repl --version
       - name: motoko type checking
         run: |
           for i in src/${{ env.BACKEND_CANISTER }}/**/*.mo ; do $(dfx cache show)/moc $(vessel sources) --check $i ; done
