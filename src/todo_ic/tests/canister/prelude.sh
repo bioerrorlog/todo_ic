@@ -1,4 +1,4 @@
-import todo_ic = "rrkah-fqaaa-aaaaa-aaaaq-cai";
+import todo_ic = "rwlgt-iiaaa-aaaaa-aaaaa-cai";
 
 identity default "~/.config/dfx/identity/default/identity.pem";
 
