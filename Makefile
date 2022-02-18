@@ -6,6 +6,7 @@ WASM_OUTDIR=_wasm_out
 BACKEND_DIR=src/$(BACKEND_CANISTER)
 
 BACKEND_MODULE_TEST_DIR=$(BACKEND_DIR)/tests/module
+BACKEND_CANISTER_TEST_DIR=$(BACKEND_DIR)/tests/canister
 
 EX_ID=$(shell dfx identity whoami)
 
@@ -36,16 +37,24 @@ module_test:
 	rm -rf $(WASM_OUTDIR)
 	mkdir $(WASM_OUTDIR)
 
-	# TODO: Fail with syntax error
 	for i in $(BACKEND_MODULE_TEST_DIR)/*Test.mo; do \
+		echo "==== Run module test $$i ===="; \
 		$(shell dfx cache show)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i; \
-		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm; \
+		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm || exit; \
 	done
 	rm -rf $(WASM_OUTDIR)
 	echo "SUCCEED: All module tests passed"
 
 .PHONY: canister_test
 canister_test:
+	for f in $(BACKEND_CANISTER_TEST_DIR)/*.test.sh; do \
+        echo "==== Run canister test $$f ===="; \
+        ic-repl -r http://localhost:8000 "$$f" || exit; \
+    done
+	echo "SUCCEED: All canister tests passed"
+
+.PHONY: canister_test_old
+canister_test_old:
 	# TODO: use ic-repl
 	# TODO: assert
 	dfx canister call $(BACKEND_CANISTER) initialize
