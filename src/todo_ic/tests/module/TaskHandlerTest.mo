@@ -2,9 +2,9 @@ import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 
-import Constants "../src/Constants";
-import TH "../src/TaskHandler";
-import T "../src/Types";
+import Constants "../../src/Constants";
+import TH "../../src/TaskHandler";
+import T "../../src/Types";
 
 // TODO: Motoko matcher
 

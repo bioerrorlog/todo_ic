@@ -2,9 +2,9 @@ import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Text "mo:base/Text";
 
-import Constants "../src/Constants";
-import U "../src/Utils/HashMap";
-import T "../src/Types";
+import Constants "../../src/Constants";
+import U "../../src/Utils/HashMap";
+import T "../../src/Types";
 
 // TODO: Motoko matcher
 

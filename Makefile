@@ -5,7 +5,7 @@ WASM_OUTDIR=_wasm_out
 
 BACKEND_DIR=src/$(BACKEND_CANISTER)
 
-BACKEND_TEST_DIR=$(BACKEND_DIR)/tests
+BACKEND_MODULE_TEST_DIR=$(BACKEND_DIR)/tests/module
 
 EX_ID=$(shell dfx identity whoami)
 
@@ -37,7 +37,7 @@ module_test:
 	mkdir $(WASM_OUTDIR)
 
 	# TODO: Fail with syntax error
-	for i in $(BACKEND_TEST_DIR)/*Test.mo; do \
+	for i in $(BACKEND_MODULE_TEST_DIR)/*Test.mo; do \
 		$(shell dfx cache show)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i; \
 		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm; \
 	done

@@ -2,8 +2,8 @@ import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
 import Text "mo:base/Text";
 
-import U "../src/Utils/Principal";
-import T "../src/Types";
+import U "../../src/Utils/Principal";
+import T "../../src/Types";
 
 // TODO: Motoko matcher
 
