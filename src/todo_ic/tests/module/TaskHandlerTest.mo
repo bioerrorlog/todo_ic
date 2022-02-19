@@ -6,8 +6,6 @@ import Constants "../../src/Constants";
 import TH "../../src/TaskHandler";
 import T "../../src/Types";
 
-// TODO: Motoko matcher
-
 Debug.print("Module Test: TaskHandler");
 
 func setUpUserTaskOrders () : (T.UserTaskOrders, Principal, T.TaskOrders) {

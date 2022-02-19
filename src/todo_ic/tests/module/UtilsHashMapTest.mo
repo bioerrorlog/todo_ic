@@ -6,8 +6,6 @@ import Constants "../../src/Constants";
 import U "../../src/Utils/HashMap";
 import T "../../src/Types";
 
-// TODO: Motoko matcher
-
 Debug.print("Module Test: Utils/HashMap");
 
 do {

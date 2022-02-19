@@ -5,8 +5,6 @@ import Text "mo:base/Text";
 import U "../../src/Utils/Principal";
 import T "../../src/Types";
 
-// TODO: Motoko matcher
-
 Debug.print("Module Test: Utils/Principal");
 
 do {
