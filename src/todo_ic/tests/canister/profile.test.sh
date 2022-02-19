@@ -13,10 +13,15 @@ assert _ == variant { ok };
 call todo_ic.listProfiles();
 assert _ ~= vec {record {about = "this is Alice"; name = "Alice";};};
 
-// Fail with alreadyExists: createProfile by Alice
-identity Alice;
+// Fail to createProfile with alreadyExists by Alice
 call todo_ic.createProfile(record {about="this is Alice again"; name="Alice"});
 assert _ == variant { err = variant { alreadyExists } };
+
+// updateProfile by Alice
+call todo_ic.updateProfile(record {about="this is Alice updated"; name="Alice updated"});
+assert _ == variant { ok };
+call todo_ic.listProfiles();
+assert _ ~= vec {record {about = "this is Alice updated"; name = "Alice updated";};};
 
 // createProfile by Bob
 identity Bob;
@@ -25,6 +30,6 @@ assert _ == variant { ok };
 // TODO: fix record order issue
 // call todo_ic.listProfiles();
 // assert _ ~= vec {
-//     record {about = "this is Alice"; name = "Alice"; };
+//     record {about = "this is Alice updated"; name = "Alice updated"; };
 //     record {about = "this is Bob"; name = "Bob"; };
 // };

@@ -51,34 +51,9 @@ canister_test:
         echo "==== Run canister test $$f ===="; \
         ic-repl -r http://localhost:8000 "$$f" || exit; \
     done
-	echo "SUCCEED: All canister tests passed"
 
-.PHONY: canister_test_old
-canister_test_old:
-	# TODO: use ic-repl
-	# TODO: assert
-	dfx canister call $(BACKEND_CANISTER) initialize
-
-	# Can call as principal identity
-	dfx identity use default
-
-	dfx canister call $(BACKEND_CANISTER) listProfiles \
-		| grep '(vec {})' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is test user"; name="BioErrorLog_0"})' \
-		| grep '(variant { ok })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated test user"; name="BioErrorLog_1"})' \
-		| grep '(variant { ok })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 001" ; description="This is description 1."})' \
-		| grep '(variant { ok = "1" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) createTask '(record {title="Task title 002" ; description="This is description 2."})' \
-		| grep '(variant { ok = "2" })' && echo 'PASS'
-	dfx canister call $(BACKEND_CANISTER) getMyTaskOrders "(principal \"$(shell dfx identity get-principal)\")"
-	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) listAllTasks
-	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders
-
-	# Can't call as anonymous identity
+	# Anonymous identity call test
+	# because ic-repl can't switch to anonymous identity.
 	dfx identity use anonymous
 
 	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is anonymous user"; name="anonimous_0"})' \
@@ -89,11 +64,9 @@ canister_test_old:
 		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
 
 	# Can call as anonymous identity
-	dfx identity use anonymous
-
-	dfx canister call $(BACKEND_CANISTER) listProfiles
-	dfx canister call $(BACKEND_CANISTER) listAllTasks
-	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders
+	dfx canister call $(BACKEND_CANISTER) listProfiles || exit
+	dfx canister call $(BACKEND_CANISTER) listAllTasks || exit
+	dfx canister call $(BACKEND_CANISTER) getGlobalTaskOrders || exit
 
 	dfx identity use $(EX_ID)
 	echo "SUCCEED: All canister tests passed"
