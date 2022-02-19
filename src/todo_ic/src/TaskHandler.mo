@@ -7,8 +7,8 @@ import UH "Utils/HashMap";
 
 module {
 
-  // If userId (Principal) linked TaskOrders exists in userTaskOrders, return it.
-  // If not exited, return empty TaskOrders.
+  /// If userId (Principal) linked TaskOrders exists in userTaskOrders, return it.
+  /// If not exited, return empty TaskOrders.
   public func getTaskOrdersByUserId(
     userTaskOrders : T.UserTaskOrders,
     userId : Principal
@@ -16,7 +16,7 @@ module {
     UH.getWithInitVal(userTaskOrders, userId, Constants.emptyTaskOrders)
   };
 
-  // Append new TaskId to the end of backlog
+  /// Append new TaskId to the end of backlog
   public func appendTaskOrders(
     oldTaskOrders : T.TaskOrders,
     newTaskId : T.TaskId
