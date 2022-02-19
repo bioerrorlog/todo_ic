@@ -124,10 +124,6 @@ actor {
     UH.hasVal(profilesState, user)
   };
 
-  private func keyPrincipal(x : Principal) : Trie.Key<Principal> {
-    { key = x; hash = Principal.hash(x) }
-  };
-
   public func initialize () : async () {
     // TODO: restrict to canister owner call
 
