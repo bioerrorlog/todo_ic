@@ -32,6 +32,14 @@ reinstall: build
 	echo yes | dfx canister install $(BACKEND_CANISTER) --mode reinstall
 	echo yes | dfx canister install $(FRONTEND_CANISTER)--mode reinstall
 
+.PHONY: type_check
+type_check:
+	for i in src/$(BACKEND_CANISTER)/**/*.mo ; do \
+		echo "==== Run type check $$i ===="; \
+		$(shell dfx cache show)/moc $(shell vessel sources) --check $$i || exit; \
+	done
+	echo "SUCCEED: All motoko type check passed"
+
 .PHONY: module_test
 module_test:
 	rm -rf $(WASM_OUTDIR)

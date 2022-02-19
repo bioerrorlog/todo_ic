@@ -40,7 +40,7 @@ jobs:
           ic-repl --version
       - name: motoko type checking
         run: |
-          for i in src/${{ env.BACKEND_CANISTER }}/**/*.mo ; do $(dfx cache show)/moc $(vessel sources) --check $i ; done
+          make type_check
       - name: module test
         run: |
           make module_test
