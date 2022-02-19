@@ -80,7 +80,7 @@ canister_test:
 	echo "SUCCEED: All canister tests passed"
 
 .PHONY: all_test
-all_test: module_test canister_test
+all_test: type_check module_test canister_test
 
 .PHONY: clean
 clean:
