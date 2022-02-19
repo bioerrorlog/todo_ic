@@ -56,9 +56,9 @@ module_test:
 .PHONY: canister_test
 canister_test:
 	for f in $(BACKEND_CANISTER_TEST_DIR)/*.test.sh; do \
-        echo "==== Run canister test $$f ===="; \
-        ic-repl -r http://localhost:8000 "$$f" || exit; \
-    done
+		echo "==== Run canister test $$f ===="; \
+		ic-repl -r http://localhost:8000 "$$f" || exit; \
+	done
 
 	# Anonymous identity call test
 	# because ic-repl can't switch to anonymous identity.
