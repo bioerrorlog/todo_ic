@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 
 import Constants "Constants";
 import T "Types";
+import UA "Utils/Array";
 import UH "Utils/HashMap";
 
 module {
@@ -22,7 +23,7 @@ module {
     newTaskId : T.TaskId
   ) : T.TaskOrders {
     let newTaskOrders : T.TaskOrders = {
-      backlog = Array.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId]); // TODO: Array.append is deprecated
+      backlog = UA.append<T.TaskId>(oldTaskOrders.backlog, [newTaskId]);
       inProgress = oldTaskOrders.inProgress;
       review = oldTaskOrders.review;
       done = oldTaskOrders.done;
