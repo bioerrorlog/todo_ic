@@ -47,7 +47,7 @@ module_test:
 
 	for i in $(BACKEND_MODULE_TEST_DIR)/*Test.mo; do \
 		echo "==== Run module test $$i ===="; \
-		$(shell dfx cache show)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i; \
+		$(shell dfx cache show)/moc $(shell vessel sources) -wasi-system-api -o $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm $$i || exit; \
 		wasmtime $(WASM_OUTDIR)/$(shell basename $$i .mo).wasm || exit; \
 	done
 	rm -rf $(WASM_OUTDIR)
