@@ -1,3 +1,6 @@
+# module tests temporary files
+_wasm_out/
+
 # vessel temporary files
 .vessel
 *.wasm
