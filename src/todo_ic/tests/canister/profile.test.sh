@@ -6,8 +6,12 @@ load "prelude.sh";
 call todo_ic.listProfiles();
 assert _ == vec {};
 
-// Fail to updateProfile if profile does not exist
+// Fail to getMyProfile if profile does not exist
 identity Alice;
+call todo_ic.getMyProfile();
+assert _ == variant { err = variant { notFound } };
+
+// Fail to updateProfile if profile does not exist
 call todo_ic.updateProfile(record {about="this is Alice updated"; name="Alice updated"});
 assert _ == variant { err = variant { notFound } };
 

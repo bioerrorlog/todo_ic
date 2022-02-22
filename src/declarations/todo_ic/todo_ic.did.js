@@ -11,13 +11,19 @@ export const idlFactory = ({ IDL }) => {
     'description' : IDL.Text,
   });
   const TaskId = IDL.Text;
-  const Result_1 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
+  const Result_2 = IDL.Variant({ 'ok' : TaskId, 'err' : Error });
   const TaskOrders = IDL.Record({
     'review' : IDL.Vec(TaskId),
     'done' : IDL.Vec(TaskId),
     'inProgress' : IDL.Vec(TaskId),
     'backlog' : IDL.Vec(TaskId),
   });
+  const Profile = IDL.Record({
+    'principal' : IDL.Principal,
+    'about' : IDL.Text,
+    'name' : IDL.Text,
+  });
+  const Result_1 = IDL.Variant({ 'ok' : Profile, 'err' : Error });
   const TaskStatus = IDL.Variant({
     'review' : IDL.Null,
     'deleted' : IDL.Null,
@@ -31,15 +37,11 @@ export const idlFactory = ({ IDL }) => {
     'title' : IDL.Text,
     'description' : IDL.Text,
   });
-  const Profile = IDL.Record({
-    'principal' : IDL.Principal,
-    'about' : IDL.Text,
-    'name' : IDL.Text,
-  });
   return IDL.Service({
     'createProfile' : IDL.Func([ProfileTemplate], [Result], []),
-    'createTask' : IDL.Func([CreateTaskTemplate], [Result_1], []),
+    'createTask' : IDL.Func([CreateTaskTemplate], [Result_2], []),
     'getGlobalTaskOrders' : IDL.Func([], [TaskOrders], ['query']),
+    'getMyProfile' : IDL.Func([], [Result_1], ['query']),
     'getMyTaskOrders' : IDL.Func([], [TaskOrders], ['query']),
     'initialize' : IDL.Func([], [], []),
     'listAllTasks' : IDL.Func([], [IDL.Vec(Task)], ['query']),

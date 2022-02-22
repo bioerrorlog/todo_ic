@@ -11,7 +11,9 @@ export interface Profile {
 export interface ProfileTemplate { 'about' : string, 'name' : string }
 export type Result = { 'ok' : null } |
   { 'err' : Error };
-export type Result_1 = { 'ok' : TaskId } |
+export type Result_1 = { 'ok' : Profile } |
+  { 'err' : Error };
+export type Result_2 = { 'ok' : TaskId } |
   { 'err' : Error };
 export interface Task {
   'id' : TaskId,
@@ -33,8 +35,9 @@ export type TaskStatus = { 'review' : null } |
   { 'backlog' : null };
 export interface _SERVICE {
   'createProfile' : (arg_0: ProfileTemplate) => Promise<Result>,
-  'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_1>,
+  'createTask' : (arg_0: CreateTaskTemplate) => Promise<Result_2>,
   'getGlobalTaskOrders' : () => Promise<TaskOrders>,
+  'getMyProfile' : () => Promise<Result_1>,
   'getMyTaskOrders' : () => Promise<TaskOrders>,
   'initialize' : () => Promise<undefined>,
   'listAllTasks' : () => Promise<Array<Task>>,

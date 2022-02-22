@@ -64,6 +64,8 @@ canister_test:
 	# because ic-repl can't switch to anonymous identity.
 	dfx identity use anonymous
 
+	dfx canister call $(BACKEND_CANISTER) getMyProfile '()' \
+		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) createProfile '(record {about="this is anonymous user"; name="anonimous_0"})' \
 		| grep '(variant { err = variant { notAuthorized } })' && echo 'PASS'
 	dfx canister call $(BACKEND_CANISTER) updateProfile '(record {about="this is updated anonymous user"; name="anonimous_1"})' \

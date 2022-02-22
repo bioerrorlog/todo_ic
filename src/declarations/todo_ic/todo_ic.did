@@ -21,10 +21,15 @@ type Task =
    status: TaskStatus;
    title: text;
  };
-type Result_1 = 
+type Result_2 = 
  variant {
    err: Error;
    ok: TaskId;
+ };
+type Result_1 = 
+ variant {
+   err: Error;
+   ok: Profile;
  };
 type Result = 
  variant {
@@ -55,8 +60,9 @@ type CreateTaskTemplate =
  };
 service : {
   createProfile: (ProfileTemplate) -> (Result);
-  createTask: (CreateTaskTemplate) -> (Result_1);
+  createTask: (CreateTaskTemplate) -> (Result_2);
   getGlobalTaskOrders: () -> (TaskOrders) query;
+  getMyProfile: () -> (Result_1) query;
   getMyTaskOrders: () -> (TaskOrders) query;
   initialize: () -> ();
   listAllTasks: () -> (vec Task) query;

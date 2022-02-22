@@ -48,6 +48,15 @@ actor {
     Iter.toArray(profilesState.vals())
   };
 
+  public query (msg) func getMyProfile () : async Result.Result<T.Profile, T.Error>  {
+    if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
+
+    switch (profilesState.get(msg.caller)) {
+      case null { #err(#notFound) };
+      case (? v) { #ok(v) };
+    }
+  };
+
   public shared (msg) func createTask (taskContents_ : T.CreateTaskTemplate) : async Result.Result<T.TaskId, T.Error> {
     if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
 
