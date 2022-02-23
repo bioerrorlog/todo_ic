@@ -37,7 +37,7 @@ actor {
 
   public shared (msg) func updateProfile (profile_ : T.ProfileTemplate) : async Result.Result<(), T.Error> {
     if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
-    if (not hasProfile_(msg.caller)) { return #err(#notFound) };
+    if (not hasProfile_(msg.caller)) { return #err(#profileDoesNotExists) };
   
     let userProfile: T.Profile = prepareNewProfile_(msg.caller, profile_);
     profilesState.put(msg.caller, userProfile);

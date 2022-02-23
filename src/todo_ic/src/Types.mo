@@ -52,5 +52,6 @@ module {
     #notFound;
     #alreadyExists;
     #notAuthorized;
+    #profileDoesNotExists;
   };
 };

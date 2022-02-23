@@ -4,6 +4,7 @@ export const idlFactory = ({ IDL }) => {
     'notAuthorized' : IDL.Null,
     'alreadyExists' : IDL.Null,
     'notFound' : IDL.Null,
+    'profileDoesNotExists' : IDL.Null,
   });
   const Result = IDL.Variant({ 'ok' : IDL.Null, 'err' : Error });
   const CreateTaskTemplate = IDL.Record({

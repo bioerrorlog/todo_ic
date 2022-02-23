@@ -2,7 +2,8 @@ import type { Principal } from '@dfinity/principal';
 export interface CreateTaskTemplate { 'title' : string, 'description' : string }
 export type Error = { 'notAuthorized' : null } |
   { 'alreadyExists' : null } |
-  { 'notFound' : null };
+  { 'notFound' : null } |
+  { 'profileDoesNotExists' : null };
 export interface Profile {
   'principal' : Principal,
   'about' : string,

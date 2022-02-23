@@ -52,6 +52,7 @@ type Error =
    alreadyExists;
    notAuthorized;
    notFound;
+   profileDoesNotExists;
  };
 type CreateTaskTemplate = 
  record {

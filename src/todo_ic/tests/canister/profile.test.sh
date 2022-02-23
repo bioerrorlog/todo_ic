@@ -13,7 +13,7 @@ assert _ == variant { err = variant { notFound } };
 
 // Fail to updateProfile if profile does not exist
 call todo_ic.updateProfile(record {about="this is Alice updated"; name="Alice updated"});
-assert _ == variant { err = variant { notFound } };
+assert _ == variant { err = variant { profileDoesNotExists } };
 
 // createProfile by Alice
 call todo_ic.createProfile(record {about="this is Alice"; name="Alice"});
