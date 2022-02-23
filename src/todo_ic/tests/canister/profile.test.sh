@@ -21,6 +21,10 @@ assert _ == variant { ok };
 call todo_ic.listProfiles();
 assert _ ~= vec {record {about = "this is Alice"; name = "Alice";};};
 
+// getMyProfile by Alice
+call todo_ic.getMyProfile();
+assert _ ~= variant { ok = record { about = "this is Alice"; name = "Alice";}};
+
 // Fail to createProfile if profile already exists
 call todo_ic.createProfile(record {about="this is Alice again"; name="Alice"});
 assert _ == variant { err = variant { alreadyExists } };
