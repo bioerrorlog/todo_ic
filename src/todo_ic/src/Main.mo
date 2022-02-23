@@ -59,6 +59,7 @@ actor {
 
   public shared (msg) func createTask (taskContents_ : T.CreateTaskTemplate) : async Result.Result<T.TaskId, T.Error> {
     if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
+    if (not hasProfile_(msg.caller)) { return #err(#profileDoesNotExists) };
 
     let (thisTask, thisTaskId) = prepareNewTask_(taskContents_);
     let newUserTaskOrders = prepareUserNewTaskOrders_(thisTaskId, msg.caller);

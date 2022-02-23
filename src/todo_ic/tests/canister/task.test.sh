@@ -8,8 +8,12 @@ assert _ == vec {};
 call todo_ic.getGlobalTaskOrders();
 assert _ == record { review = vec {}; done = vec {}; inProgress = vec {}; backlog = vec {}; };
 
-// createTask by Alice
+// Fail to createTask before createProfile
 identity Alice;
+call todo_ic.createTask(record {title="Task title Alice 0" ; description="This is description Alice 0."});
+assert _ == variant { err = variant { profileDoesNotExists } };
+
+// createTask by Alice
 call todo_ic.createProfile(record {about="this is Alice"; name="Alice"});
 assert _ == variant { ok };
 call todo_ic.createTask(record {title="Task title Alice 1" ; description="This is description Alice 1."});
