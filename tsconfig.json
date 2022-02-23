@@ -6,6 +6,7 @@
     "jsx": "react",            /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     // "checkJs": true
     "moduleResolution": "node",
+    "esModuleInterop": true
   },
   "include": ["src/**/*"]
 }
