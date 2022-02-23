@@ -1,4 +1,4 @@
-import { convertArrayToObject } from './utils';
+import { convertArrayToObject } from '.';
 
 describe('convertArrayToObject', () => {
   test('convert with number item', () => {
