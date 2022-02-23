@@ -52,7 +52,7 @@ actor {
     if (UP.isAnonymous(msg.caller)) { return #err(#notAuthorized) };
 
     switch (profilesState.get(msg.caller)) {
-      case null { #err(#notFound) };
+      case null { #err(#profileDoesNotExists) };
       case (? v) { #ok(v) };
     }
   };

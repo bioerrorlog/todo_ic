@@ -9,7 +9,7 @@ assert _ == vec {};
 // Fail to getMyProfile if profile does not exist
 identity Alice;
 call todo_ic.getMyProfile();
-assert _ == variant { err = variant { notFound } };
+assert _ == variant { err = variant { profileDoesNotExists } };
 
 // Fail to updateProfile if profile does not exist
 call todo_ic.updateProfile(record {about="this is Alice updated"; name="Alice updated"});
