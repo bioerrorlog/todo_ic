@@ -61,7 +61,7 @@ canister_test:
 	done
 
 	# Anonymous identity call test
-	# because ic-repl can't switch to anonymous identity.
+	# because ic-repl can't switch back to anonymous identity.
 	dfx identity use anonymous
 
 	dfx canister call $(BACKEND_CANISTER) getMyProfile '()' \
