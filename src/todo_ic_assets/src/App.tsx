@@ -1,9 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { 
   Box,
   Button,
 } from "@chakra-ui/react"
-import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import PlugConnect from '@psychedelic/plug-connect';
 import { taskDatasetEmpty, columnDatasetEmpty, columnOrder } from './constant'
 import Column from './components/Column'
@@ -14,12 +14,16 @@ import {
 } from "../../declarations/todo_ic";
 import { convertArrayToObject } from './utils';
 
+declare global {
+  interface Window { ic: any; }
+}
+
 const App = () => {
   const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: columnDatasetEmpty})
 
   const [plugConnected, setPlugConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
-  const [actor, setActor] = useState(false);
+  const [actor, setActor] = useState(null);
 
   const whitelist = [canisterId];
   const network = `http://${canisterId}.localhost:8000`;
@@ -147,16 +151,16 @@ const App = () => {
     setTaskState(newTaskState)
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!window.ic?.plug?.agent) {
-      setActor(false);
+      setActor(null);
       setPlugConnected(false);
     }
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (plugConnected) {
-      const principal = await window.ic.plug.agent.getPrincipal();
+      const principal = window.ic.plug.agent.getPrincipal();
 
       if (principal) {
         setPrincipalId(principal.toText());
@@ -165,11 +169,11 @@ const App = () => {
     console.log(`plugConnected: ${plugConnected}`)
   }, [plugConnected]);
 
-  useEffect(async () => {
+  useEffect(() => {
     fetchAllTasks()
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (plugConnected) {
       fetchMyTaskOrders()
     }
