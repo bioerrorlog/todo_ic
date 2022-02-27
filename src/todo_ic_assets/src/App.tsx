@@ -5,24 +5,23 @@ import {
   Button,
 } from "@chakra-ui/react"
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDatasetEmpty, columnDatasetEmpty, columnOrder } from './constant'
+import { taskDatasetEmpty, initialColumnDataset, columnOrder } from './constants'
 import Column from './components/Column'
 import {
   todo_ic,
   canisterId,
   idlFactory,
 } from "../../declarations/todo_ic";
-import { convertArrayToObject } from './utils';
+import { convertArrayToObject } from './utils/array';
 
 declare global {
   interface Window { ic: any; }
 }
 
 const App = () => {
-  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: columnDatasetEmpty})
+  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: initialColumnDataset})
 
   const [plugConnected, setPlugConnected] = useState(false);
-  const [principalId, setPrincipalId] = useState('');
   const [actor, setActor] = useState(null);
 
   const whitelist = [canisterId];
@@ -157,17 +156,6 @@ const App = () => {
       setPlugConnected(false);
     }
   }, []);
-
-  useEffect(() => {
-    if (plugConnected) {
-      const principal = window.ic.plug.agent.getPrincipal();
-
-      if (principal) {
-        setPrincipalId(principal.toText());
-      }
-    }
-    console.log(`plugConnected: ${plugConnected}`)
-  }, [plugConnected]);
 
   useEffect(() => {
     fetchAllTasks()
