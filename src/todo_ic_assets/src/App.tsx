@@ -5,7 +5,7 @@ import {
   Button,
 } from "@chakra-ui/react"
 import PlugConnect from '@psychedelic/plug-connect';
-import { taskDatasetEmpty, columnDatasetEmpty, columnOrder } from './constant'
+import { taskDatasetEmpty, initialColumnDataset, columnOrder } from './constants'
 import Column from './components/Column'
 import {
   todo_ic,
@@ -19,7 +19,7 @@ declare global {
 }
 
 const App = () => {
-  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: columnDatasetEmpty})
+  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: initialColumnDataset})
 
   const [plugConnected, setPlugConnected] = useState(false);
   const [principalId, setPrincipalId] = useState('');
@@ -43,6 +43,8 @@ const App = () => {
       tasks: convertArrayToObject(allTasks, 'id'),
       columns: newColumnData,
     }
+    console.log('newTaskState')
+    console.log(newTaskState)
     setTaskState(newTaskState)
   }
 

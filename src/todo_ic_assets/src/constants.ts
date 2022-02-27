@@ -1,8 +1,8 @@
-import { TaskOrders } from './interfaces';
+import { ColumnStates } from './interfaces';
 
 export const taskDatasetEmpty = {}
 
-export const columnDatasetEmpty: TaskOrders = {
+export const initialColumnDataset: ColumnStates = {
   "backlog": { id: "backlog", title: "Backlog", taskIds: []},
   "inProgress": { id: "inProgress", title: "In progress", taskIds: [] },
   "review": { id: "review", title: "Review", taskIds: [] },
