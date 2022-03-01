@@ -14,10 +14,10 @@ export interface ColumnStates {
 }
 
 export interface TaskObj {
-
+  [key: string]: Task,
 }
 
 export interface TaskState {
-  'tasks': {[key: string]: Task},
+  'tasks': TaskObj,
   'columns': ColumnStates,
 }

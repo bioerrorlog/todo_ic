@@ -12,14 +12,15 @@ import {
   canisterId,
   idlFactory,
 } from "../../declarations/todo_ic";
-import { convertArrayToObject } from './utils/array';
+import * as canister from './utils/canister';
+import { TaskState } from './interfaces'
 
 declare global {
   interface Window { ic: any; }
 }
 
 const App = () => {
-  const [taskState, setTaskState] = useState({tasks: taskDatasetEmpty, columns: initialColumnDataset})
+  const [taskState, setTaskState] = useState<TaskState>({tasks: taskDatasetEmpty, columns: initialColumnDataset})
 
   const [plugConnected, setPlugConnected] = useState(false);
   const [actor, setActor] = useState(null);
@@ -28,21 +29,8 @@ const App = () => {
   const network = `http://${canisterId}.localhost:8000`;
 
   const fetchAllTasks = async () => {
-    const allTasks = await todo_ic.listAllTasks()
-    const globalTaskOrders = await todo_ic.getGlobalTaskOrders()
-
-    const newColumnData = {
-      'backlog': { ...taskState.columns['backlog'], taskIds: globalTaskOrders.backlog},
-      'inProgress': { ...taskState.columns['inProgress'], taskIds: globalTaskOrders.inProgress},
-      'review': { ...taskState.columns['review'], taskIds: globalTaskOrders.review},
-      'done': { ...taskState.columns['done'], taskIds: globalTaskOrders.done},
-    }
-    const newTaskState = {
-      ...taskState,
-      tasks: convertArrayToObject(allTasks, 'id'),
-      columns: newColumnData,
-    }
-    setTaskState(newTaskState)
+    const allTaskState = await canister.fetchAllTasks(todo_ic, taskState)
+    setTaskState(allTaskState)
   }
 
   const fetchMyTaskOrders = async () => {
