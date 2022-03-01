@@ -29,8 +29,8 @@ const App = () => {
   const network = `http://${canisterId}.localhost:8000`;
 
   const fetchAllTasks = async () => {
-    const allTaskState = await canister.fetchAllTasks(todo_ic, taskState)
-    setTaskState(allTaskState)
+    const newTaskState = await canister.fetchAllTasks(todo_ic, taskState)
+    setTaskState(newTaskState)
   }
 
   const fetchMyTaskOrders = async () => {
@@ -38,22 +38,8 @@ const App = () => {
       console.log('Not authorized')
       return
     }
-    // Slow response with plug agent
-    console.log('fetchMyTaskOrders start')
-    const myTaskOrders = await actor.getMyTaskOrders()
-    console.log('End fetching')
 
-    const newColumnData = {
-      'backlog': { ...taskState.columns['backlog'], taskIds: myTaskOrders.backlog},
-      'inProgress': { ...taskState.columns['inProgress'], taskIds: myTaskOrders.inProgress},
-      'review': { ...taskState.columns['review'], taskIds: myTaskOrders.review},
-      'done': { ...taskState.columns['done'], taskIds: myTaskOrders.done},
-    }
-    const newTaskState = {
-      ...taskState,
-      columns: newColumnData,
-    }
-
+    const newTaskState = await canister.fetchMyTaskOrders(actor, taskState)
     setTaskState(newTaskState)
   }
 
