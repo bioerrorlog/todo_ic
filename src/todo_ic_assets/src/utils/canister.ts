@@ -26,15 +26,15 @@ export const fetchMyTaskOrders = async (actor: ActorSubclass<_SERVICE>, oldTaskS
   const myTaskOrders = await actor.getMyTaskOrders()
   console.log('End fetching')
 
-  const newColumnData = {
+  const newColumnData: ColumnStates  = {
     'backlog': { ...oldTaskState.columns['backlog'], taskIds: myTaskOrders.backlog},
     'inProgress': { ...oldTaskState.columns['inProgress'], taskIds: myTaskOrders.inProgress},
     'review': { ...oldTaskState.columns['review'], taskIds: myTaskOrders.review},
     'done': { ...oldTaskState.columns['done'], taskIds: myTaskOrders.done},
   }
-  const newTaskState = {
+  const newTaskState: TaskState = {
     ...oldTaskState,
-    columns: newColumnData,
+    'columns': newColumnData,
   }
   return newTaskState
 }
