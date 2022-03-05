@@ -101,8 +101,10 @@ const App = () => {
         ...taskState.columns,
         [newColumn.id]: newColumn,
       }
-
-      const newTaskState = state.setTaskOrders(taskState, state.convertColumnStatesToTaskOrders(newColumnStates))
+      const newTaskState: TaskState = {
+        ...taskState,
+        'columns': newColumnStates,
+      }
       setTaskState(newTaskState)
       return
     }

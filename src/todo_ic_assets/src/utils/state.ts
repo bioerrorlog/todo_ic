@@ -23,13 +23,3 @@ export const setTaskOrders = (taskState: TaskState, taskOrders: TaskOrders): Tas
   }
   return newTaskState
 }
-
-export const convertColumnStatesToTaskOrders = (columnStates: ColumnStates): TaskOrders => {
-  const taskOrders: TaskOrders = {
-    'backlog': columnStates['backlog'].taskIds,
-    'inProgress': columnStates['inProgress'].taskIds,
-    'review': columnStates['review'].taskIds,
-    'done': columnStates['done'].taskIds,
-  }
-  return taskOrders
-}
