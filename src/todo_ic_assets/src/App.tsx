@@ -110,19 +110,19 @@ const App = () => {
     // If dropped in a different column
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
-    const newStart = {
+    const newStart: ColumnState = {
       ...start,
       taskIds: startTaskIds
     }
     
     const finishTaskIds = Array.from(finish.taskIds);
     finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
+    const newFinish: ColumnState = {
       ...finish,
       taskIds: finishTaskIds
     }
 
-    const newTaskState = {
+    const newTaskState: TaskState = {
       ...taskState,
       columns: {
         ...taskState.columns,
