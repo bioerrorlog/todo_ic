@@ -88,8 +88,11 @@ const App = () => {
     // If dropped inside the same column
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
+
+      // Reorder TaskId
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
+
       const newColumn: ColumnState = {
         ...start,
         taskIds: newTaskIds,
@@ -98,6 +101,7 @@ const App = () => {
         ...taskState.columns,
         [newColumn.id]: newColumn,
       }
+
       const newTaskState = state.setTaskOrders(taskState, state.convertColumnStatesToTaskOrders(newColumnStates))
       setTaskState(newTaskState)
       return
