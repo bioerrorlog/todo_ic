@@ -14,7 +14,7 @@ import {
   idlFactory,
 } from "../../declarations/todo_ic";
 import * as state from './utils/state';
-import { TaskState } from './interfaces'
+import { TaskState, ColumnState, ColumnStates } from './interfaces'
 import { _SERVICE, TaskOrders } from '../../declarations/todo_ic/todo_ic.did'
 
 declare global {
@@ -79,32 +79,28 @@ const App = () => {
     const { destination, source, draggableId, type } = result;
 
     if (!destination) {return}
-    
     if (destination.droppableId === source.droppableId && destination.index === source.index) { return }
-    
     if (type === 'column') { return }
 
-    const start = taskState.columns[source.droppableId];
-    const finish = taskState.columns[destination.droppableId];
+    const start: ColumnState = taskState.columns[source.droppableId];
+    const finish: ColumnState = taskState.columns[destination.droppableId];
 
     // If dropped inside the same column
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
-      const newColumn = {
+      const newColumn: ColumnState = {
         ...start,
-        taskIds: newTaskIds
+        taskIds: newTaskIds,
       }
-      const newTaskState = {
-        ...taskState,
-        columns: {
-          ...taskState.columns,
-          [newColumn.id]: newColumn,
-        }
+      const newColumnStates: ColumnStates = {
+        ...taskState.columns,
+        [newColumn.id]: newColumn,
       }
+      const newTaskState = state.setTaskOrders(taskState, state.convertColumnStatesToTaskOrders(newColumnStates))
       setTaskState(newTaskState)
-      return;
+      return
     }
 
     // If dropped in a different column

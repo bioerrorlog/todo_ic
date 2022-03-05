@@ -1,9 +1,9 @@
-import { Task } from '../../../declarations/todo_ic/todo_ic.did';
+import { Task, TaskId } from '../../../declarations/todo_ic/todo_ic.did';
 
 export interface ColumnState {
   id: string,
   title: string,
-  taskIds: string[],
+  taskIds: TaskId[],
 }
 
 export interface ColumnStates {
