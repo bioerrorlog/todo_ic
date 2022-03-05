@@ -4,6 +4,7 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react"
+import { ActorSubclass } from '@dfinity/agent'
 import PlugConnect from '@psychedelic/plug-connect';
 import { taskDatasetEmpty, initialColumnDataset, columnOrder } from './constants'
 import Column from './components/Column'
@@ -14,7 +15,7 @@ import {
 } from "../../declarations/todo_ic";
 import * as state from './utils/state';
 import { TaskState } from './interfaces'
-import { TaskOrders } from '../../declarations/todo_ic/todo_ic.did'
+import { _SERVICE, TaskOrders } from '../../declarations/todo_ic/todo_ic.did'
 
 declare global {
   interface Window { ic: any; }
@@ -24,7 +25,7 @@ const App = () => {
   const [taskState, setTaskState] = useState<TaskState>({tasks: taskDatasetEmpty, columns: initialColumnDataset})
 
   const [plugConnected, setPlugConnected] = useState(false);
-  const [actor, setActor] = useState(null);
+  const [actor, setActor] = useState<ActorSubclass<_SERVICE> | null>(null);
 
   const whitelist = [canisterId];
   const network = `http://${canisterId}.localhost:8000`;
@@ -64,7 +65,7 @@ const App = () => {
     }
 
     // Create an actor to interact with the basckend Canister
-    const actor = await window.ic.plug.createActor({
+    const actor: ActorSubclass<_SERVICE> = await window.ic.plug.createActor({
       canisterId: canisterId,
       interfaceFactory: idlFactory,
     });
