@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
 import { 
   Box,
   Button,
@@ -75,7 +75,7 @@ const App = () => {
   }
 
 
-  const onDragEnd = result => {
+  const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
 
     if (!destination) {return}
