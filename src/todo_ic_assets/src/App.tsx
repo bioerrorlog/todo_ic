@@ -12,8 +12,9 @@ import {
   canisterId,
   idlFactory,
 } from "../../declarations/todo_ic";
-import * as canister from './utils/canister';
+import * as state from './utils/state';
 import { TaskState } from './interfaces'
+import { TaskOrders } from '../../declarations/todo_ic/todo_ic.did'
 
 declare global {
   interface Window { ic: any; }
@@ -29,7 +30,11 @@ const App = () => {
   const network = `http://${canisterId}.localhost:8000`;
 
   const fetchAllTasks = async () => {
-    const newTaskState = await canister.fetchAllTasks(todo_ic, taskState)
+    const allTasks = await todo_ic.listAllTasks()
+    const globalTaskOrders = await todo_ic.getGlobalTaskOrders()
+
+    const taskSettedState = state.setTasks(taskState, allTasks)
+    const newTaskState = state.setTaskOrders(taskSettedState, globalTaskOrders)
     setTaskState(newTaskState)
   }
 
@@ -39,13 +44,16 @@ const App = () => {
       return
     }
 
-    const newTaskState = await canister.fetchMyTaskOrders(actor, taskState)
+    // Warning: Slow response with plug agent
+    const myTaskOrders: TaskOrders = await actor.getMyTaskOrders()
+    const newTaskState = state.setTaskOrders(taskState, myTaskOrders)
     setTaskState(newTaskState)
   }
 
   const createTask = async () => {
     console.log('start creteTask')
 
+    // TODO
     fetchMyTaskOrders()
   }
 
