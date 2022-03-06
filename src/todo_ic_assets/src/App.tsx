@@ -5,7 +5,6 @@ import {
   Button,
 } from "@chakra-ui/react"
 import { ActorSubclass } from '@dfinity/agent'
-import PlugConnect from '@psychedelic/plug-connect';
 import { taskDatasetEmpty, initialColumnDataset, columnOrder } from './constants'
 import Column from './components/Column'
 import Header from './components/Header'
