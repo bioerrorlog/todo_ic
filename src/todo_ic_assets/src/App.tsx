@@ -8,6 +8,7 @@ import { ActorSubclass } from '@dfinity/agent'
 import PlugConnect from '@psychedelic/plug-connect';
 import { taskDatasetEmpty, initialColumnDataset, columnOrder } from './constants'
 import Column from './components/Column'
+import Header from './components/Header'
 import {
   todo_ic,
   canisterId,
@@ -154,22 +155,13 @@ const App = () => {
 
   return (
     <>
-      <Box m={30}>
-        {plugConnected ? `My tasks`: (
-          <Box>
-            <PlugConnect
-              host={network}
-              whitelist={whitelist}
-              dark
-              onConnectCallback={handleConnect}
-            />
-            <Box mt={30}>
-              Global tasks
-            </Box>
-            
-          </Box>
-        )}
-      </Box>
+      <Header 
+        plugConnected={plugConnected}
+        network={network}
+        whitelist={whitelist}
+        handleConnect={handleConnect}
+      />
+
       <Button variant='outline' ml={30} onClick={createTask}>createTask</Button>
 
       <DragDropContext onDragEnd={onDragEnd}>
